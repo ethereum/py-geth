@@ -23,7 +23,7 @@ def get_live_data_dir():
             "Library",
             "Ethereum",
         ))
-    elif sys.platform == 'linux2':
+    elif sys.platform in {'linux', 'linux2', 'linux3'}:
         data_dir = os.path.expanduser(os.path.join(
             "~",
             ".ethereum",
@@ -38,10 +38,10 @@ def get_live_data_dir():
         ))
 
     else:
-        raise ValueError(
-            "Unsupported platform.  Only darwin/linux2/win32 are "
+        raise ValueError((
+            "Unsupported platform: '{0}'.  Only darwin/linux2/win32 are "
             "supported.  You must specify the geth datadir manually"
-        )
+        ).format(sys.platform))
     return data_dir
 
 
@@ -78,16 +78,16 @@ def write_genesis_file(genesis_file_path,
                        overwrite=False,
                        nonce="0xdeadbeefdeadbeef",
                        timestamp="0x0",
-                       parentHash="0x0000000000000000000000000000000000000000000000000000000000000000",
+                       parentHash="0x0000000000000000000000000000000000000000000000000000000000000000",  # NOQA
                        extraData="0x686f727365",
                        gasLimit="0x2fefd8",
                        difficulty="0x400",
-                       mixhash="0x0000000000000000000000000000000000000000000000000000000000000000",
+                       mixhash="0x0000000000000000000000000000000000000000000000000000000000000000",  # NOQA
                        coinbase="0x3333333333333333333333333333333333333333",
                        alloc=None):
 
     if os.path.exists(genesis_file_path) and not overwrite:
-        raise ValueError("Genesis file already present.  call with `overwrite=True` to overwrite this file")
+        raise ValueError("Genesis file already present.  call with `overwrite=True` to overwrite this file")  # NOQA
 
     if alloc is None:
         alloc = {}

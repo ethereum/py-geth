@@ -1,12 +1,7 @@
-import uuid
-
 from threading import Lock
 
 from gevent import subprocess
 
-from .utils.filesystem import (
-    is_executable_available,
-)
 from .utils.proc import (
     kill_proc,
 )
@@ -17,7 +12,6 @@ from .accounts import (
 from .wrapper import (
     construct_test_chain_kwargs,
     construct_popen_command,
-    spawn_geth,
 )
 from .chain import (
     get_default_base_dir,
@@ -72,6 +66,14 @@ class BaseGethProcess(object):
     @property
     def accounts(self):
         return get_accounts(**self.geth_kwargs)
+
+    @property
+    def rpc_host(self):
+        return self.geth_kwargs.get('rpc_host', '127.0.0.1')
+
+    @property
+    def rpc_port(self):
+        return self.geth_kwargs.get('rpc_port', '8545')
 
 
 class LiveGethProcess(BaseGethProcess):
