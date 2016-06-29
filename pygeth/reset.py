@@ -1,7 +1,6 @@
 import os
 
 from .wrapper import (
-    construct_test_chain_kwargs,
     spawn_geth_subprocess,
 )
 from .chains import (
@@ -18,10 +17,10 @@ def soft_reset_chain(allow_live=False, allow_testnet=False, **geth_kwargs):
     data_dir = geth_kwargs.get('data_dir')
 
     if data_dir is None or (not allow_live and is_live_chain(data_dir)):
-        raise ValueError("To reset the live chain you must call this function with `allow_live=True`")
+        raise ValueError("To reset the live chain you must call this function with `allow_live=True`")  # NOQA
 
     if not allow_testnet and is_testnet_chain(data_dir):
-        raise ValueError("To reset the testnet chain you must call this function with `allow_testnet=True`")
+        raise ValueError("To reset the testnet chain you must call this function with `allow_testnet=True`")  # NOQA
 
     suffix_args = geth_kwargs.pop('suffix_args', [])
     suffix_args.extend((
@@ -35,15 +34,15 @@ def soft_reset_chain(allow_live=False, allow_testnet=False, **geth_kwargs):
     stdoutdata, stderrdata = proc.communicate("y")
 
     if "Removing chaindata" not in stdoutdata:
-        raise ValueError("An error occurred while removing the chain:\n\nError:\n{0}\n\nOutput:\n{1}".format(stderrdata, stdoutdata))
+        raise ValueError("An error occurred while removing the chain:\n\nError:\n{0}\n\nOutput:\n{1}".format(stderrdata, stdoutdata))  # NOQA
 
 
 def hard_reset_chain(data_dir, allow_live=False, allow_testnet=False):
     if not allow_live and is_live_chain(data_dir):
-        raise ValueError("To reset the live chain you must call this function with `allow_live=True`")
+        raise ValueError("To reset the live chain you must call this function with `allow_live=True`")  # NOQA
 
     if not allow_testnet and is_testnet_chain(data_dir):
-        raise ValueError("To reset the testnet chain you must call this function with `allow_testnet=True`")
+        raise ValueError("To reset the testnet chain you must call this function with `allow_testnet=True`")  # NOQA
 
     blockchain_dir = os.path.join(data_dir, 'chaindata')
     remove_dir_if_exists(blockchain_dir)

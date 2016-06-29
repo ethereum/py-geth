@@ -1,12 +1,7 @@
-import uuid
-
 from threading import Lock
 
 from gevent import subprocess
 
-from .utils.filesystem import (
-    is_executable_available,
-)
 from .utils.proc import (
     kill_proc,
 )
@@ -17,7 +12,6 @@ from .accounts import (
 from .wrapper import (
     construct_test_chain_kwargs,
     construct_popen_command,
-    spawn_geth,
 )
 from .chain import (
     get_default_base_dir,
