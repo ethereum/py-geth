@@ -23,7 +23,7 @@ def get_live_data_dir():
             "Library",
             "Ethereum",
         ))
-    elif sys.platform == 'linux2':
+    elif sys.platform in {'linux', 'linux2', 'linux3'}:
         data_dir = os.path.expanduser(os.path.join(
             "~",
             ".ethereum",
