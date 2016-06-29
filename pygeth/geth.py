@@ -73,6 +73,14 @@ class BaseGethProcess(object):
     def accounts(self):
         return get_accounts(**self.geth_kwargs)
 
+    @property
+    def rpc_host(self):
+        return self.geth_kwargs.get('rpc_host', '127.0.0.1')
+
+    @property
+    def rpc_port(self):
+        return self.geth_kwargs.get('rpc_port', '8545')
+
 
 class LiveGethProcess(BaseGethProcess):
     def __init__(self, geth_kwargs):
