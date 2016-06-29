@@ -1,5 +1,7 @@
+import os
 from threading import Lock
 
+import gevent
 from gevent import subprocess
 
 from .utils.proc import (
@@ -52,12 +54,12 @@ class BaseGethProcess(object):
             self.lock.release()
 
     @property
-    def is_started(self):
+    def is_running(self):
         return self.lock.locked()
 
     @property
     def is_alive(self):
-        return self.is_started and self._proc.poll() is None
+        return self.is_running and self._proc.poll() is None
 
     @property
     def is_stopped(self):
@@ -68,12 +70,25 @@ class BaseGethProcess(object):
         return get_accounts(**self.geth_kwargs)
 
     @property
+    def rpc_enabled(self):
+        return self.geth_kwargs.get('rpc_enabled', False)
+
+    @property
     def rpc_host(self):
         return self.geth_kwargs.get('rpc_host', '127.0.0.1')
 
     @property
     def rpc_port(self):
         return self.geth_kwargs.get('rpc_port', '8545')
+
+    @property
+    def ipc_path(self):
+        return self.geth_kwargs.get(
+            'ipc_path',
+            os.path.abspath(os.path.expanduser(os.path.join(
+                get_live_data_dir(), 'geth.ipc',
+            ))),
+        )
 
 
 class LiveGethProcess(BaseGethProcess):
