@@ -26,12 +26,15 @@ class BaseGethProcess(object):
     _proc = None
 
     def __init__(self, geth_kwargs):
-        self.lock = Lock()
         self.geth_kwargs = geth_kwargs
         self.command = construct_popen_command(**geth_kwargs)
 
+    is_running = False
+
     def start(self):
-        self.lock.acquire()
+        if self.is_running:
+            raise ValueError("Already running")
+        self.is_running = True
 
         self._proc = subprocess.Popen(
             self.command,
@@ -41,20 +44,13 @@ class BaseGethProcess(object):
         )
 
     def stop(self):
-        if not self.lock.locked():
+        if not self.is_running:
             raise ValueError("Not running")
 
         if self._proc.poll() is None:
             kill_proc(self._proc)
 
-        if self._proc.poll() is None:
-            raise ValueError("Unable to kill process")
-        else:
-            self.lock.release()
-
-    @property
-    def is_running(self):
-        return self.lock.locked()
+        self.is_running = False
 
     @property
     def is_alive(self):
