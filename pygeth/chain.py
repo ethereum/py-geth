@@ -38,10 +38,10 @@ def get_live_data_dir():
         ))
 
     else:
-        raise ValueError(
-            "Unsupported platform.  Only darwin/linux2/win32 are "
+        raise ValueError((
+            "Unsupported platform: '{0}'.  Only darwin/linux2/win32 are "
             "supported.  You must specify the geth datadir manually"
-        )
+        ).format(sys.platform))
     return data_dir
 
 
