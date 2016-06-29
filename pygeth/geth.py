@@ -1,7 +1,6 @@
 import os
 from threading import Lock
 
-import gevent
 from gevent import subprocess
 
 from .utils.proc import (
