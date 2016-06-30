@@ -1,5 +1,4 @@
 import os
-from threading import Lock
 
 from gevent import subprocess
 
