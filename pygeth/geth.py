@@ -1,14 +1,9 @@
 import os
-import logging
-import datetime
 
 from gevent import subprocess
 
 from .utils.proc import (
     kill_proc,
-)
-from .utils.filesystem import (
-    ensure_path_exists,
 )
 from .accounts import (
     ensure_account_exists,
