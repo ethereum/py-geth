@@ -3,12 +3,8 @@ from __future__ import absolute_import
 import os
 import datetime
 import logging
-from io import BytesIO
 
 import gevent
-from gevent.threading import (
-    Lock,
-)
 from gevent.queue import (
     JoinableQueue,
 )
