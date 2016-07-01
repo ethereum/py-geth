@@ -7,6 +7,7 @@ import logging
 import gevent
 from gevent.queue import (
     JoinableQueue,
+    Timeout,
 )
 
 from .utils.filesystem import ensure_path_exists
@@ -58,13 +59,6 @@ def queue_to_logger(queue, *logger_functions):
             gevent.sleep(0.1)
 
 
-def queue_to_stream(queue, *streams):
-    while True:
-        line = queue.get()
-        for stream in streams:
-            stream.writelines([line])
-
-
 class LoggingMixin(object):
     """
     Mixin class for GethProcess instances that logs stdout and stderr from the
@@ -113,8 +107,12 @@ class LoggingMixin(object):
     def stop(self):
         super(LoggingMixin, self).stop()
 
-        with gevent.Timeout(5):
-            self._stdout_logger_queue.join()
+        try:
+            self._stdout_logger_queue.join(5)
+        except Timeout:
+            pass
 
-        with gevent.Timeout(5):
-            self._stderr_logger_queue.join()
+        try:
+            self._stderr_logger_queue.join(5)
+        except Timeout:
+            pass
