@@ -68,7 +68,8 @@ def queue_to_stream(queue, *streams):
 
 class LoggingMixin(object):
     """
-    Mixin class for GethProcess instances that logs stdout and stderr from the geth process to a logger.  By defuault the logger
+    Mixin class for GethProcess instances that logs stdout and stderr from the
+    geth process to a logger.  By defuault the logger
     """
     def __init__(self, *args, **kwargs):
         super(LoggingMixin, self).__init__(*args, **kwargs)
