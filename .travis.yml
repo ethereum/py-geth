@@ -10,8 +10,9 @@ before_install:
   - mkdir -p ~/.ethash
   - geth makedag 0 ~/.ethash
 cache:
-  - pip
-  - ~/.ethash
+  pip: true
+  directories:
+    - ~/.ethash
 env:
   matrix:
     - TOX_ENV=py27
