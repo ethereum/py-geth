@@ -6,8 +6,11 @@ import logging
 from io import BytesIO
 
 import gevent
+from gevent.threading import (
+    Lock,
+)
 from gevent.queue import (
-    Queue,
+    JoinableQueue,
 )
 
 from .utils.filesystem import ensure_path_exists
@@ -63,7 +66,7 @@ def queue_to_stream(queue, *streams):
     while True:
         line = queue.get()
         for stream in streams:
-            stream.writeline(line)
+            stream.writelines([line])
 
 
 class LoggingMixin(object):
@@ -74,21 +77,17 @@ class LoggingMixin(object):
     def __init__(self, *args, **kwargs):
         super(LoggingMixin, self).__init__(*args, **kwargs)
 
-        self._stdout_logger_queue = Queue()
-        self._stdout_stream_queue = Queue()
+        self._stdout_logger_queue = JoinableQueue()
         self.stdout_logger = get_file_logger(
             'stdout',
             construct_logger_file_path('geth', 'stdout'),
         )
-        self.stdout = BytesIO()
 
-        self._stderr_logger_queue = Queue()
-        self._stderr_stream_queue = Queue()
+        self._stderr_logger_queue = JoinableQueue()
         self.stderr_logger = get_file_logger(
             'stderr',
             construct_logger_file_path('geth', 'stderr'),
         )
-        self.stdout = BytesIO()
 
     def start(self):
         super(LoggingMixin, self).start()
@@ -97,24 +96,29 @@ class LoggingMixin(object):
             stream_to_queues,
             self._proc.stdout,
             self._stdout_logger_queue,
-            self._stdout_stream_queue,
         )
         gevent.spawn(
             queue_to_logger,
             self._stdout_logger_queue,
             self.stdout_logger.info,
         )
-        gevent.spawn(queue_to_stream, self._stdout_stream_queue, self.stdout)
 
         gevent.spawn(
             stream_to_queues,
             self._proc.stderr,
             self._stderr_logger_queue,
-            self._stderr_stream_queue,
         )
         gevent.spawn(
             queue_to_logger,
             self._stderr_logger_queue,
             self.stderr_logger.info,
         )
-        gevent.spawn(queue_to_stream, self._stderr_stream_queue, self.stderr)
+
+    def stop(self):
+        super(LoggingMixin, self).stop()
+
+        with gevent.Timeout(5):
+            self._stdout_logger_queue.join()
+
+        with gevent.Timeout(5):
+            self._stderr_logger_queue.join()
