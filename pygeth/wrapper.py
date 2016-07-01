@@ -23,6 +23,9 @@ DEFAULT_PASSWORD_PATH = os.path.join(PYGETH_DIR, 'default_blockchain_password')
 DEFAULT_GENESIS_PATH = os.path.join(PYGETH_DIR, 'genesis.json')
 
 
+ALL_APIS = "admin,debug,eth,miner,net,personal,shh,txpool,web3"
+
+
 def construct_test_chain_kwargs(**overrides):
     overrides.setdefault('genesis_path', DEFAULT_GENESIS_PATH)
     overrides.setdefault('unlock', '0')
@@ -40,6 +43,7 @@ def construct_test_chain_kwargs(**overrides):
 
     overrides.setdefault('rpc_enabled', True)
     overrides.setdefault('rpc_addr', '127.0.0.1')
+    overrides.setdefault('rpc_api', ALL_APIS)
     if is_port_open(8545):
         overrides.setdefault('rpc_port', '8545')
     else:
@@ -65,9 +69,11 @@ def construct_popen_command(data_dir=None,
                             port=None,
                             verbosity=None,
                             ipc_path=None,
+                            ipc_api=None,
                             rpc_enabled=None,
                             rpc_addr=None,
                             rpc_port=None,
+                            rpc_api=None,
                             prefix_cmd=None,
                             suffix_args=None,
                             suffix_kwargs=None):
@@ -87,6 +93,9 @@ def construct_popen_command(data_dir=None,
     if rpc_port is not None:
         command.extend(('--rpcport', rpc_port))
 
+    if rpc_api is not None:
+        command.extend(('--rpcapi', rpc_api))
+
     if genesis_path is not None:
         command.extend(('--genesis', genesis_path))
 
@@ -104,6 +113,9 @@ def construct_popen_command(data_dir=None,
 
     if ipc_path is not None:
         command.extend(('--ipcpath', ipc_path))
+
+    if ipc_api is not None:
+        command.extend(('--ipcapi', ipc_api))
 
     if verbosity is not None:
         command.extend((
