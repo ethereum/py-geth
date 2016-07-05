@@ -147,7 +147,7 @@ class DevGethProcess(BaseGethProcess):
         if needs_init or True:
             genesis_data = {
                 'alloc': dict([
-                    (coinbase, {"balance": "1000000000000000000000000000"}),  # 1 billion ether.
+                    (coinbase, {"balance": "1000000000000000000000000000000"}),  # 1 billion ether.
                 ]),
             }
             initialize_chain(genesis_data, self.data_dir, **geth_kwargs)
