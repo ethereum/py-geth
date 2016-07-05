@@ -48,7 +48,7 @@ def stream_to_queues(stream, *queues):
     for line in iter(stream.readline, b''):
         for queue in queues:
             queue.put(line)
-            gevent.sleep(0.1)
+        gevent.sleep(0.1)
 
 
 def queue_to_logger(queue, *logger_functions):
@@ -56,7 +56,7 @@ def queue_to_logger(queue, *logger_functions):
         line = queue.get()
         for fn in logger_functions:
             fn(line)
-            gevent.sleep(0.1)
+        gevent.sleep(0.1)
 
 
 class LoggingMixin(object):

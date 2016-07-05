@@ -20,14 +20,12 @@ PYGETH_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
 DEFAULT_PASSWORD_PATH = os.path.join(PYGETH_DIR, 'default_blockchain_password')
-DEFAULT_GENESIS_PATH = os.path.join(PYGETH_DIR, 'genesis.json')
 
 
 ALL_APIS = "admin,debug,eth,miner,net,personal,shh,txpool,web3"
 
 
 def construct_test_chain_kwargs(**overrides):
-    overrides.setdefault('genesis_path', DEFAULT_GENESIS_PATH)
     overrides.setdefault('unlock', '0')
     overrides.setdefault('password', DEFAULT_PASSWORD_PATH)
     overrides.setdefault('mine', True)
@@ -57,7 +55,6 @@ def construct_test_chain_kwargs(**overrides):
 
 def construct_popen_command(data_dir=None,
                             geth_executable="geth",
-                            genesis_path=None,
                             max_peers=None,
                             network_id=None,
                             no_discover=None,
@@ -95,9 +92,6 @@ def construct_popen_command(data_dir=None,
 
     if rpc_api is not None:
         command.extend(('--rpcapi', rpc_api))
-
-    if genesis_path is not None:
-        command.extend(('--genesis', genesis_path))
 
     if data_dir is not None:
         command.extend(('--datadir', data_dir))
