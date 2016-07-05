@@ -14,10 +14,14 @@ from .wrapper import (
     construct_popen_command,
 )
 from .chain import (
-    get_default_base_dir,
     get_chain_data_dir,
+    get_default_base_dir,
+    get_genesis_file_path,
     get_live_data_dir,
     get_testnet_data_dir,
+    initialize_chain,
+    is_live_chain,
+    is_testnet_chain,
 )
 
 
@@ -128,7 +132,25 @@ class DevGethProcess(BaseGethProcess):
         geth_kwargs = construct_test_chain_kwargs(**overrides)
         self.data_dir = get_chain_data_dir(base_dir, chain_name)
 
-        ensure_account_exists(self.data_dir, **geth_kwargs)
+        # ensure that an account is present
+        coinbase = ensure_account_exists(self.data_dir, **geth_kwargs)
+
+        # ensure that the chain is initialized
+        genesis_file_path = get_genesis_file_path(self.data_dir)
+
+        needs_init = tuple((
+            not os.path.exists(genesis_file_path),
+            not is_live_chain(self.data_dir),
+            not is_testnet_chain(self.data_dir),
+        ))
+
+        if needs_init or True:
+            genesis_data = {
+                'alloc': dict([
+                    (coinbase, {"balance": "1000000000000000000000000000000"}),  # 1 billion ether.
+                ]),
+            }
+            initialize_chain(genesis_data, self.data_dir, **geth_kwargs)
 
         geth_kwargs['data_dir'] = self.data_dir
 

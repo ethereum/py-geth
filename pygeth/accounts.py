@@ -3,12 +3,6 @@ import re
 
 from .wrapper import spawn_geth
 from .utils.proc import format_error_message
-from .chain import (
-    get_genesis_file_path,
-    is_live_chain,
-    is_testnet_chain,
-    write_genesis_file,
-)
 
 
 def get_accounts(data_dir, **geth_kwargs):
@@ -84,20 +78,6 @@ def ensure_account_exists(data_dir, **geth_kwargs):
     accounts = get_accounts(data_dir, **geth_kwargs)
     if not accounts:
         account = create_new_account(data_dir, **geth_kwargs)
-        genesis_file_path = get_genesis_file_path(data_dir)
-
-        should_write_genesis = not any((
-            os.path.exists(genesis_file_path),
-            is_live_chain(data_dir),
-            is_testnet_chain(data_dir),
-        ))
-        if should_write_genesis:
-            write_genesis_file(
-                genesis_file_path,
-                alloc=dict([
-                    (account, "1000000000000000000000000000"),  # 1 billion ether.
-                ]),
-            )
     else:
         account = accounts[0]
     return account

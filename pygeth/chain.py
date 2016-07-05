@@ -3,6 +3,7 @@ import json
 import sys
 
 
+from .wrapper import spawn_geth
 from .utils.encoding import (
     force_obj_to_text,
 )
@@ -106,3 +107,20 @@ def write_genesis_file(genesis_file_path,
 
     with open(genesis_file_path, 'w') as genesis_file:
         genesis_file.write(json.dumps(force_obj_to_text(genesis_data)))
+
+
+def initialize_chain(genesis_data, data_dir, **geth_kwargs):
+    genesis_file_path = get_genesis_file_path(data_dir)
+    write_genesis_file(
+        genesis_file_path,
+        **genesis_data
+    )
+    command, proc = spawn_geth(dict(
+        data_dir=data_dir,
+        suffix_args=['init', genesis_file_path],
+        **geth_kwargs
+    ))
+    stdoutdata, stderrdata = proc.communicate()
+
+    if proc.returncode:
+        raise ValueError("Error: {0}".format(stdoutdata + stderrdata))

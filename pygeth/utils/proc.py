@@ -1,11 +1,13 @@
 import time
 import signal
 
+import gevent
+
 
 def wait_for_popen(proc, max_wait=5):
     wait_till = time.time() + 5
     while proc.poll() is None and time.time() < wait_till:
-        time.sleep(0.1)
+        gevent.sleep(0.1)
 
 
 def kill_proc(proc):
