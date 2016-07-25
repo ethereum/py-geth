@@ -1,5 +1,18 @@
 import os
+import random
 
+try:
+    from urllib.request import (
+        urlopen,
+        URLError,
+    )
+except ImportError:
+    from urllib2 import (
+        urlopen,
+        URLError,
+    )
+
+import gevent
 from gevent import subprocess
 
 from .utils.proc import (
@@ -46,6 +59,10 @@ class BaseGethProcess(object):
             stderr=subprocess.PIPE,
         )
 
+    def __enter__(self):
+        self.start()
+        return self
+
     def stop(self):
         if not self.is_running:
             raise ValueError("Not running")
@@ -54,6 +71,9 @@ class BaseGethProcess(object):
             kill_proc(self._proc)
 
         self.is_running = False
+
+    def __exit__(self, *exc_info):
+        self.stop()
 
     @property
     def is_alive(self):
@@ -79,6 +99,26 @@ class BaseGethProcess(object):
     def rpc_port(self):
         return self.geth_kwargs.get('rpc_port', '8545')
 
+    def wait_for_rpc(self, timeout=0):
+        if not self.rpc_enabled:
+            raise ValueError("RPC interface is not enabled")
+
+        with gevent.Timeout(timeout):
+            while True:
+                try:
+                    urlopen("http://{0}:{1}".format(
+                        self.rpc_host,
+                        self.rpc_port,
+                    ))
+                except URLError:
+                    gevent.sleep(random.random())
+                else:
+                    break
+
+    @property
+    def ipc_enabled(self):
+        raise NotImplementedError("Not implemented")
+
     @property
     def ipc_path(self):
         return self.geth_kwargs.get(
@@ -87,6 +127,22 @@ class BaseGethProcess(object):
                 get_live_data_dir(), 'geth.ipc',
             ))),
         )
+
+    def wait_for_ipc(self, timeout=0):
+        if not self.ipc_enabled:
+            raise ValueError("IPC interface is not enabled")
+
+        with gevent.Timeout(timeout):
+            while True:
+                try:
+                    raise NotImplementedError("Need to do socket connection")
+                except URLError:
+                    gevent.sleep(random.random())
+                else:
+                    break
+
+    def wait_for_dag(self, timeout=0):
+        raise NotImplementedError("Not implemented")
 
 
 class LiveGethProcess(BaseGethProcess):
