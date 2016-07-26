@@ -168,7 +168,7 @@ class BaseGethProcess(object):
     def wait_for_dag(self, timeout=0):
         with gevent.Timeout(timeout):
             while True:
-                if self.is_dag_generated():
+                if self.is_dag_generated:
                     break
                 gevent.sleep(random.random())
 
