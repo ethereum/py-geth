@@ -106,21 +106,27 @@ class BaseGethProcess(object):
     def rpc_port(self):
         return self.geth_kwargs.get('rpc_port', '8545')
 
+    @property
+    def is_rpc_ready(self):
+        try:
+            urlopen("http://{0}:{1}".format(
+                self.rpc_host,
+                self.rpc_port,
+            ))
+        except URLError:
+            return False
+        else:
+            return True
+
     def wait_for_rpc(self, timeout=0):
         if not self.rpc_enabled:
             raise ValueError("RPC interface is not enabled")
 
         with gevent.Timeout(timeout):
             while True:
-                try:
-                    urlopen("http://{0}:{1}".format(
-                        self.rpc_host,
-                        self.rpc_port,
-                    ))
-                except URLError:
-                    gevent.sleep(random.random())
-                else:
+                if self.is_rpc_ready:
                     break
+                gevent.sleep(random.random())
 
     @property
     def ipc_enabled(self):
@@ -135,24 +141,34 @@ class BaseGethProcess(object):
             ))),
         )
 
+    @property
+    def is_ipc_ready(self):
+        try:
+            with get_ipc_socket(self.ipc_path):
+                pass
+        except socket.error:
+            return False
+        else:
+            return True
+
     def wait_for_ipc(self, timeout=0):
         if not self.ipc_enabled:
             raise ValueError("IPC interface is not enabled")
 
         with gevent.Timeout(timeout):
             while True:
-                try:
-                    with get_ipc_socket(self.ipc_path):
-                        pass
-                except socket.error as e:
-                    gevent.sleep(random.random())
-                else:
+                if self.is_ipc_ready:
                     break
+                gevent.sleep(random.random())
+
+    @property
+    def is_dag_generated(self):
+        return is_dag_generated()
 
     def wait_for_dag(self, timeout=0):
         with gevent.Timeout(timeout):
             while True:
-                if is_dag_generated():
+                if self.is_dag_generated():
                     break
                 gevent.sleep(random.random())
 

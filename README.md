@@ -96,6 +96,24 @@ and stderr output to a logfile.
 
 All logs will be written to logfiles in `./logs/` in the current directory.
 
+The underlying `geth` process can take additional time to open the RPC or IPC
+connections, as well as to start mining if it needs to generate the DAG.  You
+can use the following interfaces to query whether these are ready.
+
+```python
+>>> geth.is_rpc_ready
+True
+>>> geth.wait_for_rpc(timeout=30)  # wait up to 30 seconds for the RPC connection to open
+>>> geth.is_ipc_ready
+True
+>>> geth.wait_for_ipc(timeout=30)  # wait up to 30 seconds for the IPC socket to open
+>>> geth.is_dag_ready
+True
+>>> geth.wait_for_dag(timeout=600)  # wait up to 10 minutes for the DAG to generate.
+```
+
+> The DAG functionality currently only applies to the DAG for epoch 0.
+
 
 # Aboutn `DevGethProcess`
 
