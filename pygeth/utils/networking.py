@@ -1,4 +1,6 @@
-import socket
+import contextlib
+
+from gevent import socket
 
 
 def is_port_open(port):
@@ -18,3 +20,14 @@ def get_open_port():
     port = sock.getsockname()[1]
     sock.close()
     return str(port)
+
+
+@contextlib.contextmanager
+def get_ipc_socket(ipc_path, timeout=0.1):
+    sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    sock.connect(ipc_path)
+    sock.settimeout(timeout)
+
+    yield sock
+
+    sock.close()

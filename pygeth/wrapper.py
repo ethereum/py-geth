@@ -65,6 +65,7 @@ def construct_popen_command(data_dir=None,
                             password=None,
                             port=None,
                             verbosity=None,
+                            ipc_disable=None,
                             ipc_path=None,
                             ipc_api=None,
                             rpc_enabled=None,
@@ -104,6 +105,9 @@ def construct_popen_command(data_dir=None,
 
     if port is not None:
         command.extend(('--port', port))
+
+    if ipc_disable:
+        command.append('--ipcdisable')
 
     if ipc_path is not None:
         command.extend(('--ipcpath', ipc_path))

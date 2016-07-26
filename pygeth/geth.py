@@ -14,7 +14,14 @@ except ImportError:
 
 import gevent
 from gevent import subprocess
+from gevent import socket
 
+from .utils.networking import (
+    get_ipc_socket,
+)
+from .utils.dag import (
+    is_dag_generated,
+)
 from .utils.proc import (
     kill_proc,
 )
@@ -117,7 +124,7 @@ class BaseGethProcess(object):
 
     @property
     def ipc_enabled(self):
-        raise NotImplementedError("Not implemented")
+        return not self.geth_kwargs.get('ipc_disable', None)
 
     @property
     def ipc_path(self):
@@ -135,14 +142,19 @@ class BaseGethProcess(object):
         with gevent.Timeout(timeout):
             while True:
                 try:
-                    raise NotImplementedError("Need to do socket connection")
-                except URLError:
+                    with get_ipc_socket(self.ipc_path):
+                        pass
+                except socket.error as e:
                     gevent.sleep(random.random())
                 else:
                     break
 
     def wait_for_dag(self, timeout=0):
-        raise NotImplementedError("Not implemented")
+        with gevent.Timeout(timeout):
+            while True:
+                if is_dag_generated():
+                    break
+                gevent.sleep(random.random())
 
 
 class LiveGethProcess(BaseGethProcess):
