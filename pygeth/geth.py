@@ -1,7 +1,27 @@
 import os
+import random
 
+try:
+    from urllib.request import (
+        urlopen,
+        URLError,
+    )
+except ImportError:
+    from urllib2 import (
+        urlopen,
+        URLError,
+    )
+
+import gevent
 from gevent import subprocess
+from gevent import socket
 
+from .utils.networking import (
+    get_ipc_socket,
+)
+from .utils.dag import (
+    is_dag_generated,
+)
 from .utils.proc import (
     kill_proc,
 )
@@ -39,29 +59,36 @@ class BaseGethProcess(object):
             raise ValueError("Already running")
         self.is_running = True
 
-        self._proc = subprocess.Popen(
+        self.proc = subprocess.Popen(
             self.command,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
 
+    def __enter__(self):
+        self.start()
+        return self
+
     def stop(self):
         if not self.is_running:
             raise ValueError("Not running")
 
-        if self._proc.poll() is None:
-            kill_proc(self._proc)
+        if self.proc.poll() is None:
+            kill_proc(self.proc)
 
         self.is_running = False
 
+    def __exit__(self, *exc_info):
+        self.stop()
+
     @property
     def is_alive(self):
-        return self.is_running and self._proc.poll() is None
+        return self.is_running and self.proc.poll() is None
 
     @property
     def is_stopped(self):
-        return self._proc is not None and self._proc.poll() is not None
+        return self.proc is not None and self.proc.poll() is not None
 
     @property
     def accounts(self):
@@ -80,6 +107,32 @@ class BaseGethProcess(object):
         return self.geth_kwargs.get('rpc_port', '8545')
 
     @property
+    def is_rpc_ready(self):
+        try:
+            urlopen("http://{0}:{1}".format(
+                self.rpc_host,
+                self.rpc_port,
+            ))
+        except URLError:
+            return False
+        else:
+            return True
+
+    def wait_for_rpc(self, timeout=0):
+        if not self.rpc_enabled:
+            raise ValueError("RPC interface is not enabled")
+
+        with gevent.Timeout(timeout):
+            while True:
+                if self.is_rpc_ready:
+                    break
+                gevent.sleep(random.random())
+
+    @property
+    def ipc_enabled(self):
+        return not self.geth_kwargs.get('ipc_disable', None)
+
+    @property
     def ipc_path(self):
         return self.geth_kwargs.get(
             'ipc_path',
@@ -87,6 +140,44 @@ class BaseGethProcess(object):
                 get_live_data_dir(), 'geth.ipc',
             ))),
         )
+
+    @property
+    def is_ipc_ready(self):
+        try:
+            with get_ipc_socket(self.ipc_path):
+                pass
+        except socket.error:
+            return False
+        else:
+            return True
+
+    def wait_for_ipc(self, timeout=0):
+        if not self.ipc_enabled:
+            raise ValueError("IPC interface is not enabled")
+
+        with gevent.Timeout(timeout):
+            while True:
+                if self.is_ipc_ready:
+                    break
+                gevent.sleep(random.random())
+
+    @property
+    def is_dag_generated(self):
+        return is_dag_generated()
+
+    @property
+    def is_mining(self):
+        return self.geth_kwargs.get('mine', False)
+
+    def wait_for_dag(self, timeout=0):
+        if not self.is_mining and not self.geth_kwargs.get('autodag', False):
+            raise ValueError("Geth not configured to generate DAG")
+
+        with gevent.Timeout(timeout):
+            while True:
+                if self.is_dag_generated:
+                    break
+                gevent.sleep(random.random())
 
 
 class LiveGethProcess(BaseGethProcess):
@@ -138,13 +229,13 @@ class DevGethProcess(BaseGethProcess):
         # ensure that the chain is initialized
         genesis_file_path = get_genesis_file_path(self.data_dir)
 
-        needs_init = tuple((
+        needs_init = all((
             not os.path.exists(genesis_file_path),
             not is_live_chain(self.data_dir),
             not is_testnet_chain(self.data_dir),
         ))
 
-        if needs_init or True:
+        if needs_init:
             genesis_data = {
                 'alloc': dict([
                     (coinbase, {"balance": "1000000000000000000000000000000"}),  # 1 billion ether.

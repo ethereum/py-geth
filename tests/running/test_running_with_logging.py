@@ -1,20 +1,11 @@
 import gevent
 
 from pygeth.geth import DevGethProcess
-from pygeth.logging import LoggingMixin
+from pygeth.mixins import LoggingMixin
 
 
 class WithLogging(LoggingMixin, DevGethProcess):
     pass
-
-
-def wait_for_line(stream, timeout=30):
-    with gevent.Timeout(timeout):
-        while True:
-            line = stream.readline()
-            if line:
-                break
-            gevent.sleep(0.1)
 
 
 def test_with_logging(base_dir):

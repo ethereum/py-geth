@@ -59,12 +59,14 @@ def construct_popen_command(data_dir=None,
                             network_id=None,
                             no_discover=None,
                             mine=False,
+                            autodag=False,
                             miner_threads=None,
                             nice=True,
                             unlock=None,
                             password=None,
                             port=None,
                             verbosity=None,
+                            ipc_disable=None,
                             ipc_path=None,
                             ipc_api=None,
                             rpc_enabled=None,
@@ -105,6 +107,9 @@ def construct_popen_command(data_dir=None,
     if port is not None:
         command.extend(('--port', port))
 
+    if ipc_disable:
+        command.append('--ipcdisable')
+
     if ipc_path is not None:
         command.extend(('--ipcpath', ipc_path))
 
@@ -138,6 +143,9 @@ def construct_popen_command(data_dir=None,
         if not mine:
             raise ValueError("`mine` must be truthy when specifying `miner_threads`")
         command.extend(('--minerthreads', miner_threads))
+
+    if autodag:
+        command.append('--autodag')
 
     if suffix_kwargs:
         command.extend(suffix_kwargs)

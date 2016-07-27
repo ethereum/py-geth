@@ -1,8 +1,5 @@
 import pkg_resources
 
-from gevent import monkey
-monkey.patch_all()
-
 
 __version__ = pkg_resources.get_distribution("py-geth").version
 
@@ -12,6 +9,7 @@ from .geth import (  # NOQA
     TestnetGethProcess,
     DevGethProcess,
 )
-from .logging import (  # NOQA
+from .mixins import (  # NOQA
+    InterceptedStreamsMixin,
     LoggingMixin,
 )
