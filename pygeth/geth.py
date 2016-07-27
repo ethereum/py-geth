@@ -165,7 +165,14 @@ class BaseGethProcess(object):
     def is_dag_generated(self):
         return is_dag_generated()
 
+    @property
+    def is_mining(self):
+        return self.geth_kwargs.get('mine', False)
+
     def wait_for_dag(self, timeout=0):
+        if not self.is_mining and not self.geth_kwargs.get('autodag', False):
+            raise ValueError("Geth not configured to generate DAG")
+
         with gevent.Timeout(timeout):
             while True:
                 if self.is_dag_generated:

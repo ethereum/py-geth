@@ -59,6 +59,7 @@ def construct_popen_command(data_dir=None,
                             network_id=None,
                             no_discover=None,
                             mine=False,
+                            autodag=False,
                             miner_threads=None,
                             nice=True,
                             unlock=None,
@@ -142,6 +143,9 @@ def construct_popen_command(data_dir=None,
         if not mine:
             raise ValueError("`mine` must be truthy when specifying `miner_threads`")
         command.extend(('--minerthreads', miner_threads))
+
+    if autodag:
+        command.append('--autodag')
 
     if suffix_kwargs:
         command.extend(suffix_kwargs)
