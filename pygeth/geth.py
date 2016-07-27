@@ -59,7 +59,7 @@ class BaseGethProcess(object):
             raise ValueError("Already running")
         self.is_running = True
 
-        self._proc = subprocess.Popen(
+        self.proc = subprocess.Popen(
             self.command,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
@@ -74,8 +74,8 @@ class BaseGethProcess(object):
         if not self.is_running:
             raise ValueError("Not running")
 
-        if self._proc.poll() is None:
-            kill_proc(self._proc)
+        if self.proc.poll() is None:
+            kill_proc(self.proc)
 
         self.is_running = False
 
@@ -84,11 +84,11 @@ class BaseGethProcess(object):
 
     @property
     def is_alive(self):
-        return self.is_running and self._proc.poll() is None
+        return self.is_running and self.proc.poll() is None
 
     @property
     def is_stopped(self):
-        return self._proc is not None and self._proc.poll() is not None
+        return self.proc is not None and self.proc.poll() is not None
 
     @property
     def accounts(self):
@@ -229,13 +229,13 @@ class DevGethProcess(BaseGethProcess):
         # ensure that the chain is initialized
         genesis_file_path = get_genesis_file_path(self.data_dir)
 
-        needs_init = tuple((
+        needs_init = all((
             not os.path.exists(genesis_file_path),
             not is_live_chain(self.data_dir),
             not is_testnet_chain(self.data_dir),
         ))
 
-        if needs_init or True:
+        if needs_init:
             genesis_data = {
                 'alloc': dict([
                     (coinbase, {"balance": "1000000000000000000000000000000"}),  # 1 billion ether.

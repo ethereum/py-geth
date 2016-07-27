@@ -12,6 +12,7 @@ from .geth import (  # NOQA
     TestnetGethProcess,
     DevGethProcess,
 )
-from .logging import (  # NOQA
+from .mixins import (  # NOQA
+    InterceptedStreamsMixin,
     LoggingMixin,
 )
