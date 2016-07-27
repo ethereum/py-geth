@@ -103,12 +103,12 @@ class InterceptedStreamsMixin(object):
         super(InterceptedStreamsMixin, self).stop()
 
         try:
-            self.stdout_logger_queue.join(5)
+            self.stdout_queue.join(5)
         except Timeout:
             pass
 
         try:
-            self.stderr_logger_queue.join(5)
+            self.stderr_queue.join(5)
         except Timeout:
             pass
 
