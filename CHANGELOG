@@ -1,3 +1,12 @@
+0.6.0
+-----
+
+- Add `is_rpc_ready` and `wait_for_rpc` api.
+- Add `is_ipc_ready` and `wait_for_ipc` api.
+- Add `is_dag_generated` and `wait_for_dag` api.
+- Refactor `LoggingMixin` core logic into base `InterceptedStreamsMixin`
+
+
 0.5.0
 -----
 
