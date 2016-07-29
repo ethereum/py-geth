@@ -48,6 +48,7 @@ def construct_test_chain_kwargs(**overrides):
         overrides.setdefault('rpc_port', get_open_port())
 
     overrides.setdefault('ipc_path', tempfile.NamedTemporaryFile().name)
+    overrides.setdefault('ipc_api', ALL_APIS)
 
     overrides.setdefault('verbosity', '5')
     return overrides
