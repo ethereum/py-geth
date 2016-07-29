@@ -22,7 +22,7 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 
 lint:
-	flake8 pygeth
+	flake8 geth
 
 test:
 	py.test --tb native tests

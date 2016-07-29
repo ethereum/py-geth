@@ -5,9 +5,9 @@ import pytest
 
 import gevent
 
-from pygeth.wrapper import spawn_geth
+from geth.wrapper import spawn_geth
 
-from pygeth.utils.dag import is_dag_generated
+from geth.utils.dag import is_dag_generated
 
 
 @pytest.mark.skipif(

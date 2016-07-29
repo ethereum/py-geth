@@ -3,10 +3,10 @@ import shutil
 
 import pytest
 
-from pygeth.chain import (
+from geth.chain import (
     get_chain_data_dir,
 )
-from pygeth.accounts import (
+from geth.accounts import (
     create_new_account,
     get_accounts,
 )

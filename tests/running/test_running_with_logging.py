@@ -1,7 +1,7 @@
 import gevent
 
-from pygeth.geth import DevGethProcess
-from pygeth.mixins import LoggingMixin
+from geth.geth import DevGethProcess
+from geth.mixins import LoggingMixin
 
 
 class WithLogging(LoggingMixin, DevGethProcess):

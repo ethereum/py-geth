@@ -1,7 +1,7 @@
 import pytest
 import os
 
-from pygeth.chain import is_testnet_chain
+from geth.chain import is_testnet_chain
 
 
 @pytest.mark.parametrize(

@@ -1,4 +1,4 @@
-from pygeth.accounts import parse_geth_accounts
+from geth.accounts import parse_geth_accounts
 
 
 raw_accounts = b"""Account #0: {d3cda913deb6f67967b99d67acdfa1712c293601}

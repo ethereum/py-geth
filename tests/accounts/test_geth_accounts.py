@@ -1,4 +1,4 @@
-from pygeth.accounts import (
+from geth.accounts import (
     get_accounts,
 )
 
