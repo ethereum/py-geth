@@ -1,7 +1,7 @@
 import pytest
 import os
 
-from pygeth.chain import is_live_chain
+from geth.chain import is_live_chain
 
 
 @pytest.mark.parametrize(

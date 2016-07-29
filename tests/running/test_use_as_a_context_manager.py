@@ -1,4 +1,4 @@
-from pygeth.geth import DevGethProcess
+from geth.geth import DevGethProcess
 
 
 def test_using_as_a_context_manager(base_dir):

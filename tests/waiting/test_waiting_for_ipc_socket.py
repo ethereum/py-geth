@@ -3,7 +3,7 @@ from flaky import flaky
 
 import gevent
 
-from pygeth.geth import DevGethProcess
+from geth.geth import DevGethProcess
 
 
 def test_waiting_for_ipc_socket(base_dir):

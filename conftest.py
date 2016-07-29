@@ -5,13 +5,13 @@ import requests
 
 @pytest.fixture
 def open_port():
-    from pygeth.utils import get_open_port
+    from geth.utils import get_open_port
     return get_open_port()
 
 
 @pytest.fixture()
 def rpc_client(open_port):
-    from pygeth.utils.encoding import force_obj_to_text
+    from geth.utils.encoding import force_obj_to_text
     endpoint = "http://127.0.0.1:{port}".format(port=open_port)
 
     def make_request(method, params=None, raise_on_error=True):

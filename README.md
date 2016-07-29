@@ -26,7 +26,7 @@ To run geth connected to the mainnet
 
 
 ```python
->>> from pygeth import LiveGethProcess
+>>> from geth import LiveGethProcess
 >>> geth = LiveGethProcess()
 >>> geth.start()
 ```
@@ -34,7 +34,7 @@ To run geth connected to the mainnet
 Or a private local chain for testing.  These require you to give them a name.
 
 ```python
->>> from pygeth import DevGethProcess
+>>> from geth import DevGethProcess
 >>> geth = DevGethProcess('testing')
 >>> geth.start()
 ```
@@ -87,7 +87,7 @@ process.  `py-geth` provides a mixin class that can be used to log the stdout
 and stderr output to a logfile.
 
 ```python
->>> from pygeth import LoggingMixin, DevGethProcess
+>>> from geth import LoggingMixin, DevGethProcess
 >>> class MyGeth(LoggingMixin, DevGethProcess):
 ...     pass
 >>> geth = MyGeth()

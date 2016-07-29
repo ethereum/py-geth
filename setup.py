@@ -22,7 +22,7 @@ setup(
     author_email='pipermerriam@gmail.com',
     url='https://github.com/pipermerriam/py-geth',
     include_package_data=True,
-    py_modules=['pygeth'],
+    py_modules=['geth'],
     install_requires=[
         "gevent>=1.1.1",
     ],
