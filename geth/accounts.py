@@ -38,6 +38,52 @@ account_regex = re.compile(b'\{([a-f0-9]{40})\}')
 
 
 def create_new_account(data_dir, password, **geth_kwargs):
+    """Creates a new Ethereum account on geth.
+
+    This is useful for testing when you want to stress
+    interaction (transfers) between Ethereum accounts.
+
+    This command communicates with ``geth`` command over
+    terminal interaction. It creates keystore folder and new
+    account there.
+
+    Example py.test fixture for tests:
+
+    .. code-block:: python
+
+        import os
+
+        from geth.wrapper import DEFAULT_PASSWORD_PATH
+        from geth.accounts import create_new_account
+
+
+        @pytest.fixture
+        def target_account() -> str:
+            '''Create a new Ethereum account on a running Geth node.
+
+            The account can be used as a withdrawal target for tests.
+
+            :return: 0x address of the account
+            '''
+
+            # We store keystore files in the current working directory
+            # of the test run
+            data_dir = os.getcwd()
+
+            # Use the default password "this-is-not-a-secure-password"
+            # as supplied in geth/default_blockchain_password file.
+            # The supplied password must be bytes, not string,
+            # as we only want ASCII characters and do not want to
+            # deal encoding problems with passwords
+            account = create_new_account(data_dir, DEFAULT_PASSWORD_PATH)
+            return account
+
+    :param data_dir: Geth data fir path - where to keep "keystore" folder
+    :param password: Path to a file containing the password
+        for newly created account
+    :param geth_kwargs: Extra command line arguments passwrord to geth
+    :return: Account as 0x prefixed hex string
+    """
     if os.path.exists(password):
         geth_kwargs['password'] = password
 
