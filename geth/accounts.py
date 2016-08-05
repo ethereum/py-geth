@@ -47,6 +47,15 @@ def create_new_account(data_dir, password, **geth_kwargs):
     terminal interaction. It creates keystore folder and new
     account there.
 
+    This function only works against offline geth processes,
+    because geth builds an account cache when starting up.
+    If geth process is already running you can create new
+    accounts using
+    `web3.personal.newAccount()
+    <https://github.com/ethereum/go-ethereum/wiki/JavaScript-Console#personalnewaccount>_`
+    RPC API.
+
+
     Example py.test fixture for tests:
 
     .. code-block:: python
