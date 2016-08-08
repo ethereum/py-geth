@@ -85,13 +85,21 @@ def write_genesis_file(genesis_file_path,
                        difficulty="0x400",
                        mixhash="0x0000000000000000000000000000000000000000000000000000000000000000",  # NOQA
                        coinbase="0x3333333333333333333333333333333333333333",
-                       alloc=None):
+                       alloc=None,
+                       config=None):
 
     if os.path.exists(genesis_file_path) and not overwrite:
         raise ValueError("Genesis file already present.  call with `overwrite=True` to overwrite this file")  # NOQA
 
     if alloc is None:
         alloc = {}
+
+    if config is None:
+        config = {
+            'homesteadBlock': 0,
+            'daoForkBlock': 0,
+            'daoForSupport': True,
+        }
 
     genesis_data = {
         "nonce": nonce,
@@ -103,6 +111,7 @@ def write_genesis_file(genesis_file_path,
         "mixhash": mixhash,
         "coinbase": coinbase,
         "alloc": alloc,
+        "config": config,
     }
 
     with open(genesis_file_path, 'w') as genesis_file:
