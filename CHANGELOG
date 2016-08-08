@@ -1,3 +1,9 @@
+0.8.0
+-----
+
+- Add `homesteadBlock`, `daoForkBlock`, and `doaForkSupport` to the genesis
+  config that is written for test chains.
+
 0.7.0
 -----
 
