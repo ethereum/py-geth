@@ -227,7 +227,7 @@ class DevGethProcess(BaseGethProcess):
         )
 
         # ensure that an account is present
-        coinbase = ensure_account_exists(self.data_dir, **geth_kwargs)
+        coinbase = ensure_account_exists(**geth_kwargs)
 
         # ensure that the chain is initialized
         genesis_file_path = get_genesis_file_path(self.data_dir)
@@ -244,6 +244,6 @@ class DevGethProcess(BaseGethProcess):
                     (coinbase, {"balance": "1000000000000000000000000000000"}),  # 1 billion ether.
                 ]),
             }
-            initialize_chain(genesis_data, self.data_dir, **geth_kwargs)
+            initialize_chain(genesis_data, **geth_kwargs)
 
         super(DevGethProcess, self).__init__(geth_kwargs)
