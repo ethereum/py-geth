@@ -134,7 +134,12 @@ class BaseGethProcess(object):
 
     @property
     def ipc_path(self):
-        raise NotImplementedError("Must be implemented by subclasses")
+        return self.geth_kwargs.get(
+            'ipc_path',
+            os.path.abspath(os.path.expanduser(os.path.join(
+                self.data_dir, 'geth.ipc',
+            )))
+        )
 
     @property
     def is_ipc_ready(self):
@@ -189,15 +194,6 @@ class LiveGethProcess(BaseGethProcess):
     def data_dir(self):
         return get_live_data_dir()
 
-    @property
-    def ipc_path(self):
-        return self.geth_kwargs.get(
-            'ipc_path',
-            os.path.abspath(os.path.expanduser(os.path.join(
-                self.data_dir, 'geth.ipc',
-            ))),
-        )
-
 
 class TestnetGethProcess(BaseGethProcess):
     def __init__(self, geth_kwargs=None):
@@ -217,15 +213,6 @@ class TestnetGethProcess(BaseGethProcess):
     @property
     def data_dir(self):
         return get_testnet_data_dir()
-
-    @property
-    def ipc_path(self):
-        return self.geth_kwargs.get(
-            'ipc_path',
-            os.path.abspath(os.path.expanduser(os.path.join(
-                self.data_dir, 'geth.ipc',
-            )))
-        )
 
 
 class DevGethProcess(BaseGethProcess):
