@@ -1,3 +1,9 @@
+0.9.0
+-----
+
+- Fix broken LiveGethProcess and TestnetGethProcess classes.
+- Let DevGethProcesses use a local geth.ipc if the path is short enough.
+
 0.8.0
 -----
 
