@@ -74,7 +74,7 @@ def construct_test_chain_kwargs(**overrides):
         # Otherwise default to a tempfile based ipc path.
         overrides.setdefault(
             'ipc_path',
-            os.path.join(tempfile.mkdtemp, 'geth.ipc'),
+            os.path.join(tempfile.mkdtemp(), 'geth.ipc'),
         )
 
     overrides.setdefault('ipc_path', tempfile.NamedTemporaryFile().name)
