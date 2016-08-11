@@ -1,4 +1,5 @@
 import os
+import sys
 import functools
 import tempfile
 
@@ -25,6 +26,17 @@ DEFAULT_PASSWORD_PATH = os.path.join(PYGETH_DIR, 'default_blockchain_password')
 ALL_APIS = "admin,debug,eth,miner,net,personal,shh,txpool,web3"
 
 
+def get_max_socket_path_length():
+    if 'UNIX_PATH_MAX' in os.environ:
+        return int(os.environ['UNIX_PATH_MAX'])
+    if sys.platform.startswith('darwin'):
+        return 104
+    elif sys.platform.startswith('linux'):
+        return 108
+    elif sys.platform.startswith('win'):
+        return 260
+
+
 def construct_test_chain_kwargs(**overrides):
     overrides.setdefault('unlock', '0')
     overrides.setdefault('password', DEFAULT_PASSWORD_PATH)
@@ -46,6 +58,24 @@ def construct_test_chain_kwargs(**overrides):
         overrides.setdefault('rpc_port', '8545')
     else:
         overrides.setdefault('rpc_port', get_open_port())
+
+    if 'ipc_path' not in overrides:
+        # try to use a `geth.ipc` within the provided data_dir if the path is
+        # short enough.
+        if 'data_dir' in overrides:
+            max_path_length = get_max_socket_path_length()
+            geth_ipc_path = os.path.abspath(os.path.join(
+                overrides['data_dir'],
+                'geth.ipc'
+            ))
+            if len(geth_ipc_path) <= max_path_length:
+                overrides.setdefault('ipc_path', geth_ipc_path)
+
+        # Otherwise default to a tempfile based ipc path.
+        overrides.setdefault(
+            'ipc_path',
+            os.path.join(tempfile.TemporaryDirectory().name, 'geth.ipc'),
+        )
 
     overrides.setdefault('ipc_path', tempfile.NamedTemporaryFile().name)
     overrides.setdefault('ipc_api', ALL_APIS)

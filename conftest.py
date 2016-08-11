@@ -1,6 +1,8 @@
-import pytest
 import json
+
 import requests
+
+import pytest
 
 
 @pytest.fixture
