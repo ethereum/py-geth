@@ -221,7 +221,10 @@ class DevGethProcess(BaseGethProcess):
             base_dir = get_default_base_dir()
 
         self.data_dir = get_chain_data_dir(base_dir, chain_name)
-        geth_kwargs = construct_test_chain_kwargs(data_dir=data_dir, **overrides)
+        geth_kwargs = construct_test_chain_kwargs(
+            data_dir=self.data_dir,
+            **overrides
+        )
 
         # ensure that an account is present
         coinbase = ensure_account_exists(self.data_dir, **geth_kwargs)
@@ -242,7 +245,5 @@ class DevGethProcess(BaseGethProcess):
                 ]),
             }
             initialize_chain(genesis_data, self.data_dir, **geth_kwargs)
-
-        geth_kwargs['data_dir'] = self.data_dir
 
         super(DevGethProcess, self).__init__(geth_kwargs)
