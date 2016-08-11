@@ -137,8 +137,8 @@ class BaseGethProcess(object):
         return self.geth_kwargs.get(
             'ipc_path',
             os.path.abspath(os.path.expanduser(os.path.join(
-                get_live_data_dir(), 'geth.ipc',
-            ))),
+                self.data_dir, 'geth.ipc',
+            )))
         )
 
     @property
@@ -181,7 +181,10 @@ class BaseGethProcess(object):
 
 
 class LiveGethProcess(BaseGethProcess):
-    def __init__(self, geth_kwargs):
+    def __init__(self, geth_kwargs=None):
+        if geth_kwargs is None:
+            geth_kwargs = {}
+
         if 'data_dir' in geth_kwargs:
             raise ValueError("You cannot specify `data_dir` for a LiveGethProcess")
 
@@ -193,14 +196,17 @@ class LiveGethProcess(BaseGethProcess):
 
 
 class TestnetGethProcess(BaseGethProcess):
-    def __init__(self, geth_kwargs):
+    def __init__(self, geth_kwargs=None):
+        if geth_kwargs is None:
+            geth_kwargs = {}
+
         if 'data_dir' in geth_kwargs:
             raise ValueError("You cannot specify `data_dir` for a TestnetGethProces")
 
-        extra_kwargs = geth_kwargs.get('extra_kwargs', [])
-        extra_kwargs.append('--testnet')
+        suffix_kwargs = geth_kwargs.get('suffix_kwargs', [])
+        suffix_kwargs.append('--testnet')
 
-        geth_kwargs['extra_kwargs'] = extra_kwargs
+        geth_kwargs['suffix_kwargs'] = suffix_kwargs
 
         super(TestnetGethProcess, self).__init__(geth_kwargs)
 
@@ -220,11 +226,14 @@ class DevGethProcess(BaseGethProcess):
         if base_dir is None:
             base_dir = get_default_base_dir()
 
-        geth_kwargs = construct_test_chain_kwargs(**overrides)
         self.data_dir = get_chain_data_dir(base_dir, chain_name)
+        geth_kwargs = construct_test_chain_kwargs(
+            data_dir=self.data_dir,
+            **overrides
+        )
 
         # ensure that an account is present
-        coinbase = ensure_account_exists(self.data_dir, **geth_kwargs)
+        coinbase = ensure_account_exists(**geth_kwargs)
 
         # ensure that the chain is initialized
         genesis_file_path = get_genesis_file_path(self.data_dir)
@@ -241,8 +250,6 @@ class DevGethProcess(BaseGethProcess):
                     (coinbase, {"balance": "1000000000000000000000000000000"}),  # 1 billion ether.
                 ]),
             }
-            initialize_chain(genesis_data, self.data_dir, **geth_kwargs)
-
-        geth_kwargs['data_dir'] = self.data_dir
+            initialize_chain(genesis_data, **geth_kwargs)
 
         super(DevGethProcess, self).__init__(geth_kwargs)
