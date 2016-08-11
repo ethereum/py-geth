@@ -134,12 +134,7 @@ class BaseGethProcess(object):
 
     @property
     def ipc_path(self):
-        return self.geth_kwargs.get(
-            'ipc_path',
-            os.path.abspath(os.path.expanduser(os.path.join(
-                get_live_data_dir(), 'geth.ipc',
-            ))),
-        )
+        raise NotImplementedError("Must be implemented by subclasses")
 
     @property
     def is_ipc_ready(self):
@@ -181,7 +176,10 @@ class BaseGethProcess(object):
 
 
 class LiveGethProcess(BaseGethProcess):
-    def __init__(self, geth_kwargs):
+    def __init__(self, geth_kwargs=None):
+        if geth_kwargs is None:
+            geth_kwargs = {}
+
         if 'data_dir' in geth_kwargs:
             raise ValueError("You cannot specify `data_dir` for a LiveGethProcess")
 
@@ -191,22 +189,43 @@ class LiveGethProcess(BaseGethProcess):
     def data_dir(self):
         return get_live_data_dir()
 
+    @property
+    def ipc_path(self):
+        return self.geth_kwargs.get(
+            'ipc_path',
+            os.path.abspath(os.path.expanduser(os.path.join(
+                self.data_dir, 'geth.ipc',
+            ))),
+        )
+
 
 class TestnetGethProcess(BaseGethProcess):
-    def __init__(self, geth_kwargs):
+    def __init__(self, geth_kwargs=None):
+        if geth_kwargs is None:
+            geth_kwargs = {}
+
         if 'data_dir' in geth_kwargs:
             raise ValueError("You cannot specify `data_dir` for a TestnetGethProces")
 
-        extra_kwargs = geth_kwargs.get('extra_kwargs', [])
-        extra_kwargs.append('--testnet')
+        suffix_kwargs = geth_kwargs.get('suffix_kwargs', [])
+        suffix_kwargs.append('--testnet')
 
-        geth_kwargs['extra_kwargs'] = extra_kwargs
+        geth_kwargs['suffix_kwargs'] = suffix_kwargs
 
         super(TestnetGethProcess, self).__init__(geth_kwargs)
 
     @property
     def data_dir(self):
         return get_testnet_data_dir()
+
+    @property
+    def ipc_path(self):
+        return self.geth_kwargs.get(
+            'ipc_path',
+            os.path.abspath(os.path.expanduser(os.path.join(
+                self.data_dir, 'geth.ipc',
+            )))
+        )
 
 
 class DevGethProcess(BaseGethProcess):
