@@ -1,3 +1,9 @@
+1.0.0
+-----
+
+- Add Websocket interface to default list of interfaces that are presented by
+  geth.
+
 0.9.0
 -----
 
