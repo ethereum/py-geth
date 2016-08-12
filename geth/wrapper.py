@@ -23,7 +23,7 @@ PYGETH_DIR = os.path.abspath(os.path.dirname(__file__))
 DEFAULT_PASSWORD_PATH = os.path.join(PYGETH_DIR, 'default_blockchain_password')
 
 
-ALL_APIS = "admin,debug,eth,miner,net,personal,shh,txpool,web3"
+ALL_APIS = "admin,debug,eth,miner,net,personal,shh,txpool,web3,ws"
 
 
 def get_max_socket_path_length():
@@ -77,7 +77,6 @@ def construct_test_chain_kwargs(**overrides):
             os.path.join(tempfile.mkdtemp(), 'geth.ipc'),
         )
 
-    overrides.setdefault('ipc_path', tempfile.NamedTemporaryFile().name)
     overrides.setdefault('ipc_api', ALL_APIS)
 
     overrides.setdefault('verbosity', '5')
