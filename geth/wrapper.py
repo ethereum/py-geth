@@ -51,6 +51,15 @@ def construct_test_chain_kwargs(**overrides):
     else:
         overrides.setdefault('port', get_open_port())
 
+    overrides.setdefault('ws_enabled', True)
+    overrides.setdefault('ws_addr', '127.0.0.1')
+    overrides.setdefault('ws_api', ALL_APIS)
+
+    if is_port_open(8546):
+        overrides.setdefault('ws_port', '8546')
+    else:
+        overrides.setdefault('ws_port', get_open_port())
+
     overrides.setdefault('rpc_enabled', True)
     overrides.setdefault('rpc_addr', '127.0.0.1')
     overrides.setdefault('rpc_api', ALL_APIS)
@@ -103,6 +112,11 @@ def construct_popen_command(data_dir=None,
                             rpc_addr=None,
                             rpc_port=None,
                             rpc_api=None,
+                            ws_enabled=None,
+                            ws_addr=None,
+                            ws_origins=None,
+                            ws_port=None,
+                            ws_api=None,
                             prefix_cmd=None,
                             suffix_args=None,
                             suffix_kwargs=None):
@@ -124,6 +138,21 @@ def construct_popen_command(data_dir=None,
 
     if rpc_api is not None:
         command.extend(('--rpcapi', rpc_api))
+
+    if ws_enabled:
+        command.append('--ws')
+
+    if ws_addr is not None:
+        command.extend(('--wsaddr', ws_addr))
+
+    if ws_origins is not None:
+        command.extend(('--wsorigins', ws_port))
+
+    if ws_port is not None:
+        command.extend(('--wsport', ws_port))
+
+    if ws_api is not None:
+        command.extend(('--wsapi', ws_api))
 
     if data_dir is not None:
         command.extend(('--datadir', data_dir))
