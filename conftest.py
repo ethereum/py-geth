@@ -1,5 +1,8 @@
 import json
 
+from gevent import monkey
+monkey.patch_socket()
+
 import requests
 
 import pytest

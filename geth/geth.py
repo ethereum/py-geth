@@ -1,6 +1,14 @@
 import os
 import random
 
+import gevent
+from gevent import subprocess
+from gevent import socket
+from gevent import monkey
+
+# required for urllib use
+monkey.patch_socket()
+
 try:
     from urllib.request import (
         urlopen,
@@ -12,28 +20,24 @@ except ImportError:
         URLError,
     )
 
-import gevent
-from gevent import subprocess
-from gevent import socket
-
-from .utils.networking import (
+from .utils.networking import (  # noqa: E402
     get_ipc_socket,
 )
-from .utils.dag import (
+from .utils.dag import (  # noqa: E402
     is_dag_generated,
 )
-from .utils.proc import (
+from .utils.proc import (  # noqa: E402
     kill_proc,
 )
-from .accounts import (
+from .accounts import (  # noqa: E402
     ensure_account_exists,
     get_accounts,
 )
-from .wrapper import (
+from .wrapper import (  # noqa: E402
     construct_test_chain_kwargs,
     construct_popen_command,
 )
-from .chain import (
+from .chain import (  # noqa: E402
     get_chain_data_dir,
     get_default_base_dir,
     get_genesis_file_path,
