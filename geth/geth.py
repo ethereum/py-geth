@@ -220,9 +220,12 @@ class TestnetGethProcess(BaseGethProcess):
 
 
 class DevGethProcess(BaseGethProcess):
-    def __init__(self, chain_name, base_dir=None, overrides=None):
+    def __init__(self, chain_name, base_dir=None, overrides=None, genesis_data=None):
         if overrides is None:
             overrides = {}
+
+        if genesis_data is None:
+            genesis_data = {}
 
         if 'data_dir' in overrides:
             raise ValueError("You cannot specify `data_dir` for a DevGethProcess")
@@ -249,11 +252,12 @@ class DevGethProcess(BaseGethProcess):
         ))
 
         if needs_init:
-            genesis_data = {
-                'alloc': dict([
+            genesis_data.setdefault(
+                'alloc',
+                dict([
                     (coinbase, {"balance": "1000000000000000000000000000000"}),  # 1 billion ether.
-                ]),
-            }
+                ])
+            )
             initialize_chain(genesis_data, **geth_kwargs)
 
         super(DevGethProcess, self).__init__(geth_kwargs)
