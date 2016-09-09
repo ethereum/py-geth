@@ -1,5 +1,6 @@
 import os
 import random
+import logging
 
 try:
     from urllib.request import (
@@ -45,6 +46,9 @@ from .chain import (
 )
 
 
+logger = logging.getLogger(__name__)
+
+
 class BaseGethProcess(object):
     _proc = None
 
@@ -59,6 +63,7 @@ class BaseGethProcess(object):
             raise ValueError("Already running")
         self.is_running = True
 
+        logger.info("Launching geth: %s", " ".join(self.command))
         self.proc = subprocess.Popen(
             self.command,
             stdin=subprocess.PIPE,
