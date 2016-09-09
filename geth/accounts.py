@@ -20,7 +20,7 @@ def get_accounts(data_dir, **geth_kwargs):
     stdoutdata, stderrdata = proc.communicate()
 
     if proc.returncode:
-        if "no keys in store" in stderrdata:
+        if "no keys in store" in stderrdata.decode("utf-8"):
             return tuple()
         else:
             raise ValueError(format_error_message(
