@@ -81,7 +81,7 @@ def write_genesis_file(genesis_file_path,
                        timestamp="0x0",
                        parentHash="0x0000000000000000000000000000000000000000000000000000000000000000",  # NOQA
                        extraData="0x686f727365",
-                       gasLimit="0x2fefd8",
+                       gasLimit="0x47d5cc",
                        difficulty="0x400",
                        mixhash="0x0000000000000000000000000000000000000000000000000000000000000000",  # NOQA
                        coinbase="0x3333333333333333333333333333333333333333",
