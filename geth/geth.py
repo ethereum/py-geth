@@ -1,5 +1,6 @@
 import os
 import random
+import logging
 
 import gevent
 from gevent import subprocess
@@ -49,6 +50,9 @@ from .chain import (  # noqa: E402
 )
 
 
+logger = logging.getLogger(__name__)
+
+
 class BaseGethProcess(object):
     _proc = None
 
@@ -63,6 +67,7 @@ class BaseGethProcess(object):
             raise ValueError("Already running")
         self.is_running = True
 
+        logger.info("Launching geth: %s", " ".join(self.command))
         self.proc = subprocess.Popen(
             self.command,
             stdin=subprocess.PIPE,
