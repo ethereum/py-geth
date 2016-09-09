@@ -1,3 +1,9 @@
+1.3.0
+-----
+
+- Bugfix for python3 when no contracts are found.
+- Allow genesis configuration through constructor of GethProcess classes.
+
 1.2.0
 -----
 
