@@ -117,7 +117,6 @@ def construct_popen_command(data_dir=None,
                             ws_origins=None,
                             ws_port=None,
                             ws_api=None,
-                            prefix_cmd=None,
                             suffix_args=None,
                             suffix_kwargs=None):
     command = []

@@ -10,8 +10,9 @@ def is_port_open(port):
     except socket.error:
         return False
     else:
-        sock.close()
         return True
+    finally:
+        sock.close()
 
 
 def get_open_port():
