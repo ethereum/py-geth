@@ -89,6 +89,7 @@ def construct_test_chain_kwargs(**overrides):
     overrides.setdefault('ipc_api', ALL_APIS)
 
     overrides.setdefault('verbosity', '5')
+
     return overrides
 
 
@@ -118,7 +119,8 @@ def construct_popen_command(data_dir=None,
                             ws_port=None,
                             ws_api=None,
                             suffix_args=None,
-                            suffix_kwargs=None):
+                            suffix_kwargs=None,
+                            shh=None):
     command = []
 
     if nice and is_nice_available():
@@ -204,6 +206,9 @@ def construct_popen_command(data_dir=None,
 
     if autodag:
         command.append('--autodag')
+
+    if shh:
+        command.append('--shh')
 
     if suffix_kwargs:
         command.extend(suffix_kwargs)
