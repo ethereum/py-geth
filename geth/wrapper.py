@@ -89,7 +89,8 @@ def construct_test_chain_kwargs(**overrides):
     overrides.setdefault('ipc_api', ALL_APIS)
 
     overrides.setdefault('verbosity', '5')
-    overrides.setdefault('shh', True)
+    if 'shh' in overrides:
+        overrides.setdefault('shh', overrides['shh'])
     return overrides
 
 
