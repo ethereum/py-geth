@@ -208,14 +208,14 @@ def construct_popen_command(data_dir=None,
     if autodag:
         command.append('--autodag')
 
+    if shh:
+        command.append('--shh')
+
     if suffix_kwargs:
         command.extend(suffix_kwargs)
 
     if suffix_args:
         command.extend(suffix_args)
-
-    if shh:
-        command.extend('--shh')
 
     return command
 
