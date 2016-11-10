@@ -113,6 +113,7 @@ def construct_popen_command(data_dir=None,
                             rpc_addr=None,
                             rpc_port=None,
                             rpc_api=None,
+                            rpc_cors_domain=None,
                             ws_enabled=None,
                             ws_addr=None,
                             ws_origins=None,
@@ -139,6 +140,9 @@ def construct_popen_command(data_dir=None,
 
     if rpc_api is not None:
         command.extend(('--rpcapi', rpc_api))
+
+    if rpc_cors_domain is not None:
+        command.extend(('--rpccorsdomain', rpc_cors_domain))
 
     if ws_enabled:
         command.append('--ws')
