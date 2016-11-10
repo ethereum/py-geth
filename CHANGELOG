@@ -1,3 +1,8 @@
+1.4.1
+-----
+
+- Add `rpc_cors_domain` to supported arguments for running geth instances.
+
 1.4.0
 -----
 
