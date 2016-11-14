@@ -1,3 +1,8 @@
+Unreleased
+----------
+
+- Library users must explicitly enable gevent monkey patching. `See geth.monkey.patch()`
+
 1.4.1
 -----
 
