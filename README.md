@@ -26,7 +26,7 @@ To run geth connected to the mainnet
 
 
 ```python
->>> from geth import monket
+>>> from geth import monkey
 >>> from geth import LiveGethProcess
 >>> monkey.patch()  # Enable gevent support for urllib
 >>> geth = LiveGethProcess()
