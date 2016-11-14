@@ -5,7 +5,6 @@ import logging
 import gevent
 from gevent import subprocess
 from gevent import socket
-from gevent import monkey
 
 try:
     from urllib.request import (

@@ -136,6 +136,17 @@ preconfigured as follows.
 * The DevP2P interface *tries* to bind to 30303 but will find an open port if this
   port is not available.
 
+# Gevent monkey patching
+
+To use py-geth in your py.test test suite you need to enable gevent monkey patches.
+In the `setup.cfg` of your Python package add:
+
+```ini
+[tool:pytest]
+addopts =
+    -p geth
+
+```
 
 # Gotchas
 
