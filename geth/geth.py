@@ -7,9 +7,6 @@ from gevent import subprocess
 from gevent import socket
 from gevent import monkey
 
-# required for urllib use
-monkey.patch_socket()
-
 try:
     from urllib.request import (
         urlopen,
