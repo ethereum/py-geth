@@ -93,8 +93,11 @@ def construct_test_chain_kwargs(**overrides):
     return overrides
 
 
+GETH_BINARY = os.environ.get('GETH_BINARY', 'geth')
+
+
 def construct_popen_command(data_dir=None,
-                            geth_executable="geth",
+                            geth_executable=GETH_BINARY,
                             max_peers=None,
                             network_id=None,
                             no_discover=None,
