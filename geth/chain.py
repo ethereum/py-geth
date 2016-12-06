@@ -46,10 +46,10 @@ def get_live_data_dir():
     return data_dir
 
 
-def get_testnet_data_dir():
+def get_ropsten_data_dir():
     return os.path.abspath(os.path.expanduser(os.path.join(
         get_live_data_dir(),
-        "testnet",
+        "ropsten",
     )))
 
 
@@ -71,8 +71,8 @@ def is_live_chain(data_dir):
     return is_same_path(data_dir, get_live_data_dir())
 
 
-def is_testnet_chain(data_dir):
-    return is_same_path(data_dir, get_testnet_data_dir())
+def is_ropsten_chain(data_dir):
+    return is_same_path(data_dir, get_ropsten_data_dir())
 
 
 def write_genesis_file(genesis_file_path,

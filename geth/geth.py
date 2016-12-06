@@ -43,10 +43,10 @@ from .chain import (  # noqa: E402
     get_default_base_dir,
     get_genesis_file_path,
     get_live_data_dir,
-    get_testnet_data_dir,
+    get_ropsten_data_dir,
     initialize_chain,
     is_live_chain,
-    is_testnet_chain,
+    is_ropsten_chain,
 )
 
 
@@ -204,24 +204,35 @@ class LiveGethProcess(BaseGethProcess):
         return get_live_data_dir()
 
 
-class TestnetGethProcess(BaseGethProcess):
+class RopstenGethProcess(BaseGethProcess):
     def __init__(self, geth_kwargs=None):
         if geth_kwargs is None:
             geth_kwargs = {}
 
         if 'data_dir' in geth_kwargs:
-            raise ValueError("You cannot specify `data_dir` for a TestnetGethProces")
+            raise ValueError(
+                "You cannot specify `data_dir` for a {0}".format(type(self).__name__)
+            )
+        if 'network_id' in geth_kwargs:
+            raise ValueError(
+                "You cannot specify `network_id` for a {0}".format(type(self).__name__)
+            )
 
-        suffix_kwargs = geth_kwargs.get('suffix_kwargs', [])
-        suffix_kwargs.append('--testnet')
+        geth_kwargs['network_id'] = '3'
+        geth_kwargs['data_dir'] = get_ropsten_data_dir()
 
-        geth_kwargs['suffix_kwargs'] = suffix_kwargs
-
-        super(TestnetGethProcess, self).__init__(geth_kwargs)
+        super(RopstenGethProcess, self).__init__(geth_kwargs)
 
     @property
     def data_dir(self):
-        return get_testnet_data_dir()
+        return get_ropsten_data_dir()
+
+
+class TestnetGethProcess(RopstenGethProcess):
+    """
+    Alias for whatever the current primary testnet chain is.
+    """
+    pass
 
 
 class DevGethProcess(BaseGethProcess):
@@ -253,7 +264,7 @@ class DevGethProcess(BaseGethProcess):
         needs_init = all((
             not os.path.exists(genesis_file_path),
             not is_live_chain(self.data_dir),
-            not is_testnet_chain(self.data_dir),
+            not is_ropsten_chain(self.data_dir),
         ))
 
         if needs_init:
