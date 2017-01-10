@@ -99,13 +99,15 @@ class InterceptedStreamsMixin(object):
 
         try:
             self.stdout_queue.put(StopIteration)
-            self.stdout_queue.join(5)
+            # TODO: figure out how to get a timeout on these joins.
+            self.stdout_queue.join()
         except async.Timeout:
             pass
 
         try:
             self.stderr_queue.put(StopIteration)
-            self.stderr_queue.join(5)
+            # TODO: figure out how to get a timeout on these joins.
+            self.stderr_queue.join()
         except async.Timeout:
             pass
 
