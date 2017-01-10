@@ -1,5 +1,3 @@
-import gevent
-
 from geth.geth import DevGethProcess
 from geth.mixins import LoggingMixin
 

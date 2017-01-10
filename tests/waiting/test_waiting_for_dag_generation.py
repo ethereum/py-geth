@@ -3,11 +3,9 @@ import random
 
 import pytest
 
-import gevent
-
 from geth.wrapper import spawn_geth
-
 from geth.utils.dag import is_dag_generated
+from geth.utils import async
 
 
 @pytest.mark.skipif(
@@ -24,11 +22,12 @@ def test_waiting_for_dag_generation(base_dir):
 
     assert not is_dag_generated(base_dir=base_dir)
 
-    with gevent.Timeout(600):
+    with async.Timeout(600) as timeout:
         while True:
             if is_dag_generated(base_dir=base_dir):
                 break
-            gevent.sleep(random.random())
+            async.sleep(random.random())
+            timeout.check()
 
     assert proc.poll() is not None
     assert proc.returncode == 0

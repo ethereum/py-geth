@@ -1,6 +1,15 @@
+import sys
 import contextlib
 
-from gevent import socket
+from .async import (
+    socket,
+    Timeout,
+    sleep,
+)
+
+
+if sys.version_info.major == 2:
+    ConnectionRefusedError = socket.timeout
 
 
 def is_port_open(port):
@@ -32,3 +41,20 @@ def get_ipc_socket(ipc_path, timeout=0.1):
     yield sock
 
     sock.close()
+
+
+def wait_for_http_connection(port, timeout=5):
+    with Timeout(timeout) as _timeout:
+        while True:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.settimeout(1)
+            try:
+                s.connect(('127.0.0.1', port))
+            except (socket.timeout, ConnectionRefusedError):
+                sleep(0.1)
+                _timeout.check()
+                continue
+            else:
+                break
+        else:
+            raise ValueError("Unable to establish HTTP connection")
