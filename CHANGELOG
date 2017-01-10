@@ -1,3 +1,9 @@
+1.7.0
+-----
+
+- Change to use `compat` instead of `async` since async is a keyword
+- Change env variable for gevent threading to be `GETH_THREADING_BACKEND`
+
 1.6.0
 -----
 
