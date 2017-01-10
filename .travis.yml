@@ -12,6 +12,12 @@ env:
     - TOX_ENV=py27-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
     - TOX_ENV=py34-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
     - TOX_ENV=py35-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
+    - TOX_ENV=py27-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.5/go-ethereum-1.5.5/build/bin/geth"
+    - TOX_ENV=py34-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.5/go-ethereum-1.5.5/build/bin/geth"
+    - TOX_ENV=py35-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.5/go-ethereum-1.5.5/build/bin/geth"
+    - TOX_ENV=py27-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.6/go-ethereum-1.5.6/build/bin/geth"
+    - TOX_ENV=py34-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.6/go-ethereum-1.5.6/build/bin/geth"
+    - TOX_ENV=py35-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.6/go-ethereum-1.5.6/build/bin/geth"
     - TOX_ENV=py27-gevent GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
     - TOX_ENV=py34-gevent GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
     - TOX_ENV=py35-gevent GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
@@ -24,10 +30,16 @@ install:
   - travis_retry pip install setuptools --upgrade
   - travis_retry pip install tox
   - ./scripts/install_geth-1.5.4.sh
+  - ./scripts/install_geth-1.5.5.sh
+  - ./scripts/install_geth-1.5.6.sh
   - mkdir -p $HOME/.ethash
 before_script:
   - ./geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth version
   - ./geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth makedag 0 $HOME/.ethash
+  - ./geth-versions/geth-1.5.5/go-ethereum-1.5.5/build/bin/geth version
+  - ./geth-versions/geth-1.5.5/go-ethereum-1.5.5/build/bin/geth makedag 0 $HOME/.ethash
+  - ./geth-versions/geth-1.5.6/go-ethereum-1.5.6/build/bin/geth version
+  - ./geth-versions/geth-1.5.6/go-ethereum-1.5.6/build/bin/geth makedag 0 $HOME/.ethash
 script:
   - tox -e $TOX_ENV
 after_script:
