@@ -23,9 +23,11 @@ setup(
     url='https://github.com/pipermerriam/py-geth',
     include_package_data=True,
     py_modules=['geth'],
-    install_requires=[
-        "gevent>=1.1.2",
-    ],
+    extras_require={
+        'gevent': [
+            "gevent>=1.1.1,<1.2.0",
+        ],
+    },
     license="MIT",
     zip_safe=False,
     keywords='ethereum go-ethereum geth',

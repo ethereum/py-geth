@@ -3,8 +3,6 @@ import sys
 import functools
 import tempfile
 
-from gevent import subprocess
-
 from .utils.networking import (
     is_port_open,
     get_open_port,
@@ -12,6 +10,7 @@ from .utils.networking import (
 from .utils.filesystem import (
     is_executable_available,
 )
+from .utils.async import subprocess
 
 
 is_nice_available = functools.partial(is_executable_available, 'nice')

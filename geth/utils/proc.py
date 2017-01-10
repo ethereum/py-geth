@@ -1,14 +1,18 @@
 import signal
 
-import gevent
+from .async import (
+    Timeout,
+    sleep,
+)
 
 
 def wait_for_popen(proc, timeout=30):
     try:
-        with gevent.Timeout(30):
+        with Timeout(timeout) as _timeout:
             while proc.poll() is None:
-                gevent.sleep(0.1)
-    except gevent.Timeout:
+                sleep(0.1)
+                _timeout.check()
+    except Timeout:
         pass
 
 

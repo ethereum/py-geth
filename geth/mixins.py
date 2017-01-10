@@ -4,12 +4,7 @@ import os
 import datetime
 import logging
 
-import gevent
-from gevent.queue import (
-    JoinableQueue,
-    Timeout,
-)
-
+from .utils import async
 from .utils.filesystem import ensure_path_exists
 
 
@@ -55,10 +50,10 @@ class InterceptedStreamsMixin(object):
     def __init__(self, *args, **kwargs):
         super(InterceptedStreamsMixin, self).__init__(*args, **kwargs)
         self.stdout_callbacks = []
-        self.stdout_queue = JoinableQueue()
+        self.stdout_queue = async.JoinableQueue()
 
         self.stderr_callbacks = []
-        self.stderr_queue = JoinableQueue()
+        self.stderr_queue = async.JoinableQueue()
 
     def register_stdout_callback(self, callback_fn):
         self.stdout_callbacks.append(callback_fn)
@@ -69,47 +64,49 @@ class InterceptedStreamsMixin(object):
     def produce_stdout_queue(self):
         for line in iter(self.proc.stdout.readline, b''):
             self.stdout_queue.put(line)
-            gevent.sleep(0)
+            async.sleep(0)
 
     def produce_stderr_queue(self):
         for line in iter(self.proc.stderr.readline, b''):
             self.stderr_queue.put(line)
-            gevent.sleep(0)
+            async.sleep(0)
 
     def consume_stdout_queue(self):
-        while True:
-            line = self.stdout_queue.get()
+        for line in self.stdout_queue:
             for fn in self.stdout_callbacks:
                 fn(line.strip())
-            gevent.sleep(0)
+            self.stdout_queue.task_done()
+            async.sleep(0)
 
     def consume_stderr_queue(self):
-        while True:
-            line = self.stderr_queue.get()
+        for line in self.stderr_queue:
             for fn in self.stderr_callbacks:
                 fn(line.strip())
-            gevent.sleep(0)
+            self.stderr_queue.task_done()
+            async.sleep(0)
 
     def start(self):
         super(InterceptedStreamsMixin, self).start()
 
-        gevent.spawn(self.produce_stdout_queue)
-        gevent.spawn(self.produce_stderr_queue)
+        async.spawn(self.produce_stdout_queue)
+        async.spawn(self.produce_stderr_queue)
 
-        gevent.spawn(self.consume_stdout_queue)
-        gevent.spawn(self.consume_stderr_queue)
+        async.spawn(self.consume_stdout_queue)
+        async.spawn(self.consume_stderr_queue)
 
     def stop(self):
         super(InterceptedStreamsMixin, self).stop()
 
         try:
+            self.stdout_queue.put(StopIteration)
             self.stdout_queue.join(5)
-        except Timeout:
+        except async.Timeout:
             pass
 
         try:
+            self.stderr_queue.put(StopIteration)
             self.stderr_queue.join(5)
-        except Timeout:
+        except async.Timeout:
             pass
 
 

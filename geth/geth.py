@@ -2,14 +2,6 @@ import os
 import random
 import logging
 
-import gevent
-from gevent import subprocess
-from gevent import socket
-from gevent import monkey
-
-# required for urllib use
-monkey.patch_socket()
-
 try:
     from urllib.request import (
         urlopen,
@@ -30,6 +22,9 @@ from .utils.dag import (  # noqa: E402
 from .utils.proc import (  # noqa: E402
     kill_proc,
 )
+from .utils import async
+from .utils.async import subprocess
+from .utils.async import socket
 from .accounts import (  # noqa: E402
     ensure_account_exists,
     get_accounts,
@@ -131,11 +126,12 @@ class BaseGethProcess(object):
         if not self.rpc_enabled:
             raise ValueError("RPC interface is not enabled")
 
-        with gevent.Timeout(timeout):
+        with async.Timeout(timeout) as _timeout:
             while True:
                 if self.is_rpc_ready:
                     break
-                gevent.sleep(random.random())
+                async.sleep(random.random())
+                _timeout.check()
 
     @property
     def ipc_enabled(self):
@@ -164,11 +160,12 @@ class BaseGethProcess(object):
         if not self.ipc_enabled:
             raise ValueError("IPC interface is not enabled")
 
-        with gevent.Timeout(timeout):
+        with async.Timeout(timeout) as _timeout:
             while True:
                 if self.is_ipc_ready:
                     break
-                gevent.sleep(random.random())
+                async.sleep(random.random())
+                _timeout.check()
 
     @property
     def is_dag_generated(self):
@@ -182,11 +179,12 @@ class BaseGethProcess(object):
         if not self.is_mining and not self.geth_kwargs.get('autodag', False):
             raise ValueError("Geth not configured to generate DAG")
 
-        with gevent.Timeout(timeout):
+        with async.Timeout(timeout) as _timeout:
             while True:
                 if self.is_dag_generated:
                     break
-                gevent.sleep(random.random())
+                async.sleep(random.random())
+                _timeout.check()
 
 
 class LiveGethProcess(BaseGethProcess):
