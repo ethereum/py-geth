@@ -7,7 +7,6 @@ from gevent.queue import (  # noqa: F401
 )
 from gevent import (  # noqa; F401
     subprocess,
-    threading,
     socket,
 )
 

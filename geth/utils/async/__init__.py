@@ -8,20 +8,16 @@ def is_using_gevent():
 if is_using_gevent():
     from .gevent_async import (  # noqa
         Timeout,
-        spawn,
         sleep,
         subprocess,
         socket,
-        threading,
-        make_server,
+        JoinableQueue,
     )
 else:
     from .stdlib_async import (  # noqa
         Timeout,
-        spawn,
         sleep,
         subprocess,
         socket,
-        threading,
-        make_server,
+        JoinableQueue,
     )
