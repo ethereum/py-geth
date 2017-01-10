@@ -10,7 +10,6 @@ from wsgiref.simple_server import make_server  # noqa: F401
 
 
 sleep = time.sleep
-JoinableQueue = queue.Queue
 
 
 class Timeout(Exception):
@@ -103,3 +102,20 @@ def spawn(target, *args, **kwargs):
     thread.daemon = True
     thread.start()
     return thread
+
+
+class JoinableQueue(queue.Queue):
+    def __iter__(self):
+        while True:
+            item = self.get()
+            if isinstance(item, Exception):
+                raise item
+            elif isinstance(item, type) and issubclass(item, Exception):
+                raise item
+            yield item
+
+    def join(self, timeout=None):
+        with Timeout(timeout) as _timeout:
+            while not self.empty():
+                sleep(0)
+                _timeout.check()
