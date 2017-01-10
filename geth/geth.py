@@ -22,9 +22,12 @@ from .utils.dag import (  # noqa: E402
 from .utils.proc import (  # noqa: E402
     kill_proc,
 )
-from .utils import async
-from .utils.async import subprocess
-from .utils.async import socket
+from .utils.compat import (
+    subprocess,
+    socket,
+    sleep,
+    Timeout,
+)
 from .accounts import (  # noqa: E402
     ensure_account_exists,
     get_accounts,
@@ -126,11 +129,11 @@ class BaseGethProcess(object):
         if not self.rpc_enabled:
             raise ValueError("RPC interface is not enabled")
 
-        with async.Timeout(timeout) as _timeout:
+        with Timeout(timeout) as _timeout:
             while True:
                 if self.is_rpc_ready:
                     break
-                async.sleep(random.random())
+                sleep(random.random())
                 _timeout.check()
 
     @property
@@ -160,11 +163,11 @@ class BaseGethProcess(object):
         if not self.ipc_enabled:
             raise ValueError("IPC interface is not enabled")
 
-        with async.Timeout(timeout) as _timeout:
+        with Timeout(timeout) as _timeout:
             while True:
                 if self.is_ipc_ready:
                     break
-                async.sleep(random.random())
+                sleep(random.random())
                 _timeout.check()
 
     @property
@@ -179,11 +182,11 @@ class BaseGethProcess(object):
         if not self.is_mining and not self.geth_kwargs.get('autodag', False):
             raise ValueError("Geth not configured to generate DAG")
 
-        with async.Timeout(timeout) as _timeout:
+        with Timeout(timeout) as _timeout:
             while True:
                 if self.is_dag_generated:
                     break
-                async.sleep(random.random())
+                sleep(random.random())
                 _timeout.check()
 
 

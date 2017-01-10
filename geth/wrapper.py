@@ -10,7 +10,7 @@ from .utils.networking import (
 from .utils.filesystem import (
     is_executable_available,
 )
-from .utils.async import subprocess
+from .utils.compat import subprocess
 
 
 is_nice_available = functools.partial(is_executable_available, 'nice')

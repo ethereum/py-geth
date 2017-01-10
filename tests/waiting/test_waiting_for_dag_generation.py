@@ -5,7 +5,11 @@ import pytest
 
 from geth.wrapper import spawn_geth
 from geth.utils.dag import is_dag_generated
-from geth.utils import async
+from geth.utils.compat import (
+    Timeout,
+    sleep,
+)
+
 
 
 @pytest.mark.skipif(
@@ -22,11 +26,11 @@ def test_waiting_for_dag_generation(base_dir):
 
     assert not is_dag_generated(base_dir=base_dir)
 
-    with async.Timeout(600) as timeout:
+    with Timeout(600) as timeout:
         while True:
             if is_dag_generated(base_dir=base_dir):
                 break
-            async.sleep(random.random())
+            sleep(random.random())
             timeout.check()
 
     assert proc.poll() is not None
