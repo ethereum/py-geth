@@ -1,12 +1,17 @@
 """
 A minimal implementation of the various gevent APIs used within this codebase.
 """
+import sys
 import time
 import threading
 import socket  # noqa: F401
 import subprocess  # noqa: F401
-import queue
 from wsgiref.simple_server import make_server  # noqa: F401
+
+if sys.version_info.major == 2:
+    import Queue as queue
+else:
+    import queue
 
 
 sleep = time.sleep
