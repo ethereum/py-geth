@@ -29,7 +29,8 @@ Or to install with gevent support
 pip install py-geth[gevent]
 ```
 
-> Set the environment variable GETH_ASYNC_GEVENT to use gevent based threading.
+And then enable gevent based threads by setting the environment variable
+`GETH_THREADING_BACKEND=gevent`.
 
 
 To run geth connected to the mainnet

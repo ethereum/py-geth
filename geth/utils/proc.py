@@ -1,6 +1,6 @@
 import signal
 
-from .async import (
+from .compat import (
     Timeout,
     sleep,
 )

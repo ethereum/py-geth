@@ -1,7 +1,7 @@
 import sys
 import contextlib
 
-from .async import (
+from .compat import (
     socket,
     Timeout,
     sleep,
