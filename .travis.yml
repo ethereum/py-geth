@@ -9,9 +9,12 @@ cache:
     - $HOME/.ethash
 env:
   matrix:
-    - TOX_ENV=py27 GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
-    - TOX_ENV=py34 GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
-    - TOX_ENV=py35 GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
+    - TOX_ENV=py27-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
+    - TOX_ENV=py34-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
+    - TOX_ENV=py35-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
+    - TOX_ENV=py27-gevent GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
+    - TOX_ENV=py34-gevent GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
+    - TOX_ENV=py35-gevent GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
     - TOX_ENV=flake8
 before_install:
   - travis_retry sudo add-apt-repository -y ppa:gophers/archive
