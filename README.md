@@ -18,9 +18,19 @@ This library requires the `geth` executable to be present.
 
 Installation
 
-```sh
+```bash
 pip install py-geth
 ```
+
+Or to install with gevent support
+
+
+```bash
+pip install py-geth[gevent]
+```
+
+> Set the environment variable GETH_ASYNC_GEVENT to use gevent based threading.
+
 
 To run geth connected to the mainnet
 
