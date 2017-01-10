@@ -8,6 +8,7 @@ def is_using_gevent():
 if is_using_gevent():
     from .gevent_async import (  # noqa
         Timeout,
+        spawn,
         sleep,
         subprocess,
         socket,
@@ -16,6 +17,7 @@ if is_using_gevent():
 else:
     from .stdlib_async import (  # noqa
         Timeout,
+        spawn,
         sleep,
         subprocess,
         socket,

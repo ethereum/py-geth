@@ -2,6 +2,7 @@
 A minimal implementation of the various gevent APIs used within this codebase.
 """
 import time
+import threading
 import socket  # noqa: F401
 import subprocess  # noqa: F401
 import queue
@@ -69,3 +70,36 @@ class Timeout(Exception):
 
     def cancel(self):
         self.is_running = False
+
+
+class empty(object):
+    pass
+
+
+class ThreadWithReturn(threading.Thread):
+    def __init__(self, target=None, args=None, kwargs=None):
+        super(ThreadWithReturn, self).__init__(target=target, args=args, kwargs=kwargs)
+        self.target = target
+        self.args = args
+        self.kwargs = kwargs
+
+    def run(self):
+        self._return = self.target(*self.args, **self.kwargs)
+
+    def get(self, timeout=None):
+        self.join(timeout)
+        try:
+            return self._return
+        except AttributeError:
+            raise RuntimeError("Something went wrong.  No `_return` property was set")
+
+
+def spawn(target, *args, **kwargs):
+    thread = ThreadWithReturn(
+        target=target,
+        args=args,
+        kwargs=kwargs,
+    )
+    thread.daemon = True
+    thread.start()
+    return thread
