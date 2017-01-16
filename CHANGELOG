@@ -1,3 +1,8 @@
+1.7.1
+-----
+
+- Bugfix for `ensure_path_exists` utility function.
+
 1.7.0
 -----
 
