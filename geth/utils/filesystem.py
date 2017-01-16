@@ -1,10 +1,21 @@
 import os
 import sys
 import shutil
+import errno
 
 
 if sys.version_info.major == 2:
     FileNotFoundError = OSError
+
+
+def mkdir(path):
+    try:
+        os.makedirs(path)
+    except OSError as exc:  # Python >2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else:
+            raise
 
 
 def ensure_path_exists(dir_path):
@@ -12,7 +23,7 @@ def ensure_path_exists(dir_path):
     Make sure that a path exists
     """
     if not os.path.exists(dir_path):
-        os.mkdir(dir_path)
+        mkdir(dir_path)
         return True
     return False
 
