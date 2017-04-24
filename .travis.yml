@@ -40,7 +40,6 @@ install:
   - travis_retry pip install setuptools --upgrade
   - travis_retry pip install tox
   - if [ -n "$GETH_VERSION" ]; then /.$TRAVIS_BUILD_DIR/bin/install_geth.sh; fi
-  - ./scripts/install_geth.sh
   - mkdir -p $HOME/.ethash
 before_script:
   - if [ -n "$GETH_VERSION" ]; then ./$TRAVIS_BUILD_DIR/geth-versions/geth-$GETH_VERSION/go-ethereum-$GETH_VERSION/build/bin/geth version; fi
