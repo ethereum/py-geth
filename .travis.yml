@@ -9,37 +9,41 @@ cache:
     - $HOME/.ethash
 env:
   matrix:
-    - TOX_ENV=py27-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
-    - TOX_ENV=py34-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
-    - TOX_ENV=py35-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
-    - TOX_ENV=py27-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.5/go-ethereum-1.5.5/build/bin/geth"
-    - TOX_ENV=py34-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.5/go-ethereum-1.5.5/build/bin/geth"
-    - TOX_ENV=py35-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.5/go-ethereum-1.5.5/build/bin/geth"
-    - TOX_ENV=py27-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.6/go-ethereum-1.5.6/build/bin/geth"
-    - TOX_ENV=py34-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.6/go-ethereum-1.5.6/build/bin/geth"
-    - TOX_ENV=py35-stdlib GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.6/go-ethereum-1.5.6/build/bin/geth"
-    - TOX_ENV=py27-gevent GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
-    - TOX_ENV=py34-gevent GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
-    - TOX_ENV=py35-gevent GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth"
+    # geth 1.5.6
+    - TOX_ENV=py27-stdlib GETH_VERSION=1.5.6
+    - TOX_ENV=py34-stdlib GETH_VERSION=1.5.6
+    - TOX_ENV=py35-stdlib GETH_VERSION=1.5.6
+    # geth 1.5.7
+    - TOX_ENV=py27-stdlib GETH_VERSION=1.5.7
+    - TOX_ENV=py34-stdlib GETH_VERSION=1.5.7
+    - TOX_ENV=py35-stdlib GETH_VERSION=1.5.7
+    # geth 1.5.8
+    - TOX_ENV=py27-stdlib GETH_VERSION=1.5.8
+    - TOX_ENV=py34-stdlib GETH_VERSION=1.5.8
+    - TOX_ENV=py35-stdlib GETH_VERSION=1.5.8
+    # geth 1.5.9
+    - TOX_ENV=py27-stdlib GETH_VERSION=1.5.9
+    - TOX_ENV=py34-stdlib GETH_VERSION=1.5.9
+    - TOX_ENV=py35-stdlib GETH_VERSION=1.5.9
+    # geth 1.6.0
+    - TOX_ENV=py27-stdlib GETH_VERSION=1.6.0
+    - TOX_ENV=py34-stdlib GETH_VERSION=1.6.0
+    - TOX_ENV=py35-stdlib GETH_VERSION=1.6.0
+    # flake8
     - TOX_ENV=flake8
 before_install:
-  - travis_retry sudo add-apt-repository -y ppa:gophers/archive
-  - travis_retry sudo apt-get update
+  - if [ -n "$GETH_VERSION" ]; then travis_retry sudo add-apt-repository -y ppa:gophers/archive; fi
+  - if [ -n "$GETH_VERSION" ]; then travis_retry sudo apt-get update; fi
+  - if [ -n "$GETH_VERSION" ]; then export GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-$GETH_VERSION/go-ethereum-$GETH_VERSION/build/bin/geth"; fi
 install:
-  - travis_retry sudo apt-get install -y golang-1.7 build-essential
+  - if [ -n "$GETH_VERSION" ]; then travis_retry sudo apt-get install -y golang-1.7 build-essential; fi
   - travis_retry pip install setuptools --upgrade
   - travis_retry pip install tox
-  - ./scripts/install_geth-1.5.4.sh
-  - ./scripts/install_geth-1.5.5.sh
-  - ./scripts/install_geth-1.5.6.sh
+  - if [ -n "$GETH_VERSION" ]; then /.$TRAVIS_BUILD_DIR/bin/install_geth.sh; fi
   - mkdir -p $HOME/.ethash
 before_script:
-  - ./geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth version
-  - ./geth-versions/geth-1.5.4/go-ethereum-1.5.4/build/bin/geth makedag 0 $HOME/.ethash
-  - ./geth-versions/geth-1.5.5/go-ethereum-1.5.5/build/bin/geth version
-  - ./geth-versions/geth-1.5.5/go-ethereum-1.5.5/build/bin/geth makedag 0 $HOME/.ethash
-  - ./geth-versions/geth-1.5.6/go-ethereum-1.5.6/build/bin/geth version
-  - ./geth-versions/geth-1.5.6/go-ethereum-1.5.6/build/bin/geth makedag 0 $HOME/.ethash
+  - if [ -n "$GETH_VERSION" ]; then /.$TRAVIS_BUILD_DIR/geth-versions/geth-$GETH_VERSION/go-ethereum-$GETH_VERSION/build/bin/geth version; fi
+  - if [ -n "$GETH_VERSION" ]; then /.$TRAVIS_BUILD_DIR/geth-versions/geth-$GETH_VERSION/go-ethereum-$GETH_VERSION/build/bin/geth makedag 0 $HOME/.ethash; fi
 script:
   - tox -e $TOX_ENV
 after_script:

@@ -85,8 +85,6 @@ def construct_test_chain_kwargs(**overrides):
             os.path.join(tempfile.mkdtemp(), 'geth.ipc'),
         )
 
-    overrides.setdefault('ipc_api', ALL_APIS)
-
     overrides.setdefault('verbosity', '5')
 
     return overrides
@@ -110,7 +108,8 @@ def construct_popen_command(data_dir=None,
                             verbosity=None,
                             ipc_disable=None,
                             ipc_path=None,
-                            ipc_api=None,
+                            ipc_api=None,  # deprecated.
+                            ipc_disabled=None,
                             rpc_enabled=None,
                             rpc_addr=None,
                             rpc_port=None,
@@ -124,6 +123,11 @@ def construct_popen_command(data_dir=None,
                             suffix_args=None,
                             suffix_kwargs=None,
                             shh=None):
+    if ipc_api is not None:
+        raise DeprecationWarning(
+            "The ipc_api flag has been deprecated.  The ipc API is now on by "
+            "default.  Use `ipc_disable=True` to disable this API"
+        )
     command = []
 
     if nice and is_nice_available():
@@ -178,9 +182,6 @@ def construct_popen_command(data_dir=None,
 
     if ipc_path is not None:
         command.extend(('--ipcpath', ipc_path))
-
-    if ipc_api is not None:
-        command.extend(('--ipcapi', ipc_api))
 
     if verbosity is not None:
         command.extend((
