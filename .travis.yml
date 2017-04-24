@@ -34,7 +34,6 @@ env:
 before_install:
   - if [ -n "$GETH_VERSION" ]; then travis_retry sudo add-apt-repository -y ppa:gophers/archive; fi
   - if [ -n "$GETH_VERSION" ]; then travis_retry sudo apt-get update; fi
-  - if [ -n "$GETH_VERSION" ]; then travis_retry sudo apt-get -y install tree; fi
   - if [ -n "$GETH_VERSION" ]; then export GETH_BINARY="$TRAVIS_BUILD_DIR/geth-versions/geth-$GETH_VERSION/go-ethereum-$GETH_VERSION/build/bin/geth"; fi
 install:
   - if [ -n "$GETH_VERSION" ]; then travis_retry sudo apt-get install -y golang-1.7 build-essential; fi
@@ -43,8 +42,8 @@ install:
   - if [ -n "$GETH_VERSION" ]; then /.$TRAVIS_BUILD_DIR/bin/install_geth.sh; fi
   - mkdir -p $HOME/.ethash
 before_script:
-  - if [ -n "$GETH_VERSION" ]; then ./$TRAVIS_BUILD_DIR/geth-versions/geth-$GETH_VERSION/go-ethereum-$GETH_VERSION/build/bin/geth version; fi
-  - if [ -n "$GETH_VERSION" ]; then ./$TRAVIS_BUILD_DIR/geth-versions/geth-$GETH_VERSION/go-ethereum-$GETH_VERSION/build/bin/geth makedag 0 $HOME/.ethash; fi
+  - if [ -n "$GETH_VERSION" ]; then /.$TRAVIS_BUILD_DIR/geth-versions/geth-$GETH_VERSION/go-ethereum-$GETH_VERSION/build/bin/geth version; fi
+  - if [ -n "$GETH_VERSION" ]; then /.$TRAVIS_BUILD_DIR/geth-versions/geth-$GETH_VERSION/go-ethereum-$GETH_VERSION/build/bin/geth makedag 0 $HOME/.ethash; fi
 script:
   - tox -e $TOX_ENV
 after_script:

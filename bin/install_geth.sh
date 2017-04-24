@@ -13,9 +13,6 @@ if [ ! -e geth-versions/geth-$GETH_VERSION/go-ethereum-$GETH_VERSION/build/bin/g
     tar -zxvf geth.tar.gz
     cd go-ethereum-$GETH_VERSION
     PATH=/usr/lib/go-1.7/bin:$PATH make geth
-    echo "$PWD"
-    ls .
-    tree .
     echo "Geth installed at $TRAVIS_BUILD_DIR/geth-versions/geth-$GETH_VERSION/go-ethereum-$GETH_VERSION/build/bin/geth"
 else
     echo "Geth found at $TRAVIS_BUILD_DIR/geth-versions/geth-$GETH_VERSION/go-ethereum-$GETH_VERSION/build/bin/geth"
