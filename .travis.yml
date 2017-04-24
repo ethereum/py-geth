@@ -13,22 +13,22 @@ env:
     - TOX_ENV=py27-stdlib GETH_VERSION=1.5.6
     - TOX_ENV=py34-stdlib GETH_VERSION=1.5.6
     - TOX_ENV=py35-stdlib GETH_VERSION=1.5.6
-    ## geth 1.5.7
-    #- TOX_ENV=py27-stdlib GETH_VERSION=1.5.7
-    #- TOX_ENV=py34-stdlib GETH_VERSION=1.5.7
-    #- TOX_ENV=py35-stdlib GETH_VERSION=1.5.7
-    ## geth 1.5.8
-    #- TOX_ENV=py27-stdlib GETH_VERSION=1.5.8
-    #- TOX_ENV=py34-stdlib GETH_VERSION=1.5.8
-    #- TOX_ENV=py35-stdlib GETH_VERSION=1.5.8
-    ## geth 1.5.9
-    #- TOX_ENV=py27-stdlib GETH_VERSION=1.5.9
-    #- TOX_ENV=py34-stdlib GETH_VERSION=1.5.9
-    #- TOX_ENV=py35-stdlib GETH_VERSION=1.5.9
-    ## geth 1.6.0
-    #- TOX_ENV=py27-stdlib GETH_VERSION=1.6.0
-    #- TOX_ENV=py34-stdlib GETH_VERSION=1.6.0
-    #- TOX_ENV=py35-stdlib GETH_VERSION=1.6.0
+    # geth 1.5.7
+    - TOX_ENV=py27-stdlib GETH_VERSION=1.5.7
+    - TOX_ENV=py34-stdlib GETH_VERSION=1.5.7
+    - TOX_ENV=py35-stdlib GETH_VERSION=1.5.7
+    # geth 1.5.8
+    - TOX_ENV=py27-stdlib GETH_VERSION=1.5.8
+    - TOX_ENV=py34-stdlib GETH_VERSION=1.5.8
+    - TOX_ENV=py35-stdlib GETH_VERSION=1.5.8
+    # geth 1.5.9
+    - TOX_ENV=py27-stdlib GETH_VERSION=1.5.9
+    - TOX_ENV=py34-stdlib GETH_VERSION=1.5.9
+    - TOX_ENV=py35-stdlib GETH_VERSION=1.5.9
+    # geth 1.6.0
+    - TOX_ENV=py27-stdlib GETH_VERSION=1.6.0
+    - TOX_ENV=py34-stdlib GETH_VERSION=1.6.0
+    - TOX_ENV=py35-stdlib GETH_VERSION=1.6.0
     # flake8
     - TOX_ENV=flake8
 before_install:
