@@ -15,7 +15,7 @@ readme = open(os.path.join(DIR, 'README.md')).read()
 
 setup(
     name='py-geth',
-    version="1.7.1",
+    version="1.8.0",
     description="""Run Go-Ethereum as a subprocess""",
     long_description=readme,
     author='Piper Merriam',
@@ -25,7 +25,7 @@ setup(
     py_modules=['geth'],
     extras_require={
         'gevent': [
-            "gevent>=1.1.1,<1.2.0",
+            "gevent>=1.1.1,!=1.2.0",
         ],
     },
     license="MIT",

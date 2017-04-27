@@ -1,3 +1,8 @@
+1.8.0
+-----
+
+- Bugfix for `--ipcapi` flag removal in geth 1.6.x
+
 1.7.1
 -----
 
