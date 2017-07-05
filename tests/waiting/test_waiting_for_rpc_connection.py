@@ -1,7 +1,8 @@
 import pytest
+
 from flaky import flaky
 
-from geth.geth import DevGethProcess
+from geth import DevGethProcess
 from geth.utils.compat import (
     Timeout,
 )

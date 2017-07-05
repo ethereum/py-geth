@@ -3,9 +3,16 @@ import sys
 import functools
 import tempfile
 
+from .exceptions import (
+    GethError,
+)
+
 from .utils.networking import (
     is_port_open,
     get_open_port,
+)
+from .utils.encoding import (
+    force_bytes,
 )
 from .utils.filesystem import (
     is_executable_available,
@@ -90,11 +97,12 @@ def construct_test_chain_kwargs(**overrides):
     return overrides
 
 
-GETH_BINARY = os.environ.get('GETH_BINARY', 'geth')
+def get_geth_binary_path():
+    return os.environ.get('GETH_BINARY', 'geth')
 
 
 def construct_popen_command(data_dir=None,
-                            geth_executable=GETH_BINARY,
+                            geth_executable=None,
                             max_peers=None,
                             network_id=None,
                             no_discover=None,
@@ -123,6 +131,9 @@ def construct_popen_command(data_dir=None,
                             suffix_args=None,
                             suffix_kwargs=None,
                             shh=None):
+    if geth_executable is None:
+        geth_executable = get_geth_binary_path()
+
     if ipc_api is not None:
         raise DeprecationWarning(
             "The ipc_api flag has been deprecated.  The ipc API is now on by "
@@ -224,6 +235,34 @@ def construct_popen_command(data_dir=None,
         command.extend(suffix_args)
 
     return command
+
+
+def geth_wrapper(**geth_kwargs):
+    stdin = geth_kwargs.pop('stdin', None)
+    command = construct_popen_command(**geth_kwargs)
+
+    proc = subprocess.Popen(
+        command,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+
+    if stdin is not None:
+        stdin = force_bytes(stdin)
+
+    stdoutdata, stderrdata = proc.communicate(stdin)
+
+    if proc.returncode != 0:
+        raise GethError(
+            command=command,
+            return_code=proc.returncode,
+            stdin_data=stdin,
+            stdout_data=stdoutdata,
+            stderr_data=stderrdata,
+        )
+
+    return stdoutdata, stderrdata, command, proc
 
 
 def spawn_geth(geth_kwargs,

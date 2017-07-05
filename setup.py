@@ -23,6 +23,9 @@ setup(
     url='https://github.com/pipermerriam/py-geth',
     include_package_data=True,
     py_modules=['geth'],
+    install_requires=[
+        "semantic-version>=2.6.0",
+    ],
     extras_require={
         'gevent': [
             "gevent>=1.1.1,!=1.2.0",

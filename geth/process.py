@@ -1,6 +1,7 @@
 import os
 import random
 import logging
+import warnings
 
 try:
     from urllib.request import (
@@ -190,19 +191,28 @@ class BaseGethProcess(object):
                 _timeout.check()
 
 
-class LiveGethProcess(BaseGethProcess):
+class MainnetGethProcess(BaseGethProcess):
     def __init__(self, geth_kwargs=None):
         if geth_kwargs is None:
             geth_kwargs = {}
 
         if 'data_dir' in geth_kwargs:
-            raise ValueError("You cannot specify `data_dir` for a LiveGethProcess")
+            raise ValueError("You cannot specify `data_dir` for a MainnetGethProcess")
 
-        super(LiveGethProcess, self).__init__(geth_kwargs)
+        super(MainnetGethProcess, self).__init__(geth_kwargs)
 
     @property
     def data_dir(self):
         return get_live_data_dir()
+
+
+class LiveGethProcess(MainnetGethProcess):
+    def __init__(self, *args, **kwargs):
+        warnings.warn(DeprecationWarning(
+            "The `LiveGethProcess` has been renamed to `MainnetGethProcess`. "
+            "The `LiveGethProcess` alias will be removed in subsequent releases"
+        ))
+        super(LiveGethProcess, self).__init__(*args, **kwargs)
 
 
 class RopstenGethProcess(BaseGethProcess):
@@ -237,6 +247,9 @@ class TestnetGethProcess(RopstenGethProcess):
 
 
 class DevGethProcess(BaseGethProcess):
+    """
+    A local private chain for development.
+    """
     def __init__(self, chain_name, base_dir=None, overrides=None, genesis_data=None):
         if overrides is None:
             overrides = {}
