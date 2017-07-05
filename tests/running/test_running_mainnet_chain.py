@@ -1,9 +1,9 @@
-from geth.geth import LiveGethProcess
+from geth import MainnetGethProcess
 from geth.mixins import LoggingMixin
 from geth.utils.networking import get_open_port
 
 
-class LoggedMainnetGethProcess(LoggingMixin, LiveGethProcess):
+class LoggedMainnetGethProcess(LoggingMixin, MainnetGethProcess):
     pass
 
 

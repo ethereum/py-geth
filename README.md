@@ -128,7 +128,44 @@ True
 > The DAG functionality currently only applies to the DAG for epoch 0.
 
 
-# Aboutn `DevGethProcess`
+# Installing specific versions of `geth`
+
+> This feature is experimental and subject to breaking changes.
+
+Any of the following versions of `geth` can be installed using `py-geth` on the
+listed platforms.
+
+* `v1.5.6` (linux/osx)
+* `v1.5.7` (linux/osx)
+* `v1.5.8` (linux/osx)
+* `v1.5.9` (linux/osx)
+* `v1.6.0` (linux/osx)
+* `v1.6.1` (linux/osx)
+* `v1.6.2` (linux/osx)
+* `v1.6.3` (linux/osx)
+* `v1.6.4` (linux/osx)
+* `v1.6.5` (linux/osx)
+* `v1.6.6` (linux/osx)
+
+Installation can be done via the command line:
+
+```bash
+$ python -m geth.install v0.4.12
+```
+
+Or from python using the `install_geth` function.
+
+```python
+>>> from geth import install_geth
+>>> install_geth('v1.6.6')
+```
+
+The installed binary can be found in the `$HOME/.py-geth` directory, under your
+home directory.  The `v1.6.12` binary would be located at
+`$HOME/.py-geth/geth-v0.4.12/bin/geth`.
+
+
+# About `DevGethProcess`
 
 The `DevGethProcess` is designed to facilitate testing.  In that regard, it is
 preconfigured as follows.

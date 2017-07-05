@@ -1,4 +1,4 @@
-from geth.geth import DevGethProcess
+from geth import DevGethProcess
 from geth.mixins import LoggingMixin
 
 

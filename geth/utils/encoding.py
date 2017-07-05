@@ -1,3 +1,4 @@
+import codecs
 import sys
 
 
@@ -23,30 +24,22 @@ def is_string(value):
     return isinstance(value, string_types)
 
 
-if sys.version_info.major == 2:
-    def force_bytes(value):
-        if is_binary(value):
-            return str(value)
-        elif is_text(value):
-            return value.encode('latin1')
-        else:
-            raise TypeError("Unsupported type: {0}".format(type(value)))
+def force_bytes(value, encoding='iso-8859-1'):
+    if is_binary(value):
+        return bytes(value)
+    elif is_text(value):
+        return codecs.encode(value, encoding)
+    else:
+        raise TypeError("Unsupported type: {0}".format(type(value)))
 
-    def force_text(value):
-        if is_text(value):
-            return value
-        elif is_binary(value):
-            return unicode(force_bytes(value), 'latin1')  # NOQA
-        else:
-            raise TypeError("Unsupported type: {0}".format(type(value)))
-else:
-    def force_text(value):
-        if isinstance(value, text_types):
-            return value
-        elif isinstance(value, binary_types):
-            return str(value, 'latin1')
-        else:
-            raise TypeError("Unsupported type: {0}".format(type(value)))
+
+def force_text(value, encoding='iso-8859-1'):
+    if is_text(value):
+        return value
+    elif is_binary(value):
+        return codecs.decode(value, encoding)
+    else:
+        raise TypeError("Unsupported type: {0}".format(type(value)))
 
 
 def force_obj_to_text(obj):
