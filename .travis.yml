@@ -6,7 +6,7 @@ sudo: required
 cache:
   pip: true
   directories:
-    - $HOME/.ethash
+    - $HOME/.ethash/
 env:
   global:
     - GETH_BASE_INSTALL_PATH=$TRAVIS_BUILD_DIR
