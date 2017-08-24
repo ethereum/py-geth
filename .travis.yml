@@ -4,8 +4,8 @@ python:
 dist: trusty
 sudo: required
 cache:
-  pip: true
-  directories:
+  - pip: true
+  - directories:
     - $HOME/.ethash/
 env:
   global:
