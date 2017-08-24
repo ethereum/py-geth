@@ -146,6 +146,7 @@ listed platforms.
 * `v1.6.4` (linux/osx)
 * `v1.6.5` (linux/osx)
 * `v1.6.6` (linux/osx)
+* `v1.6.7` (linux/osx)
 
 Installation can be done via the command line:
 
@@ -157,12 +158,12 @@ Or from python using the `install_geth` function.
 
 ```python
 >>> from geth import install_geth
->>> install_geth('v1.6.6')
+>>> install_geth('v1.6.7')
 ```
 
 The installed binary can be found in the `$HOME/.py-geth` directory, under your
-home directory.  The `v1.6.12` binary would be located at
-`$HOME/.py-geth/geth-v0.4.12/bin/geth`.
+home directory.  The `v1.6.7` binary would be located at
+`$HOME/.py-geth/geth-v1.6.7/bin/geth`.
 
 
 # About `DevGethProcess`
