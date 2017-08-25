@@ -22,6 +22,7 @@ V1_6_3 = 'v1.6.3'
 V1_6_4 = 'v1.6.4'
 V1_6_5 = 'v1.6.5'
 V1_6_6 = 'v1.6.6'
+V1_6_7 = 'v1.6.7'
 
 
 LINUX = 'linux'
@@ -295,6 +296,7 @@ install_v1_6_3 = functools.partial(install_from_source_code_release, V1_6_3)
 install_v1_6_4 = functools.partial(install_from_source_code_release, V1_6_4)
 install_v1_6_5 = functools.partial(install_from_source_code_release, V1_6_5)
 install_v1_6_6 = functools.partial(install_from_source_code_release, V1_6_6)
+install_v1_6_7 = functools.partial(install_from_source_code_release, V1_6_7)
 
 
 INSTALL_FUNCTIONS = {
@@ -310,6 +312,7 @@ INSTALL_FUNCTIONS = {
         V1_6_4: install_v1_6_4,
         V1_6_5: install_v1_6_5,
         V1_6_6: install_v1_6_6,
+        V1_6_7: install_v1_6_7,
     },
     OSX: {
         V1_5_6: install_v1_5_6,
@@ -323,13 +326,14 @@ INSTALL_FUNCTIONS = {
         V1_6_4: install_v1_6_4,
         V1_6_5: install_v1_6_5,
         V1_6_6: install_v1_6_6,
+        V1_6_7: install_v1_6_7,
     }
 }
 
 
 def install_geth(identifier, platform=None):
     if platform is None:
-        platform = sys.platform
+        platform = get_platform()
 
     if platform not in INSTALL_FUNCTIONS:
         raise ValueError(
