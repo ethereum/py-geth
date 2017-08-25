@@ -1,3 +1,14 @@
+1.10.0
+-----
+
+- Support and testing against `geth==1.6.1`
+- Support and testing against `geth==1.6.2`
+- Support and testing against `geth==1.6.3`
+- Support and testing against `geth==1.6.4`
+- Support and testing against `geth==1.6.5`
+- Support and testing against `geth==1.6.6`
+- Support and testing against `geth==1.6.7`
+
 1.9.0
 -----
 
