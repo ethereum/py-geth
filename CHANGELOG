@@ -1,5 +1,10 @@
+1.10.1
+------
+
+- Support for testing and installation of `geth==1.7.0`
+
 1.10.0
------
+------
 
 - Support and testing against `geth==1.6.1`
 - Support and testing against `geth==1.6.2`
