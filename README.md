@@ -148,6 +148,7 @@ listed platforms.
 * `v1.6.6` (linux/osx)
 * `v1.6.7` (linux/osx)
 * `v1.7.0` (linux/osx)
+* `v1.7.2` (linux/osx)
 
 Installation can be done via the command line:
 
