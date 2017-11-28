@@ -1,26 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import os
-
 from setuptools import (
     setup,
     find_packages,
 )
 
 
-DIR = os.path.dirname(os.path.abspath(__file__))
-
-readme = open(os.path.join(DIR, 'README.md')).read()
-
-
 setup(
     name='py-geth',
+    # *IMPORTANT*: Don't manually change the version here. Use the 'bumpversion' utility.
     version="1.10.2",
     description="""Run Go-Ethereum as a subprocess""",
-    long_description=readme,
+    long_description_markdown_filename='README.md',
     author='Piper Merriam',
     author_email='pipermerriam@gmail.com',
-    url='https://github.com/pipermerriam/py-geth',
+    url='https://github.com/ethereum/py-geth',
     include_package_data=True,
     py_modules=['geth'],
     install_requires=[
