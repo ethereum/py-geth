@@ -1,13 +1,12 @@
 import os
-import random
+import time
 
 import pytest
 
 from geth.wrapper import spawn_geth
 from geth.utils.dag import is_dag_generated
-from geth.utils.compat import (
+from geth.utils.timeout import (
     Timeout,
-    sleep,
 )
 
 
@@ -30,7 +29,7 @@ def test_waiting_for_dag_generation(base_dir):
         while True:
             if is_dag_generated(base_dir=base_dir):
                 break
-            sleep(random.random())
+            time(0.1)
             timeout.check()
 
     assert proc.poll() is not None

@@ -1,15 +1,23 @@
 from __future__ import absolute_import
 
-import os
 import datetime
 import logging
+import os
 
-from .utils.filesystem import ensure_path_exists
-from .utils.compat import (
+try:
+    import queue
+except ImportError:
+    # python 2 support
+    import Queue as queue
+
+import time
+
+from geth.utils.filesystem import ensure_path_exists
+from geth.utils.thread import (
     spawn,
+)
+from geth.utils.timeout import (
     Timeout,
-    sleep,
-    JoinableQueue,
 )
 
 
@@ -44,6 +52,23 @@ def get_file_logger(name, filename):
     return logger
 
 
+class JoinableQueue(queue.Queue):
+    def __iter__(self):
+        while True:
+            item = self.get()
+            if isinstance(item, Exception):
+                raise item
+            elif isinstance(item, type) and issubclass(item, Exception):
+                raise item
+            yield item
+
+    def join(self, timeout=None):
+        with Timeout(timeout) as _timeout:
+            while not self.empty():
+                time.sleep(0)
+                _timeout.check()
+
+
 class InterceptedStreamsMixin(object):
     """
     Mixin class for GethProcess instances that feeds all of the stdout and
@@ -69,26 +94,26 @@ class InterceptedStreamsMixin(object):
     def produce_stdout_queue(self):
         for line in iter(self.proc.stdout.readline, b''):
             self.stdout_queue.put(line)
-            sleep(0)
+            time.sleep(0)
 
     def produce_stderr_queue(self):
         for line in iter(self.proc.stderr.readline, b''):
             self.stderr_queue.put(line)
-            sleep(0)
+            time.sleep(0)
 
     def consume_stdout_queue(self):
         for line in self.stdout_queue:
             for fn in self.stdout_callbacks:
                 fn(line.strip())
             self.stdout_queue.task_done()
-            sleep(0)
+            time.sleep(0)
 
     def consume_stderr_queue(self):
         for line in self.stderr_queue:
             for fn in self.stderr_callbacks:
                 fn(line.strip())
             self.stderr_queue.task_done()
-            sleep(0)
+            time.sleep(0)
 
     def start(self):
         super(InterceptedStreamsMixin, self).start()

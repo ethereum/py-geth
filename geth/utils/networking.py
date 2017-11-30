@@ -1,10 +1,10 @@
 import sys
 import contextlib
+import time
+import socket
 
-from .compat import (
-    socket,
+from .timeout import (
     Timeout,
-    sleep,
 )
 
 
@@ -51,7 +51,7 @@ def wait_for_http_connection(port, timeout=5):
             try:
                 s.connect(('127.0.0.1', port))
             except (socket.timeout, ConnectionRefusedError):
-                sleep(0.1)
+                time.sleep(0.1)
                 _timeout.check()
                 continue
             else:

@@ -1,8 +1,8 @@
 import signal
+import time
 
-from .compat import (
+from .timeout import (
     Timeout,
-    sleep,
 )
 
 
@@ -10,7 +10,7 @@ def wait_for_popen(proc, timeout=30):
     try:
         with Timeout(timeout) as _timeout:
             while proc.poll() is None:
-                sleep(0.1)
+                time.sleep(0.1)
                 _timeout.check()
     except Timeout:
         pass

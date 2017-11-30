@@ -1,13 +1,12 @@
 """
 Install geth
 """
+import contextlib
 import functools
 import os
 import stat
 import subprocess
 import sys
-import contextlib
-
 import tarfile
 
 

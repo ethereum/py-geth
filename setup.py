@@ -20,11 +20,6 @@ setup(
     install_requires=[
         "semantic-version>=2.6.0",
     ],
-    extras_require={
-        'gevent': [
-            "gevent>=1.1.1,!=1.2.0",
-        ],
-    },
     license="MIT",
     zip_safe=False,
     keywords='ethereum go-ethereum geth',

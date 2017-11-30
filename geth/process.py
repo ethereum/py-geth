@@ -1,6 +1,8 @@
 import os
-import random
 import logging
+import socket
+import subprocess
+import time
 import warnings
 
 try:
@@ -14,30 +16,27 @@ except ImportError:
         URLError,
     )
 
-from .utils.networking import (  # noqa: E402
+from geth.utils.networking import (  # noqa: E402
     get_ipc_socket,
 )
-from .utils.dag import (  # noqa: E402
+from geth.utils.dag import (  # noqa: E402
     is_dag_generated,
 )
-from .utils.proc import (  # noqa: E402
+from geth.utils.proc import (  # noqa: E402
     kill_proc,
 )
-from .utils.compat import (
-    subprocess,
-    socket,
-    sleep,
+from geth.utils.timeout import (
     Timeout,
 )
-from .accounts import (  # noqa: E402
+from geth.accounts import (  # noqa: E402
     ensure_account_exists,
     get_accounts,
 )
-from .wrapper import (  # noqa: E402
+from geth.wrapper import (  # noqa: E402
     construct_test_chain_kwargs,
     construct_popen_command,
 )
-from .chain import (  # noqa: E402
+from geth.chain import (  # noqa: E402
     get_chain_data_dir,
     get_default_base_dir,
     get_genesis_file_path,
@@ -134,7 +133,7 @@ class BaseGethProcess(object):
             while True:
                 if self.is_rpc_ready:
                     break
-                sleep(random.random())
+                time.sleep(0.1)
                 _timeout.check()
 
     @property
@@ -168,7 +167,7 @@ class BaseGethProcess(object):
             while True:
                 if self.is_ipc_ready:
                     break
-                sleep(random.random())
+                time.sleep(0.1)
                 _timeout.check()
 
     @property
@@ -187,7 +186,7 @@ class BaseGethProcess(object):
             while True:
                 if self.is_dag_generated:
                     break
-                sleep(random.random())
+                time.sleep(0.1)
                 _timeout.check()
 
 

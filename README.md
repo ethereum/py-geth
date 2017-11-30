@@ -22,17 +22,6 @@ Installation
 pip install py-geth
 ```
 
-Or to install with gevent support
-
-
-```bash
-pip install py-geth[gevent]
-```
-
-And then enable gevent based threads by setting the environment variable
-`GETH_THREADING_BACKEND=gevent`.
-
-
 ## Quickstart
 
 
