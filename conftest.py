@@ -1,16 +1,8 @@
-import os
 import json
-import contextlib
 
-if 'GETH_ASYNC_GEVENT' in os.environ:
-    from gevent import monkey
-    monkey.patch_socket()
+import pytest
 
-import pytest  # noqa: E402
-
-from geth.utils.encoding import (  # noqa: E402
-    force_text,
-)
+import requests
 
 
 @pytest.fixture
@@ -36,33 +28,15 @@ def rpc_client(open_port):
         }
         payload_data = json.dumps(force_obj_to_text(payload, True))
 
-        if 'GETH_ASYNC_GEVENT' in os.environ:
-            from geventhttpclient import HTTPClient
-            client = HTTPClient(
-                host='127.0.0.1',
-                port=open_port,
-                connection_timeout=10,
-                network_timeout=10,
-                headers={
-                    'Content-Type': 'application/json',
-                },
-            )
-            with contextlib.closing(client):
-                response = client.post('/', body=payload_data)
-                response_body = response.read()
+        response = requests.post(
+            endpoint,
+            data=payload_data,
+            headers={
+                'Content-Type': 'application/json',
+            },
+        )
 
-            result = json.loads(force_text(response_body))
-        else:
-            import requests
-            response = requests.post(
-                endpoint,
-                data=payload_data,
-                headers={
-                    'Content-Type': 'application/json',
-                },
-            )
-
-            result = response.json()
+        result = response.json()
 
         if 'error' in result:
             raise AssertionError(result['error'])

@@ -2,22 +2,22 @@ import os
 import sys
 import functools
 import tempfile
+import subprocess
 
-from .exceptions import (
+from geth.exceptions import (
     GethError,
 )
 
-from .utils.networking import (
+from geth.utils.networking import (
     is_port_open,
     get_open_port,
 )
-from .utils.encoding import (
+from geth.utils.encoding import (
     force_bytes,
 )
-from .utils.filesystem import (
+from geth.utils.filesystem import (
     is_executable_available,
 )
-from .utils.compat import subprocess
 
 
 is_nice_available = functools.partial(is_executable_available, 'nice')

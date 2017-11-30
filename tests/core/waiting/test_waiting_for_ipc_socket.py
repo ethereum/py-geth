@@ -3,7 +3,7 @@ import pytest
 from flaky import flaky
 
 from geth import DevGethProcess
-from geth.utils.compat import (
+from geth.utils.timeout import (
     Timeout,
 )
 
