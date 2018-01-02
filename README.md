@@ -110,7 +110,7 @@ True
 >>> geth.is_ipc_ready
 True
 >>> geth.wait_for_ipc(timeout=30)  # wait up to 30 seconds for the IPC socket to open
->>> geth.is_dag_ready
+>>> geth.is_dag_generated
 True
 >>> geth.is_mining
 True
