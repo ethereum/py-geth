@@ -9,7 +9,7 @@ from setuptools import (
 setup(
     name='py-geth',
     # *IMPORTANT*: Don't manually change the version here. Use the 'bumpversion' utility.
-    version='2.0.0',
+    version='2.0.1',
     description="""Run Go-Ethereum as a subprocess""",
     long_description_markdown_filename='README.md',
     author='Piper Merriam',
