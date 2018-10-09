@@ -52,8 +52,8 @@ def construct_test_chain_kwargs(**overrides):
     overrides.setdefault('max_peers', '0')
     overrides.setdefault('network_id', '1234')
 
-    if is_port_open(30303):
-        overrides.setdefault('port', '30303')
+    if is_port_open(overrides.get('port', '30303')):
+        overrides.setdefault('port', overrides.get('port', '30303'))
     else:
         overrides.setdefault('port', get_open_port())
 
@@ -61,16 +61,16 @@ def construct_test_chain_kwargs(**overrides):
     overrides.setdefault('ws_addr', '127.0.0.1')
     overrides.setdefault('ws_api', ALL_APIS)
 
-    if is_port_open(8546):
-        overrides.setdefault('ws_port', '8546')
+    if is_port_open(overrides.get('ws_port', '8546')):
+        overrides.setdefault('ws_port', overrides.get('ws_port', '8546'))
     else:
         overrides.setdefault('ws_port', get_open_port())
 
     overrides.setdefault('rpc_enabled', True)
     overrides.setdefault('rpc_addr', '127.0.0.1')
     overrides.setdefault('rpc_api', ALL_APIS)
-    if is_port_open(8545):
-        overrides.setdefault('rpc_port', '8545')
+    if is_port_open(overrides.get('rpc_port', '8545')):
+        overrides.setdefault('rpc_port', overrides.get('rpc_port', '8545'))
     else:
         overrides.setdefault('rpc_port', get_open_port())
 
