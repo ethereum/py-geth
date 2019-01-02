@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-
-wget https://dl.google.com/go/go1.7.linux-amd64.tar.gz
-sudo tar -zxvf go1.7.linux-amd64.tar.gz -C /usr/local/
+GO_VERSION=$1
+wget "https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz"
+sudo tar -zxvf go$GO_VERSION.linux-amd64.tar.gz -C /usr/local/
 echo 'export GOROOT=/usr/local/go' >> $BASH_ENV
 echo 'export PATH=$PATH:/usr/local/go/bin' >> $BASH_ENV
 
