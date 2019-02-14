@@ -25,6 +25,27 @@ V1_6_7 = 'v1.6.7'
 V1_7_0 = 'v1.7.0'
 V1_7_2 = 'v1.7.2'
 V1_8_1 = 'v1.8.1'
+V1_8_2 = 'v1.8.2'
+V1_8_3 = 'v1.8.3'
+V1_8_4 = 'v1.8.4'
+V1_8_5 = 'v1.8.5'
+V1_8_6 = 'v1.8.6'
+V1_8_7 = 'v1.8.7'
+V1_8_8 = 'v1.8.8'
+V1_8_9 = 'v1.8.9'
+V1_8_10 = 'v1.8.10'
+V1_8_11 = 'v1.8.11'
+V1_8_12 = 'v1.8.12'
+V1_8_13 = 'v1.8.13'
+V1_8_14 = 'v1.8.14'
+V1_8_15 = 'v1.8.15'
+V1_8_16 = 'v1.8.16'
+V1_8_17 = 'v1.8.17'
+V1_8_18 = 'v1.8.18'
+V1_8_19 = 'v1.8.19'
+V1_8_20 = 'v1.8.20'
+V1_8_21 = 'v1.8.21'
+V1_8_22 = 'v1.8.22'
 
 
 LINUX = 'linux'
@@ -302,6 +323,27 @@ install_v1_6_7 = functools.partial(install_from_source_code_release, V1_6_7)
 install_v1_7_0 = functools.partial(install_from_source_code_release, V1_7_0)
 install_v1_7_2 = functools.partial(install_from_source_code_release, V1_7_2)
 install_v1_8_1 = functools.partial(install_from_source_code_release, V1_8_1)
+install_v1_8_2 = functools.partial(install_from_source_code_release, V1_8_2)
+install_v1_8_3 = functools.partial(install_from_source_code_release, V1_8_3)
+install_v1_8_4 = functools.partial(install_from_source_code_release, V1_8_4)
+install_v1_8_5 = functools.partial(install_from_source_code_release, V1_8_5)
+install_v1_8_6 = functools.partial(install_from_source_code_release, V1_8_6)
+install_v1_8_7 = functools.partial(install_from_source_code_release, V1_8_7)
+install_v1_8_8 = functools.partial(install_from_source_code_release, V1_8_8)
+install_v1_8_9 = functools.partial(install_from_source_code_release, V1_8_9)
+install_v1_8_10 = functools.partial(install_from_source_code_release, V1_8_10)
+install_v1_8_11 = functools.partial(install_from_source_code_release, V1_8_11)
+install_v1_8_12 = functools.partial(install_from_source_code_release, V1_8_12)
+install_v1_8_13 = functools.partial(install_from_source_code_release, V1_8_13)
+install_v1_8_14 = functools.partial(install_from_source_code_release, V1_8_14)
+install_v1_8_15 = functools.partial(install_from_source_code_release, V1_8_15)
+install_v1_8_16 = functools.partial(install_from_source_code_release, V1_8_16)
+install_v1_8_17 = functools.partial(install_from_source_code_release, V1_8_17)
+install_v1_8_18 = functools.partial(install_from_source_code_release, V1_8_18)
+install_v1_8_19 = functools.partial(install_from_source_code_release, V1_8_19)
+install_v1_8_20 = functools.partial(install_from_source_code_release, V1_8_20)
+install_v1_8_21 = functools.partial(install_from_source_code_release, V1_8_21)
+install_v1_8_22 = functools.partial(install_from_source_code_release, V1_8_22)
 
 
 INSTALL_FUNCTIONS = {
@@ -321,6 +363,27 @@ INSTALL_FUNCTIONS = {
         V1_7_0: install_v1_7_0,
         V1_7_2: install_v1_7_2,
         V1_8_1: install_v1_8_1,
+        V1_8_2: install_v1_8_2,
+        V1_8_3: install_v1_8_3,
+        V1_8_4: install_v1_8_4,
+        V1_8_5: install_v1_8_5,
+        V1_8_6: install_v1_8_6,
+        V1_8_7: install_v1_8_7,
+        V1_8_8: install_v1_8_8,
+        V1_8_9: install_v1_8_9,
+        V1_8_10: install_v1_8_10,
+        V1_8_11: install_v1_8_11,
+        V1_8_12: install_v1_8_12,
+        V1_8_13: install_v1_8_13,
+        V1_8_14: install_v1_8_14,
+        V1_8_15: install_v1_8_15,
+        V1_8_16: install_v1_8_16,
+        V1_8_17: install_v1_8_17,
+        V1_8_18: install_v1_8_18,
+        V1_8_19: install_v1_8_19,
+        V1_8_20: install_v1_8_20,
+        V1_8_21: install_v1_8_21,
+        V1_8_22: install_v1_8_22,
     },
     OSX: {
         V1_5_6: install_v1_5_6,
@@ -338,6 +401,27 @@ INSTALL_FUNCTIONS = {
         V1_7_0: install_v1_7_0,
         V1_7_2: install_v1_7_2,
         V1_8_1: install_v1_8_1,
+        V1_8_2: install_v1_8_2,
+        V1_8_3: install_v1_8_3,
+        V1_8_4: install_v1_8_4,
+        V1_8_5: install_v1_8_5,
+        V1_8_6: install_v1_8_6,
+        V1_8_7: install_v1_8_7,
+        V1_8_8: install_v1_8_8,
+        V1_8_9: install_v1_8_9,
+        V1_8_10: install_v1_8_10,
+        V1_8_11: install_v1_8_11,
+        V1_8_12: install_v1_8_12,
+        V1_8_13: install_v1_8_13,
+        V1_8_14: install_v1_8_14,
+        V1_8_15: install_v1_8_15,
+        V1_8_16: install_v1_8_16,
+        V1_8_17: install_v1_8_17,
+        V1_8_18: install_v1_8_18,
+        V1_8_19: install_v1_8_19,
+        V1_8_20: install_v1_8_20,
+        V1_8_21: install_v1_8_21,
+        V1_8_22: install_v1_8_22,
     }
 }
 
