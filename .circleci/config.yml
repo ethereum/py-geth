@@ -100,13 +100,6 @@ common_go_v_1_10: &common_go_v_1_10
         key: cache-v5-{{ arch }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
 
 jobs:
-  py27-install-geth-v1.7.0:
-    <<: *common_go_v_1_7
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.7.0
-          TOXENV: py27-install-geth-v1.7.0
   py34-install-geth-v1.7.0:
     <<: *common_go_v_1_7
     docker:
@@ -122,13 +115,6 @@ jobs:
           GETH_VERSION: v1.7.0
           TOXENV: py35-install-geth-v1.7.0
 
-  py27-install-geth-v1.7.2:
-    <<: *common_go_v_1_7
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.7.2
-          TOXENV: py27-install-geth-v1.7.2
   py34-install-geth-v1.7.2:
     <<: *common_go_v_1_7
     docker:
@@ -144,13 +130,6 @@ jobs:
           GETH_VERSION: v1.7.2
           TOXENV: py35-install-geth-v1.7.2
 
-  py27-install-geth-v1.8.1:
-    <<: *common_go_v_1_7
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.1
-          TOXENV: py27-install-geth-v1.8.1
   py34-install-geth-v1.8.1:
     <<: *common_go_v_1_7
     docker:
@@ -166,13 +145,6 @@ jobs:
           GETH_VERSION: v1.8.1
           TOXENV: py35-install-geth-v1.8.1
 
-  py27-install-geth-v1.8.2:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.2
-          TOXENV: py27-install-geth-v1.8.2
   py34-install-geth-v1.8.2:
     <<: *common_go_v_1_10
     docker:
@@ -188,13 +160,6 @@ jobs:
           GETH_VERSION: v1.8.2
           TOXENV: py35-install-geth-v1.8.2
 
-  py27-install-geth-v1.8.3:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.3
-          TOXENV: py27-install-geth-v1.8.3
   py34-install-geth-v1.8.3:
     <<: *common_go_v_1_10
     docker:
@@ -210,13 +175,6 @@ jobs:
           GETH_VERSION: v1.8.3
           TOXENV: py35-install-geth-v1.8.3
 
-  py27-install-geth-v1.8.4:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.4
-          TOXENV: py27-install-geth-v1.8.4
   py34-install-geth-v1.8.4:
     <<: *common_go_v_1_10
     docker:
@@ -232,13 +190,6 @@ jobs:
           GETH_VERSION: v1.8.4
           TOXENV: py35-install-geth-v1.8.4
 
-  py27-install-geth-v1.8.5:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.5
-          TOXENV: py27-install-geth-v1.8.5
   py34-install-geth-v1.8.5:
     <<: *common_go_v_1_10
     docker:
@@ -254,13 +205,6 @@ jobs:
           GETH_VERSION: v1.8.5
           TOXENV: py35-install-geth-v1.8.5
 
-  py27-install-geth-v1.8.6:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.6
-          TOXENV: py27-install-geth-v1.8.6
   py34-install-geth-v1.8.6:
     <<: *common_go_v_1_10
     docker:
@@ -276,13 +220,6 @@ jobs:
           GETH_VERSION: v1.8.6
           TOXENV: py35-install-geth-v1.8.6
 
-  py27-install-geth-v1.8.7:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.7
-          TOXENV: py27-install-geth-v1.8.7
   py34-install-geth-v1.8.7:
     <<: *common_go_v_1_10
     docker:
@@ -298,13 +235,6 @@ jobs:
           GETH_VERSION: v1.8.7
           TOXENV: py35-install-geth-v1.8.7
 
-  py27-install-geth-v1.8.8:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.8
-          TOXENV: py27-install-geth-v1.8.8
   py34-install-geth-v1.8.8:
     <<: *common_go_v_1_10
     docker:
@@ -320,13 +250,6 @@ jobs:
           GETH_VERSION: v1.8.8
           TOXENV: py35-install-geth-v1.8.8
 
-  py27-install-geth-v1.8.9:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.9
-          TOXENV: py27-install-geth-v1.8.9
   py34-install-geth-v1.8.9:
     <<: *common_go_v_1_10
     docker:
@@ -342,13 +265,6 @@ jobs:
           GETH_VERSION: v1.8.9
           TOXENV: py35-install-geth-v1.8.9
 
-  py27-install-geth-v1.8.10:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.10
-          TOXENV: py27-install-geth-v1.8.10
   py34-install-geth-v1.8.10:
     <<: *common_go_v_1_10
     docker:
@@ -364,13 +280,6 @@ jobs:
           GETH_VERSION: v1.8.10
           TOXENV: py35-install-geth-v1.8.10
 
-  py27-install-geth-v1.8.11:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.11
-          TOXENV: py27-install-geth-v1.8.11
   py34-install-geth-v1.8.11:
     <<: *common_go_v_1_10
     docker:
@@ -386,13 +295,6 @@ jobs:
           GETH_VERSION: v1.8.11
           TOXENV: py35-install-geth-v1.8.11
 
-  py27-install-geth-v1.8.12:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.12
-          TOXENV: py27-install-geth-v1.8.12
   py34-install-geth-v1.8.12:
     <<: *common_go_v_1_10
     docker:
@@ -408,13 +310,6 @@ jobs:
           GETH_VERSION: v1.8.12
           TOXENV: py35-install-geth-v1.8.12
 
-  py27-install-geth-v1.8.13:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.13
-          TOXENV: py27-install-geth-v1.8.13
   py34-install-geth-v1.8.13:
     <<: *common_go_v_1_10
     docker:
@@ -430,13 +325,6 @@ jobs:
           GETH_VERSION: v1.8.13
           TOXENV: py35-install-geth-v1.8.13
 
-  py27-install-geth-v1.8.14:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.14
-          TOXENV: py27-install-geth-v1.8.14
   py34-install-geth-v1.8.14:
     <<: *common_go_v_1_10
     docker:
@@ -452,13 +340,6 @@ jobs:
           GETH_VERSION: v1.8.14
           TOXENV: py35-install-geth-v1.8.14
 
-  py27-install-geth-v1.8.15:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.15
-          TOXENV: py27-install-geth-v1.8.15
   py34-install-geth-v1.8.15:
     <<: *common_go_v_1_10
     docker:
@@ -474,13 +355,6 @@ jobs:
           GETH_VERSION: v1.8.15
           TOXENV: py35-install-geth-v1.8.15
 
-  py27-install-geth-v1.8.16:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.16
-          TOXENV: py27-install-geth-v1.8.16
   py34-install-geth-v1.8.16:
     <<: *common_go_v_1_10
     docker:
@@ -496,13 +370,6 @@ jobs:
           GETH_VERSION: v1.8.16
           TOXENV: py35-install-geth-v1.8.16
 
-  py27-install-geth-v1.8.17:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.17
-          TOXENV: py27-install-geth-v1.8.17
   py34-install-geth-v1.8.17:
     <<: *common_go_v_1_10
     docker:
@@ -518,13 +385,6 @@ jobs:
           GETH_VERSION: v1.8.17
           TOXENV: py35-install-geth-v1.8.17
 
-  py27-install-geth-v1.8.18:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.18
-          TOXENV: py27-install-geth-v1.8.18
   py34-install-geth-v1.8.18:
     <<: *common_go_v_1_10
     docker:
@@ -540,13 +400,6 @@ jobs:
           GETH_VERSION: v1.8.18
           TOXENV: py35-install-geth-v1.8.18
 
-  py27-install-geth-v1.8.19:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.19
-          TOXENV: py27-install-geth-v1.8.19
   py34-install-geth-v1.8.19:
     <<: *common_go_v_1_10
     docker:
@@ -562,13 +415,6 @@ jobs:
           GETH_VERSION: v1.8.19
           TOXENV: py35-install-geth-v1.8.19
 
-  py27-install-geth-v1.8.20:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.20
-          TOXENV: py27-install-geth-v1.8.20
   py34-install-geth-v1.8.20:
     <<: *common_go_v_1_10
     docker:
@@ -584,13 +430,6 @@ jobs:
           GETH_VERSION: v1.8.20
           TOXENV: py35-install-geth-v1.8.20
 
-  py27-install-geth-v1.8.21:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.21
-          TOXENV: py27-install-geth-v1.8.21
   py34-install-geth-v1.8.21:
     <<: *common_go_v_1_10
     docker:
@@ -606,13 +445,6 @@ jobs:
           GETH_VERSION: v1.8.21
           TOXENV: py35-install-geth-v1.8.21
 
-  py27-install-geth-v1.8.22:
-    <<: *common_go_v_1_10
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          GETH_VERSION: v1.8.22
-          TOXENV: py27-install-geth-v1.8.22
   py34-install-geth-v1.8.22:
     <<: *common_go_v_1_10
     docker:
@@ -628,12 +460,6 @@ jobs:
           GETH_VERSION: v1.8.22
           TOXENV: py35-install-geth-v1.8.22
 
-  py27-lint:
-    <<: *common_go_v_1_7
-    docker:
-      - image: circleci/python:2.7
-        environment:
-          TOXENV: py27-lint
   py34-lint:
     <<: *common_go_v_1_7
     docker:
@@ -652,102 +478,77 @@ workflows:
   version: 2
   test:
     jobs:
-      - py27-install-geth-v1.7.0
       - py34-install-geth-v1.7.0
       - py35-install-geth-v1.7.0
 
-      - py27-install-geth-v1.7.2
       - py34-install-geth-v1.7.2
       - py35-install-geth-v1.7.2
 
-      - py27-install-geth-v1.8.1
       - py34-install-geth-v1.8.1
       - py35-install-geth-v1.8.1
 
-      - py27-install-geth-v1.8.2
       - py34-install-geth-v1.8.2
       - py35-install-geth-v1.8.2
 
-      - py27-install-geth-v1.8.3
       - py34-install-geth-v1.8.3
       - py35-install-geth-v1.8.3
 
-      - py27-install-geth-v1.8.4
       - py34-install-geth-v1.8.4
       - py35-install-geth-v1.8.4
 
-      - py27-install-geth-v1.8.5
       - py34-install-geth-v1.8.5
       - py35-install-geth-v1.8.5
 
-      - py27-install-geth-v1.8.6
       - py34-install-geth-v1.8.6
       - py35-install-geth-v1.8.6
 
-      - py27-install-geth-v1.8.7
       - py34-install-geth-v1.8.7
       - py35-install-geth-v1.8.7
 
-      - py27-install-geth-v1.8.8
       - py34-install-geth-v1.8.8
       - py35-install-geth-v1.8.8
 
-      - py27-install-geth-v1.8.9
       - py34-install-geth-v1.8.9
       - py35-install-geth-v1.8.9
 
-      - py27-install-geth-v1.8.10
       - py34-install-geth-v1.8.10
       - py35-install-geth-v1.8.10
 
-      - py27-install-geth-v1.8.11
       - py34-install-geth-v1.8.11
       - py35-install-geth-v1.8.11
 
-      - py27-install-geth-v1.8.12
       - py34-install-geth-v1.8.12
       - py35-install-geth-v1.8.12
 
-      - py27-install-geth-v1.8.13
       - py34-install-geth-v1.8.13
       - py35-install-geth-v1.8.13
 
-      - py27-install-geth-v1.8.14
       - py34-install-geth-v1.8.14
       - py35-install-geth-v1.8.14
 
-      - py27-install-geth-v1.8.15
       - py34-install-geth-v1.8.15
       - py35-install-geth-v1.8.15
 
-      - py27-install-geth-v1.8.16
       - py34-install-geth-v1.8.16
       - py35-install-geth-v1.8.16
 
-      - py27-install-geth-v1.8.17
       - py34-install-geth-v1.8.17
       - py35-install-geth-v1.8.17
 
-      - py27-install-geth-v1.8.18
       - py34-install-geth-v1.8.18
       - py35-install-geth-v1.8.18
 
-      - py27-install-geth-v1.8.19
       - py34-install-geth-v1.8.19
       - py35-install-geth-v1.8.19
 
-      - py27-install-geth-v1.8.20
       - py34-install-geth-v1.8.20
       - py35-install-geth-v1.8.20
 
-      - py27-install-geth-v1.8.21
       - py34-install-geth-v1.8.21
       - py35-install-geth-v1.8.21
 
-      - py27-install-geth-v1.8.22
       - py34-install-geth-v1.8.22
       - py35-install-geth-v1.8.22
 
-      - py27-lint
       - py34-lint
       - py35-lint

@@ -3,13 +3,7 @@ from __future__ import absolute_import
 import datetime
 import logging
 import os
-
-try:
-    import queue
-except ImportError:
-    # python 2 support
-    import Queue as queue
-
+import queue
 import time
 
 from geth.utils.filesystem import ensure_path_exists
