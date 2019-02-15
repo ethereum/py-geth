@@ -50,6 +50,7 @@ setup(
     install_requires=[
         "semantic-version>=2.6.0",
     ],
+    python_requires=">=3",
     extras_require=deps,
     setup_requires=['setuptools-markdown'],
     license="MIT",
