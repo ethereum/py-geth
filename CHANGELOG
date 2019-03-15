@@ -1,3 +1,11 @@
+2.1.0
+-----
+
+- remove support for python 2.x
+- Geth versions `<1.7` are no longer tested in CI
+- Support for geth versions up to `geth==1.8.22`
+- Support for python 3.6 and 3.7
+
 1.10.2
 ------
 
