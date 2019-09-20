@@ -628,6 +628,28 @@ jobs:
           GETH_VERSION: v1.8.22
           TOXENV: py37-install-geth-v1.8.22
 
+  py35-install-geth-v1.9.3:
+    <<: *common_go_v_1_10
+    docker:
+      - image: circleci/python:3.5
+        environment:
+          GETH_VERSION: v1.9.3
+          TOXENV: py35-install-geth-v1.9.3
+  py36-install-geth-v1.9.3:
+    <<: *common_go_v_1_10
+    docker:
+      - image: circleci/python:3.6
+        environment:
+          GETH_VERSION: v1.9.3
+          TOXENV: py36-install-geth-v1.9.3
+  py37-install-geth-v1.9.3:
+    <<: *common_go_v_1_10
+    docker:
+      - image: circleci/python:3.7
+        environment:
+          GETH_VERSION: v1.9.3
+          TOXENV: py37-install-geth-v1.9.3
+
   py34-lint:
     <<: *common_go_v_1_7
     docker:
@@ -753,6 +775,22 @@ workflows:
       - py35-install-geth-v1.8.22
       - py36-install-geth-v1.8.22
       - py37-install-geth-v1.8.22
+
+      - py35-install-geth-v1.9.0
+      - py36-install-geth-v1.9.0
+      - py37-install-geth-v1.9.0
+
+      - py35-install-geth-v1.9.1
+      - py36-install-geth-v1.9.1
+      - py37-install-geth-v1.9.1
+
+      - py35-install-geth-v1.9.2
+      - py36-install-geth-v1.9.2
+      - py37-install-geth-v1.9.2
+
+      - py35-install-geth-v1.9.3
+      - py36-install-geth-v1.9.3
+      - py37-install-geth-v1.9.3
 
       - py35-lint
       - py36-lint

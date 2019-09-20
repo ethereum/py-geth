@@ -35,7 +35,7 @@ INSTALLATION_TEST_PARAMS = tuple(
 )
 def test_geth_installation_as_function_call(monkeypatch, tmpdir, platform, version):
     if get_platform() != platform:
-        pytest.skip("Wront platform for install script")
+        pytest.skip("Wrong platform for install script")
 
     base_install_path = str(tmpdir.mkdir("temporary-dir"))
     monkeypatch.setenv('GETH_BASE_INSTALL_PATH', base_install_path)
