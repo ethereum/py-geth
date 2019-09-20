@@ -34,7 +34,7 @@ def get_accounts(data_dir, **geth_kwargs):
     return accounts
 
 
-account_regex = re.compile(b'\{([a-f0-9]{40})\}')
+account_regex = re.compile(b'([a-f0-9]{40})')
 
 
 def create_new_account(data_dir, password, **geth_kwargs):
