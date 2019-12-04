@@ -1,3 +1,9 @@
+2.2.0
+-----
+
+- Add support for geth 1.9.x
+- Readme bugfix for pypi badges
+
 2.1.0
 -----
 
