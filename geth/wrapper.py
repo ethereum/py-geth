@@ -130,7 +130,8 @@ def construct_popen_command(data_dir=None,
                             ws_api=None,
                             suffix_args=None,
                             suffix_kwargs=None,
-                            shh=None):
+                            shh=None,
+                            allow_insecure_unlock=None):
     if geth_executable is None:
         geth_executable = get_geth_binary_path()
 
@@ -227,6 +228,9 @@ def construct_popen_command(data_dir=None,
 
     if shh:
         command.append('--shh')
+
+    if allow_insecure_unlock:
+        command.append('--allow-insecure-unlock')
 
     if suffix_kwargs:
         command.extend(suffix_kwargs)

@@ -1,11 +1,5 @@
 import os
-import shutil
 
-import pytest
-
-from geth.chain import (
-    get_chain_data_dir,
-)
 from geth.accounts import (
     create_new_account,
     get_accounts,
@@ -21,7 +15,7 @@ def test_create_new_account_with_text_password(tmpdir):
     account_1 = create_new_account(data_dir, b'some-text-password')
 
     accounts = get_accounts(data_dir)
-    assert (account_0, account_1) == accounts
+    assert sorted((account_0, account_1)) == sorted(tuple(set(accounts)))
 
 
 def test_create_new_account_with_file_based_password(tmpdir):
@@ -38,4 +32,4 @@ def test_create_new_account_with_file_based_password(tmpdir):
     account_1 = create_new_account(data_dir, pw_file_path)
 
     accounts = get_accounts(data_dir)
-    assert (account_0, account_1) == accounts
+    assert sorted((account_0, account_1)) == sorted(tuple(set(accounts)))
