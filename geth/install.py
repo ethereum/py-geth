@@ -54,6 +54,11 @@ V1_9_4 = 'v1.9.4'
 V1_9_5 = 'v1.9.5'
 V1_9_6 = 'v1.9.6'
 V1_9_7 = 'v1.9.7'
+V1_9_8 = 'v1.9.8'
+V1_9_9 = 'v1.9.9'
+V1_9_10 = 'v1.9.10'
+V1_9_11 = 'v1.9.11'
+V1_9_12 = 'v1.9.12'
 
 
 LINUX = 'linux'
@@ -360,6 +365,11 @@ install_v1_9_4 = functools.partial(install_from_source_code_release, V1_9_4)
 install_v1_9_5 = functools.partial(install_from_source_code_release, V1_9_5)
 install_v1_9_6 = functools.partial(install_from_source_code_release, V1_9_6)
 install_v1_9_7 = functools.partial(install_from_source_code_release, V1_9_7)
+install_v1_9_8 = functools.partial(install_from_source_code_release, V1_9_8)
+install_v1_9_9 = functools.partial(install_from_source_code_release, V1_9_9)
+install_v1_9_10 = functools.partial(install_from_source_code_release, V1_9_10)
+install_v1_9_11 = functools.partial(install_from_source_code_release, V1_9_11)
+install_v1_9_12 = functools.partial(install_from_source_code_release, V1_9_12)
 
 
 INSTALL_FUNCTIONS = {
@@ -408,6 +418,11 @@ INSTALL_FUNCTIONS = {
         V1_9_5: install_v1_9_5,
         V1_9_6: install_v1_9_6,
         V1_9_7: install_v1_9_7,
+        V1_9_8: install_v1_9_8,
+        V1_9_9: install_v1_9_9,
+        V1_9_10: install_v1_9_10,
+        V1_9_11: install_v1_9_11,
+        V1_9_12: install_v1_9_12,
     },
     OSX: {
         V1_5_6: install_v1_5_6,
@@ -454,6 +469,11 @@ INSTALL_FUNCTIONS = {
         V1_9_5: install_v1_9_5,
         V1_9_6: install_v1_9_6,
         V1_9_7: install_v1_9_7,
+        V1_9_8: install_v1_9_8,
+        V1_9_9: install_v1_9_9,
+        V1_9_10: install_v1_9_10,
+        V1_9_11: install_v1_9_11,
+        V1_9_12: install_v1_9_12,
     }
 }
 
