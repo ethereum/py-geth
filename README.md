@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/pipermerriam/py-geth.png)](https://travis-ci.org/pipermerriam/py-geth)
 [![Documentation Status](https://readthedocs.org/projects/py-geth/badge/?version=latest)](https://readthedocs.org/projects/py-geth/?badge=latest)
 [![PyPi version](https://img.shields.io/pypi/v/py-geth.svg)](https://pypi.python.org/pypi/py-geth)
-   
+
 
 Python wrapper around running `geth` as a subprocess
 
@@ -200,7 +200,7 @@ process will likely timeout during generation.
 Clone the repository and then run:
 
 ```sh
-pip install -e . -r requirements-dev.txt
+pip install -e .[dev]
 ```
 
 
@@ -209,7 +209,7 @@ pip install -e . -r requirements-dev.txt
 You can run the tests with:
 
 ```sh
-py.test tests
+pytest tests
 ```
 
 Or you can install `tox` to run the full test suite.

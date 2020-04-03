@@ -99,6 +99,54 @@ common_go_v_1_10: &common_go_v_1_10
           - ~/.ethash
         key: cache-v5-{{ arch }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
 
+common_go_v_1_13: &common_go_v_1_13
+  working_directory: ~/repo
+  steps:
+    - checkout
+    - run:
+        name: checkout fixtures submodule
+        command: git submodule update --init --recursive
+    - run:
+        name: merge pull request base
+        command: ./.circleci/merge_pr.sh
+    - run:
+        name: merge pull request base (2nd try)
+        command: ./.circleci/merge_pr.sh
+        when: on_fail
+    - run:
+        name: merge pull request base (3nd try)
+        command: ./.circleci/merge_pr.sh
+        when: on_fail
+    - restore_cache:
+        keys:
+          - cache-v6-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
+    - restore_cache:
+        keys:
+          - cache-v5-{{ arch }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
+    - run:
+        name: install dependencies
+        command: |
+          pip install --user tox
+          pip install --user checksumdir
+    - run:
+        name: install golang-1.13
+        command: ./.circleci/install_golang.sh 1.13
+    - run:
+        name: run tox
+        command: ~/.local/bin/tox
+    - save_cache:
+        paths:
+          - .hypothesis
+          - .tox
+          - ~/.cache/pip
+          - ~/.local
+          - ./eggs
+        key: cache-v6-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
+    - save_cache:
+        paths:
+          - ~/.ethash
+        key: cache-v5-{{ arch }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
+
 jobs:
   py35-install-geth-v1.7.0:
     <<: *common_go_v_1_7
@@ -806,21 +854,21 @@ jobs:
           TOXENV: py37-install-geth-v1.9.7
 
   py35-install-geth-v1.9.8:
-    <<: *common_go_v_1_10
+    <<: *common_go_v_1_13
     docker:
       - image: circleci/python:3.5
         environment:
           GETH_VERSION: v1.9.8
           TOXENV: py35-install-geth-v1.9.8
   py36-install-geth-v1.9.8:
-    <<: *common_go_v_1_10
+    <<: *common_go_v_1_13
     docker:
       - image: circleci/python:3.6
         environment:
           GETH_VERSION: v1.9.8
           TOXENV: py36-install-geth-v1.9.8
   py37-install-geth-v1.9.8:
-    <<: *common_go_v_1_10
+    <<: *common_go_v_1_13
     docker:
       - image: circleci/python:3.7
         environment:
@@ -828,21 +876,21 @@ jobs:
           TOXENV: py37-install-geth-v1.9.8
 
   py35-install-geth-v1.9.9:
-    <<: *common_go_v_1_10
+    <<: *common_go_v_1_13
     docker:
       - image: circleci/python:3.5
         environment:
           GETH_VERSION: v1.9.9
           TOXENV: py35-install-geth-v1.9.9
   py36-install-geth-v1.9.9:
-    <<: *common_go_v_1_10
+    <<: *common_go_v_1_13
     docker:
       - image: circleci/python:3.6
         environment:
           GETH_VERSION: v1.9.9
           TOXENV: py36-install-geth-v1.9.9
   py37-install-geth-v1.9.9:
-    <<: *common_go_v_1_10
+    <<: *common_go_v_1_13
     docker:
       - image: circleci/python:3.7
         environment:
@@ -850,21 +898,21 @@ jobs:
           TOXENV: py37-install-geth-v1.9.9
 
   py35-install-geth-v1.9.10:
-    <<: *common_go_v_1_10
+    <<: *common_go_v_1_13
     docker:
       - image: circleci/python:3.5
         environment:
           GETH_VERSION: v1.9.10
           TOXENV: py35-install-geth-v1.9.10
   py36-install-geth-v1.9.10:
-    <<: *common_go_v_1_10
+    <<: *common_go_v_1_13
     docker:
       - image: circleci/python:3.6
         environment:
           GETH_VERSION: v1.9.10
           TOXENV: py36-install-geth-v1.9.10
   py37-install-geth-v1.9.10:
-    <<: *common_go_v_1_10
+    <<: *common_go_v_1_13
     docker:
       - image: circleci/python:3.7
         environment:
@@ -872,21 +920,21 @@ jobs:
           TOXENV: py37-install-geth-v1.9.10
 
   py35-install-geth-v1.9.11:
-    <<: *common_go_v_1_10
+    <<: *common_go_v_1_13
     docker:
       - image: circleci/python:3.5
         environment:
           GETH_VERSION: v1.9.11
           TOXENV: py35-install-geth-v1.9.11
   py36-install-geth-v1.9.11:
-    <<: *common_go_v_1_10
+    <<: *common_go_v_1_13
     docker:
       - image: circleci/python:3.6
         environment:
           GETH_VERSION: v1.9.11
           TOXENV: py36-install-geth-v1.9.11
   py37-install-geth-v1.9.11:
-    <<: *common_go_v_1_10
+    <<: *common_go_v_1_13
     docker:
       - image: circleci/python:3.7
         environment:
@@ -894,21 +942,21 @@ jobs:
           TOXENV: py37-install-geth-v1.9.11
 
   py35-install-geth-v1.9.12:
-    <<: *common_go_v_1_10
+    <<: *common_go_v_1_13
     docker:
       - image: circleci/python:3.5
         environment:
           GETH_VERSION: v1.9.12
           TOXENV: py35-install-geth-v1.9.12
   py36-install-geth-v1.9.12:
-    <<: *common_go_v_1_10
+    <<: *common_go_v_1_13
     docker:
       - image: circleci/python:3.6
         environment:
           GETH_VERSION: v1.9.12
           TOXENV: py36-install-geth-v1.9.12
   py37-install-geth-v1.9.12:
-    <<: *common_go_v_1_10
+    <<: *common_go_v_1_13
     docker:
       - image: circleci/python:3.7
         environment:
