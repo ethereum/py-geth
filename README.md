@@ -1,7 +1,6 @@
 # PyGeth
 
-[![Build Status](https://travis-ci.org/pipermerriam/py-geth.png)](https://travis-ci.org/pipermerriam/py-geth)
-[![Documentation Status](https://readthedocs.org/projects/py-geth/badge/?version=latest)](https://readthedocs.org/projects/py-geth/?badge=latest)
+[![Build Status](https://travis-ci.org/ethereum/py-geth.png)](https://travis-ci.org/ethereum/py-geth)
 [![PyPi version](https://img.shields.io/pypi/v/py-geth.svg)](https://pypi.python.org/pypi/py-geth)
 
 
@@ -123,41 +122,26 @@ True
 
 > This feature is experimental and subject to breaking changes.
 
-Any of the following versions of `geth` can be installed using `py-geth` on the
-listed platforms.
-
-* `v1.5.6` (linux/osx)
-* `v1.5.7` (linux/osx)
-* `v1.5.8` (linux/osx)
-* `v1.5.9` (linux/osx)
-* `v1.6.0` (linux/osx)
-* `v1.6.1` (linux/osx)
-* `v1.6.2` (linux/osx)
-* `v1.6.3` (linux/osx)
-* `v1.6.4` (linux/osx)
-* `v1.6.5` (linux/osx)
-* `v1.6.6` (linux/osx)
-* `v1.6.7` (linux/osx)
-* `v1.7.0` (linux/osx)
-* `v1.7.2` (linux/osx)
-* `v1.8.1` (linux/osx)
+Versions of `geth` dating back to v1.5.6 can be installed using `py-geth`.
+See [install.py](https://github.com/ethereum/py-geth/blob/master/geth/install.py) for
+the current list of supported versions.
 
 Installation can be done via the command line:
 
 ```bash
-$ python -m geth.install v0.4.12
+$ python -m geth.install v1.9.19
 ```
 
 Or from python using the `install_geth` function.
 
 ```python
 >>> from geth import install_geth
->>> install_geth('v1.7.0')
+>>> install_geth('v1.9.19')
 ```
 
 The installed binary can be found in the `$HOME/.py-geth` directory, under your
-home directory.  The `v1.7.0` binary would be located at
-`$HOME/.py-geth/geth-v1.7.0/bin/geth`.
+home directory.  The `v1.9.19` binary would be located at
+`$HOME/.py-geth/geth-v1.9.19/bin/geth`.
 
 
 # About `DevGethProcess`
