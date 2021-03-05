@@ -148,34 +148,34 @@ def construct_popen_command(data_dir=None,
     command.append(geth_executable)
 
     if rpc_enabled:
-        command.append('--rpc')
+        command.append('--http')
 
     if rpc_addr is not None:
-        command.extend(('--rpcaddr', rpc_addr))
+        command.extend(('--http.addr', rpc_addr))
 
     if rpc_port is not None:
-        command.extend(('--rpcport', rpc_port))
+        command.extend(('--http.port', rpc_port))
 
     if rpc_api is not None:
-        command.extend(('--rpcapi', rpc_api))
+        command.extend(('--http.api', rpc_api))
 
     if rpc_cors_domain is not None:
-        command.extend(('--rpccorsdomain', rpc_cors_domain))
+        command.extend(('--http.corsdomain', rpc_cors_domain))
 
     if ws_enabled:
         command.append('--ws')
 
     if ws_addr is not None:
-        command.extend(('--wsaddr', ws_addr))
+        command.extend(('--ws.addr', ws_addr))
 
     if ws_origins is not None:
-        command.extend(('--wsorigins', ws_port))
+        command.extend(('--ws.origins', ws_port))
 
     if ws_port is not None:
-        command.extend(('--wsport', ws_port))
+        command.extend(('--ws.port', ws_port))
 
     if ws_api is not None:
-        command.extend(('--wsapi', ws_api))
+        command.extend(('--ws.api', ws_api))
 
     if data_dir is not None:
         command.extend(('--datadir', data_dir))
@@ -221,7 +221,7 @@ def construct_popen_command(data_dir=None,
     if miner_threads is not None:
         if not mine:
             raise ValueError("`mine` must be truthy when specifying `miner_threads`")
-        command.extend(('--minerthreads', miner_threads))
+        command.extend(('--miner.threads', miner_threads))
 
     if autodag:
         command.append('--autodag')
