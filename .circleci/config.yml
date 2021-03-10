@@ -3,102 +3,6 @@ version: 2.0
 # heavily inspired by:
 # https://raw.githubusercontent.com/pinax/pinax-wiki/6bd2a99ab6f702e300d708532a6d1d9aa638b9f8/.circleci/config.yml
 
-common_go_v_1_7: &common_go_v_1_7
-  working_directory: ~/repo
-  steps:
-    - checkout
-    - run:
-        name: checkout fixtures submodule
-        command: git submodule update --init --recursive
-    - run:
-        name: merge pull request base
-        command: ./.circleci/merge_pr.sh
-    - run:
-        name: merge pull request base (2nd try)
-        command: ./.circleci/merge_pr.sh
-        when: on_fail
-    - run:
-        name: merge pull request base (3nd try)
-        command: ./.circleci/merge_pr.sh
-        when: on_fail
-    - restore_cache:
-        keys:
-          - cache-v4-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
-    - restore_cache:
-        keys:
-          - cache-v5-{{ arch }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
-    - run:
-        name: install dependencies
-        command: |
-          pip install --user tox
-          pip install --user checksumdir
-    - run:
-        name: install golang-1.7
-        command: ./.circleci/install_golang.sh 1.7
-    - run:
-        name: run tox
-        command: ~/.local/bin/tox
-    - save_cache:
-        paths:
-          - .hypothesis
-          - .tox
-          - ~/.cache/pip
-          - ~/.local
-          - ./eggs
-        key: cache-v4-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
-    - save_cache:
-        paths:
-          - ~/.ethash
-        key: cache-v5-{{ arch }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
-
-common_go_v_1_10: &common_go_v_1_10
-  working_directory: ~/repo
-  steps:
-    - checkout
-    - run:
-        name: checkout fixtures submodule
-        command: git submodule update --init --recursive
-    - run:
-        name: merge pull request base
-        command: ./.circleci/merge_pr.sh
-    - run:
-        name: merge pull request base (2nd try)
-        command: ./.circleci/merge_pr.sh
-        when: on_fail
-    - run:
-        name: merge pull request base (3nd try)
-        command: ./.circleci/merge_pr.sh
-        when: on_fail
-    - restore_cache:
-        keys:
-          - cache-v6-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
-    - restore_cache:
-        keys:
-          - cache-v5-{{ arch }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
-    - run:
-        name: install dependencies
-        command: |
-          pip install --user tox
-          pip install --user checksumdir
-    - run:
-        name: install golang-1.10
-        command: ./.circleci/install_golang.sh 1.10
-    - run:
-        name: run tox
-        command: ~/.local/bin/tox
-    - save_cache:
-        paths:
-          - .hypothesis
-          - .tox
-          - ~/.cache/pip
-          - ~/.local
-          - ./eggs
-        key: cache-v6-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
-    - save_cache:
-        paths:
-          - ~/.ethash
-        key: cache-v5-{{ arch }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
-
 common_go_v_1_13: &common_go_v_1_13
   working_directory: ~/repo
   steps:
@@ -444,25 +348,25 @@ jobs:
           TOXENV: py37-install-geth-v1.10.1
 
   py34-lint:
-    <<: *common_go_v_1_7
+    <<: *common_go_v_1_13
     docker:
       - image: circleci/python:3.4
         environment:
           TOXENV: py34-lint
   py35-lint:
-    <<: *common_go_v_1_7
+    <<: *common_go_v_1_13
     docker:
       - image: circleci/python:3.5
         environment:
           TOXENV: py35-lint
   py36-lint:
-    <<: *common_go_v_1_7
+    <<: *common_go_v_1_13
     docker:
       - image: circleci/python:3.6
         environment:
           TOXENV: py36-lint
   py37-lint:
-    <<: *common_go_v_1_7
+    <<: *common_go_v_1_13
     docker:
       - image: circleci/python:3.7
         environment:
