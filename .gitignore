@@ -56,3 +56,6 @@ docs/_build
 
 # Created by tox run for geth logs
 logs
+
+# pyenv
+.python-version
