@@ -122,7 +122,7 @@ True
 
 > This feature is experimental and subject to breaking changes.
 
-Versions of `geth` dating back to v1.5.6 can be installed using `py-geth`.
+Versions of `geth` dating back to v1.9.14 can be installed using `py-geth`.
 See [install.py](https://github.com/ethereum/py-geth/blob/master/geth/install.py) for
 the current list of supported versions.
 
