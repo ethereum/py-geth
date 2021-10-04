@@ -12,7 +12,7 @@ deps = {
         "flaky==3.2.0",
     ],
     'lint': [
-        "flake8==3.5.0",
+        "flake8==3.9.2",
     ],
     'dev': [
         "bumpversion>=0.5.3,<1",
