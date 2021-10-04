@@ -279,7 +279,7 @@ def install_from_source_code_release(identifier):
     build_from_source_code(identifier)
 
     executable_path = get_executable_path(identifier)
-    assert os.path.exists(executable_path), "Executable not found @".format(executable_path)
+    assert os.path.exists(executable_path), "Executable not found @ {0}".format(executable_path)
 
     check_version_command = [executable_path, 'version']
 
