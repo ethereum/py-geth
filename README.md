@@ -1,6 +1,6 @@
 # PyGeth
 
-[![Build Status](https://travis-ci.org/ethereum/py-geth.png)](https://travis-ci.org/ethereum/py-geth)
+[![Build Status](https://circleci.com/gh/ethereum/py-geth.svg?style=shield)](https://circleci.com/gh/ethereum/py-geth)
 [![PyPi version](https://img.shields.io/pypi/v/py-geth.svg)](https://pypi.python.org/pypi/py-geth)
 
 
