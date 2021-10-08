@@ -1,9 +1,9 @@
 # Development
 
-To start development for Populus you should begin by cloning the repo.
+To start development for `py-geth` you should begin by cloning the repo.
 
 ```bash
-$ git clone git@github.com/pipermerriam/py-geth.git
+$ git clone git@github.com:ethereum/py-geth.git
 ```
 
 
@@ -20,6 +20,7 @@ In general, pull requests are welcome.  Please try to adhere to the following.
 - code should conform to PEP8 and as well as the linting done by flake8
 - include tests.
 - include any relevant documentation updates.
+- update the CHANGELOG to include a brief description of what was done.
 
 It's a good idea to make pull requests early on.  A pull request represents the
 start of a discussion, and doesn't necessarily need to be the final, finished
@@ -31,4 +32,7 @@ Always run the tests before submitting pull requests, and ideally run `tox` in
 order to check that your modifications don't break anything.
 
 Once you've made a pull request take a look at the travis build status in the
-GitHub interface and make sure the tests are runnning as you'd expect.
+GitHub interface and make sure the tests are running as you'd expect.
+
+
+[pull-requests]: https://help.github.com/articles/about-pull-requests

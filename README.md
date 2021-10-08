@@ -179,12 +179,18 @@ This is especially important in CI environments like Travis-CI where your
 process will likely timeout during generation.
 
 
-## Development
+# Development
 
-Clone the repository and then run:
+Clone the repository:
+
+```shell
+$ git clone git@github.com:ethereum/py-geth.git
+````
+
+Next, run the following from the newly-created `py-geth` directory:
 
 ```sh
-pip install -e ".[dev]"
+$ pip install -e ".[dev]"
 ```
 
 
@@ -222,8 +228,6 @@ To release a new version:
 make release bump=$$VERSION_PART_TO_BUMP$$
 ```
 
-#### How to bumpversion
-
 The version format for this repo is `{major}.{minor}.{patch}` for stable, and
 `{major}.{minor}.{patch}-{stage}.{devnum}` for unstable (`stage` can be alpha or beta).
 
@@ -234,3 +238,27 @@ If you are in a beta version, `make release bump=stage` will switch to a stable.
 
 To issue an unstable version when the current version is stable, specify the
 new version explicitly, like `make release bump="--new-version 4.0.0-alpha.1 devnum"`
+
+
+## Adding Support For New Geth Versions
+
+There is an automation script to facilitate adding support for new geth versions: `update_geth.py`
+
+To add support for a geth version, run the following line from the py-geth directory, substituting
+the version for the one you wish to add support for. Note that the `v` in the versioning is
+optional.
+
+```shell
+$ python update_geth.py v1.10.9
+```
+
+To introduce support for more than one version, pass in the versions in increasing order,
+ending with the latest version.
+
+```shell
+$ python update_geth.py v1.10.7 v1.10.8 v1.10.9
+```
+
+Always review your changes before committing as something may cause this existing pattern to change at some point. 
+It is best to compare the git difference with a previous commit that introduced support for a new geth version to make 
+sure everything looks good.
