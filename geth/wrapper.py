@@ -280,7 +280,6 @@ def spawn_geth(geth_kwargs,
         stdin=stdin,
         stdout=stdout,
         stderr=stderr,
-        bufsize=1,
     )
 
     return command, proc
