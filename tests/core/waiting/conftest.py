@@ -14,4 +14,3 @@ def _amend_geth_overrides_for_1_9(overrides=None):
             return {'allow_insecure_unlock': True}
     elif version.major != 1 or version.minor < 9:
         raise Exception('Unsupported geth version. Please choose a version between 1.9.14 and 2.0.0')
-        raise Exception('Unsupported geth version. Please choose a version between 1.7.0 and 2.0.0')
