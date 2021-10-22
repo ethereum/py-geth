@@ -114,7 +114,7 @@ def check_subprocess_output(command, message=None, stderr=subprocess.STDOUT, **p
 
     return subprocess.check_output(
         command,
-        stderr=subprocess.STDOUT,
+        stderr=stderr,
         **proc_kwargs
     )
 
