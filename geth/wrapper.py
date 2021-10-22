@@ -172,7 +172,7 @@ def construct_popen_command(data_dir=None,
         command.extend(('--ws.origins', ws_port))
 
     if ws_port is not None:
-        command.extend(('--ws.port', ws_port))
+        command.extend(('--ws.port', str(ws_port)))
 
     if ws_api is not None:
         command.extend(('--ws.api', ws_api))
