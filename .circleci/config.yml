@@ -514,6 +514,48 @@ jobs:
         environment:
           GETH_VERSION: v1.10.9
           TOXENV: py39-install-geth-v1.10.9
+  py37-install-geth-v1.10.10:
+    <<: *common_go_v_1_17_1
+    docker:
+      - image: circleci/python:3.7
+        environment:
+          GETH_VERSION: v1.10.10
+          TOXENV: py37-install-geth-v1.10.10
+  py38-install-geth-v1.10.10:
+    <<: *common_go_v_1_17_1
+    docker:
+      - image: circleci/python:3.8
+        environment:
+          GETH_VERSION: v1.10.10
+          TOXENV: py38-install-geth-v1.10.10
+  py39-install-geth-v1.10.10:
+    <<: *common_go_v_1_17_1
+    docker:
+      - image: circleci/python:3.9
+        environment:
+          GETH_VERSION: v1.10.10
+          TOXENV: py39-install-geth-v1.10.10
+  py37-install-geth-v1.10.11:
+    <<: *common_go_v_1_17_1
+    docker:
+      - image: circleci/python:3.7
+        environment:
+          GETH_VERSION: v1.10.11
+          TOXENV: py37-install-geth-v1.10.11
+  py38-install-geth-v1.10.11:
+    <<: *common_go_v_1_17_1
+    docker:
+      - image: circleci/python:3.8
+        environment:
+          GETH_VERSION: v1.10.11
+          TOXENV: py38-install-geth-v1.10.11
+  py39-install-geth-v1.10.11:
+    <<: *common_go_v_1_17_1
+    docker:
+      - image: circleci/python:3.9
+        environment:
+          GETH_VERSION: v1.10.11
+          TOXENV: py39-install-geth-v1.10.11
 
   py37-lint:
     <<: *common_go_v_1_17_1
@@ -626,6 +668,14 @@ workflows:
       - py37-install-geth-v1.10.9
       - py38-install-geth-v1.10.9
       - py39-install-geth-v1.10.9
+
+      - py37-install-geth-v1.10.10
+      - py38-install-geth-v1.10.10
+      - py39-install-geth-v1.10.10
+
+      - py37-install-geth-v1.10.11
+      - py38-install-geth-v1.10.11
+      - py39-install-geth-v1.10.11
 
       - py37-lint
       - py38-lint
