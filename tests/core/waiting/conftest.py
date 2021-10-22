@@ -6,7 +6,7 @@ from geth import (
 
 
 @pytest.fixture
-def _amend_geth_overrides_for_1_9(overrides=None):
+def _amend_geth_overrides_for_1_9():
     version = get_geth_version()
 
     if version.major == 1:
