@@ -8,7 +8,7 @@ class LoggedRopstenGethProcess(LoggingMixin, RopstenGethProcess):
 
 
 def test_testnet_chain_with_no_overrides():
-    geth = LoggedRopstenGethProcess(geth_kwargs={'port': get_open_port()})
+    geth = LoggedRopstenGethProcess(geth_kwargs={"port": get_open_port()})
 
     geth.start()
 

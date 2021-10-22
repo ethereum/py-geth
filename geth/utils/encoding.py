@@ -24,31 +24,29 @@ def is_string(value):
     return isinstance(value, string_types)
 
 
-def force_bytes(value, encoding='iso-8859-1'):
+def force_bytes(value, encoding="iso-8859-1"):
     if is_binary(value):
         return bytes(value)
     elif is_text(value):
         return codecs.encode(value, encoding)
     else:
-        raise TypeError("Unsupported type: {0}".format(type(value)))
+        raise TypeError(f"Unsupported type: {type(value)}")
 
 
-def force_text(value, encoding='iso-8859-1'):
+def force_text(value, encoding="iso-8859-1"):
     if is_text(value):
         return value
     elif is_binary(value):
         return codecs.decode(value, encoding)
     else:
-        raise TypeError("Unsupported type: {0}".format(type(value)))
+        raise TypeError(f"Unsupported type: {type(value)}")
 
 
 def force_obj_to_text(obj):
     if is_string(obj):
         return force_text(obj)
     elif isinstance(obj, dict):
-        return {
-            force_obj_to_text(k): force_obj_to_text(v) for k, v in obj.items()
-        }
+        return {force_obj_to_text(k): force_obj_to_text(v) for k, v in obj.items()}
     elif isinstance(obj, (list, tuple)):
         return type(obj)(force_obj_to_text(v) for v in obj)
     else:

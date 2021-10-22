@@ -12,29 +12,29 @@ def get_accounts(data_dir, **geth_kwargs):
     >>> geth_accounts()
     ... ('0x...', '0x...')
     """
-    command, proc = spawn_geth(dict(
-        data_dir=data_dir,
-        suffix_args=['account', 'list'],
-        **geth_kwargs
-    ))
+    command, proc = spawn_geth(
+        dict(data_dir=data_dir, suffix_args=["account", "list"], **geth_kwargs)
+    )
     stdoutdata, stderrdata = proc.communicate()
 
     if proc.returncode:
         if "no keys in store" in stderrdata.decode("utf-8"):
             return tuple()
         else:
-            raise ValueError(format_error_message(
-                "Error trying to list accounts",
-                command,
-                proc.returncode,
-                stdoutdata,
-                stderrdata,
-            ))
+            raise ValueError(
+                format_error_message(
+                    "Error trying to list accounts",
+                    command,
+                    proc.returncode,
+                    stdoutdata,
+                    stderrdata,
+                )
+            )
     accounts = parse_geth_accounts(stdoutdata)
     return accounts
 
 
-account_regex = re.compile(b'([a-f0-9]{40})')
+account_regex = re.compile(b"([a-f0-9]{40})")
 
 
 def create_new_account(data_dir, password, **geth_kwargs):
@@ -94,13 +94,11 @@ def create_new_account(data_dir, password, **geth_kwargs):
     :return: Account as 0x prefixed hex string
     """
     if os.path.exists(password):
-        geth_kwargs['password'] = password
+        geth_kwargs["password"] = password
 
-    command, proc = spawn_geth(dict(
-        data_dir=data_dir,
-        suffix_args=['account', 'new'],
-        **geth_kwargs
-    ))
+    command, proc = spawn_geth(
+        dict(data_dir=data_dir, suffix_args=["account", "new"], **geth_kwargs)
+    )
 
     if os.path.exists(password):
         stdoutdata, stderrdata = proc.communicate()
@@ -108,25 +106,29 @@ def create_new_account(data_dir, password, **geth_kwargs):
         stdoutdata, stderrdata = proc.communicate(b"\n".join((password, password)))
 
     if proc.returncode:
-        raise ValueError(format_error_message(
-            "Error trying to create a new account",
-            command,
-            proc.returncode,
-            stdoutdata,
-            stderrdata,
-        ))
+        raise ValueError(
+            format_error_message(
+                "Error trying to create a new account",
+                command,
+                proc.returncode,
+                stdoutdata,
+                stderrdata,
+            )
+        )
 
     match = account_regex.search(stdoutdata)
     if not match:
-        raise ValueError(format_error_message(
-            "Did not find an address in process output",
-            command,
-            proc.returncode,
-            stdoutdata,
-            stderrdata,
-        ))
+        raise ValueError(
+            format_error_message(
+                "Did not find an address in process output",
+                command,
+                proc.returncode,
+                stdoutdata,
+                stderrdata,
+            )
+        )
 
-    return b'0x' + match.groups()[0]
+    return b"0x" + match.groups()[0]
 
 
 def ensure_account_exists(data_dir, **geth_kwargs):
@@ -140,4 +142,4 @@ def ensure_account_exists(data_dir, **geth_kwargs):
 
 def parse_geth_accounts(raw_accounts_output):
     accounts = account_regex.findall(raw_accounts_output)
-    return tuple(b'0x' + account for account in accounts)
+    return tuple(b"0x" + account for account in accounts)

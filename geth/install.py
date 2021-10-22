@@ -10,35 +10,35 @@ import sys
 import tarfile
 
 
-V1_9_14 = 'v1.9.14'
-V1_9_15 = 'v1.9.15'
-V1_9_16 = 'v1.9.16'
-V1_9_17 = 'v1.9.17'
-V1_9_18 = 'v1.9.18'
-V1_9_19 = 'v1.9.19'
-V1_9_20 = 'v1.9.20'
-V1_9_21 = 'v1.9.21'
-V1_9_22 = 'v1.9.22'
-V1_9_23 = 'v1.9.23'
-V1_9_24 = 'v1.9.24'
-V1_9_25 = 'v1.9.25'
-V1_10_0 = 'v1.10.0'
-V1_10_1 = 'v1.10.1'
-V1_10_2 = 'v1.10.2'
-V1_10_3 = 'v1.10.3'
-V1_10_4 = 'v1.10.4'
-V1_10_5 = 'v1.10.5'
-V1_10_6 = 'v1.10.6'
-V1_10_7 = 'v1.10.7'
-V1_10_8 = 'v1.10.8'
-V1_10_9 = 'v1.10.9'
-V1_10_10 = 'v1.10.10'
-V1_10_11 = 'v1.10.11'
+V1_9_14 = "v1.9.14"
+V1_9_15 = "v1.9.15"
+V1_9_16 = "v1.9.16"
+V1_9_17 = "v1.9.17"
+V1_9_18 = "v1.9.18"
+V1_9_19 = "v1.9.19"
+V1_9_20 = "v1.9.20"
+V1_9_21 = "v1.9.21"
+V1_9_22 = "v1.9.22"
+V1_9_23 = "v1.9.23"
+V1_9_24 = "v1.9.24"
+V1_9_25 = "v1.9.25"
+V1_10_0 = "v1.10.0"
+V1_10_1 = "v1.10.1"
+V1_10_2 = "v1.10.2"
+V1_10_3 = "v1.10.3"
+V1_10_4 = "v1.10.4"
+V1_10_5 = "v1.10.5"
+V1_10_6 = "v1.10.6"
+V1_10_7 = "v1.10.7"
+V1_10_8 = "v1.10.8"
+V1_10_9 = "v1.10.9"
+V1_10_10 = "v1.10.10"
+V1_10_11 = "v1.10.11"
 
 
-LINUX = 'linux'
-OSX = 'darwin'
-WINDOWS = 'win32'
+LINUX = "linux"
+OSX = "darwin"
+WINDOWS = "win32"
 
 
 #
@@ -55,14 +55,14 @@ def chdir(path):
 
 
 def get_platform():
-    if sys.platform.startswith('linux'):
+    if sys.platform.startswith("linux"):
         return LINUX
     elif sys.platform == OSX:
         return OSX
     elif sys.platform == WINDOWS:
         return WINDOWS
     else:
-        raise KeyError("Unknown platform: {0}".format(sys.platform))
+        raise KeyError(f"Unknown platform: {sys.platform}")
 
 
 def is_executable_available(program):
@@ -97,28 +97,24 @@ def ensure_parent_dir_exists(path):
     ensure_path_exists(os.path.dirname(path))
 
 
-def check_subprocess_call(command, message=None, stderr=subprocess.STDOUT, **proc_kwargs):
+def check_subprocess_call(
+    command, message=None, stderr=subprocess.STDOUT, **proc_kwargs
+):
     if message:
         print(message)
-    print("Executing: {0}".format(" ".join(command)))
+    print(f"Executing: {' '.join(command)}")
 
-    return subprocess.check_call(
-        command,
-        stderr=subprocess.STDOUT,
-        **proc_kwargs
-    )
+    return subprocess.check_call(command, stderr=stderr, **proc_kwargs)
 
 
-def check_subprocess_output(command, message=None, stderr=subprocess.STDOUT, **proc_kwargs):
+def check_subprocess_output(
+    command, message=None, stderr=subprocess.STDOUT, **proc_kwargs
+):
     if message:
         print(message)
-    print("Executing: {0}".format(" ".join(command)))
+    print(f"Executing: {' '.join(command)}")
 
-    return subprocess.check_output(
-        command,
-        stderr=subprocess.STDOUT,
-        **proc_kwargs
-    )
+    return subprocess.check_output(command, stderr=stderr, **proc_kwargs)
 
 
 def chmod_plus_x(executable_path):
@@ -127,7 +123,7 @@ def chmod_plus_x(executable_path):
 
 
 def get_go_executable_path():
-    return os.environ.get('GO_BINARY', 'go')
+    return os.environ.get("GO_BINARY", "go")
 
 
 def is_go_available():
@@ -138,38 +134,37 @@ def is_go_available():
 #  Installation filesystem path utilities
 #
 def get_base_install_path(identifier):
-    if 'GETH_BASE_INSTALL_PATH' in os.environ:
-        return os.path.join(
-            os.environ['GETH_BASE_INSTALL_PATH'],
-            'geth-{0}'.format(identifier),
-        )
+    if "GETH_BASE_INSTALL_PATH" in os.environ:
+        return os.path.join(os.environ["GETH_BASE_INSTALL_PATH"], f"geth-{identifier}")
     else:
-        return os.path.expanduser(os.path.join(
-            '~',
-            '.py-geth',
-            'geth-{0}'.format(identifier),
-        ))
+        return os.path.expanduser(
+            os.path.join(
+                "~",
+                ".py-geth",
+                f"geth-{identifier}",
+            )
+        )
 
 
 def get_source_code_archive_path(identifier):
     return os.path.join(
         get_base_install_path(identifier),
-        'release.tar.gz',
+        "release.tar.gz",
     )
 
 
 def get_source_code_extract_path(identifier):
     return os.path.join(
         get_base_install_path(identifier),
-        'source',
+        "source",
     )
 
 
 def get_source_code_path(identifier):
     return os.path.join(
         get_base_install_path(identifier),
-        'source',
-        'go-ethereum-{0}'.format(identifier.lstrip('v')),
+        "source",
+        f"go-ethereum-{identifier.lstrip('v')}",
     )
 
 
@@ -177,7 +172,7 @@ def get_build_path(identifier):
     source_code_path = get_source_code_path(identifier)
     return os.path.join(
         source_code_path,
-        'build',
+        "build",
     )
 
 
@@ -185,8 +180,8 @@ def get_built_executable_path(identifier):
     build_path = get_build_path(identifier)
     return os.path.join(
         build_path,
-        'bin',
-        'geth',
+        "bin",
+        "geth",
     )
 
 
@@ -194,15 +189,17 @@ def get_executable_path(identifier):
     base_install_path = get_base_install_path(identifier)
     return os.path.join(
         base_install_path,
-        'bin',
-        'geth',
+        "bin",
+        "geth",
     )
 
 
 #
 # Installation primitives.
 #
-DOWNLOAD_SOURCE_CODE_URI_TEMPLATE = "https://github.com/ethereum/go-ethereum/archive/{0}.tar.gz"  # noqa: E501
+DOWNLOAD_SOURCE_CODE_URI_TEMPLATE = (
+    "https://github.com/ethereum/go-ethereum/archive/{0}.tar.gz"  # noqa: E501
+)
 
 
 def download_source_code_release(identifier):
@@ -212,14 +209,15 @@ def download_source_code_release(identifier):
     ensure_parent_dir_exists(source_code_archive_path)
 
     command = [
-        "wget", download_uri,
-        '-c',  # resume previously incomplete download.
-        '-O', source_code_archive_path,
+        "wget",
+        download_uri,
+        "-c",  # resume previously incomplete download.
+        "-O",
+        source_code_archive_path,
     ]
 
     return check_subprocess_call(
-        command,
-        message="Downloading source code release from {0}".format(download_uri),
+        command, message=f"Downloading source code release from {download_uri}"
     )
 
 
@@ -229,12 +227,11 @@ def extract_source_code_release(identifier):
     source_code_extract_path = get_source_code_extract_path(identifier)
     ensure_path_exists(source_code_extract_path)
 
-    print("Extracting archive: {0} -> {1}".format(
-        source_code_archive_path,
-        source_code_extract_path,
-    ))
+    print(
+        f"Extracting archive: {source_code_archive_path} -> {source_code_extract_path}"
+    )
 
-    with tarfile.open(source_code_archive_path, 'r:gz') as archive_file:
+    with tarfile.open(source_code_archive_path, "r:gz") as archive_file:
         archive_file.extractall(source_code_extract_path)
 
 
@@ -259,9 +256,9 @@ def build_from_source_code(identifier):
     if not os.path.exists(built_executable_path):
         raise OSError(
             "Built executable not found in expected location: "
-            "{0}".format(built_executable_path)
+            f"{built_executable_path}"
         )
-    print("Making built binary executable: chmod +x {0}".format(built_executable_path))
+    print(f"Making built binary executable: chmod +x {built_executable_path}")
     chmod_plus_x(built_executable_path)
 
     executable_path = get_executable_path(identifier)
@@ -270,7 +267,7 @@ def build_from_source_code(identifier):
         if os.path.islink(executable_path):
             os.remove(executable_path)
         else:
-            raise OSError("Non-symlink file already present at `{0}`".format(executable_path))
+            raise OSError(f"Non-symlink file already present at `{executable_path}`")
     os.symlink(built_executable_path, executable_path)
     chmod_plus_x(executable_path)
 
@@ -281,19 +278,16 @@ def install_from_source_code_release(identifier):
     build_from_source_code(identifier)
 
     executable_path = get_executable_path(identifier)
-    assert os.path.exists(executable_path), "Executable not found @ {0}".format(executable_path)
+    assert os.path.exists(executable_path), f"Executable not found @ {executable_path}"
 
-    check_version_command = [executable_path, 'version']
+    check_version_command = [executable_path, "version"]
 
     version_output = check_subprocess_output(
         check_version_command,
-        message="Checking installed executable version @ {0}".format(executable_path),
+        message=f"Checking installed executable version @ {executable_path}",
     )
 
-    print("geth successfully installed at: {0}\n\n{1}\n\n".format(
-        executable_path,
-        version_output,
-    ))
+    print(f"geth successfully installed at: {executable_path}\n\n{version_output}\n\n")
 
 
 install_v1_9_14 = functools.partial(install_from_source_code_release, V1_9_14)
@@ -374,7 +368,7 @@ INSTALL_FUNCTIONS = {
         V1_10_9: install_v1_10_9,
         V1_10_10: install_v1_10_10,
         V1_10_11: install_v1_10_11,
-    }
+    },
 }
 
 
@@ -384,18 +378,13 @@ def install_geth(identifier, platform=None):
 
     if platform not in INSTALL_FUNCTIONS:
         raise ValueError(
-            "Installation of go-ethereum is not supported on your platform ({0}). "
-            "Supported platforms are: {1}".format(
-                platform,
-                ', '.join(sorted(INSTALL_FUNCTIONS.keys())),
-            )
+            f"Installation of go-ethereum is not supported on your platform ({platform}). "
+            f"Supported platforms are: {', '.join(sorted(INSTALL_FUNCTIONS.keys()))}"
         )
     elif identifier not in INSTALL_FUNCTIONS[platform]:
         raise ValueError(
-            "Installation of geth=={0} is not supported.  Must be one of {1}".format(
-                identifier,
-                ', '.join(sorted(INSTALL_FUNCTIONS[platform].keys())),
-            )
+            f"Installation of geth=={identifier} is not supported. "
+            f"Must be one of {', '.join(sorted(INSTALL_FUNCTIONS[platform].keys()))}"
         )
 
     install_fn = INSTALL_FUNCTIONS[platform][identifier]
@@ -406,7 +395,9 @@ if __name__ == "__main__":
     try:
         identifier = sys.argv[1]
     except IndexError:
-        print("Invocation error.  Should be invoked as `python -m geth.install <release-tag>`")
+        print(
+            "Invocation error.  Should be invoked as `python -m geth.install <release-tag>`"
+        )
         sys.exit(1)
 
     install_geth(identifier)

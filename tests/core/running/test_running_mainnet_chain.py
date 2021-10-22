@@ -8,7 +8,7 @@ class LoggedMainnetGethProcess(LoggingMixin, MainnetGethProcess):
 
 
 def test_live_chain_with_no_overrides():
-    geth = LoggedMainnetGethProcess(geth_kwargs={'port': get_open_port()})
+    geth = LoggedMainnetGethProcess(geth_kwargs={"port": get_open_port()})
 
     geth.start()
 

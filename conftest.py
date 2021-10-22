@@ -8,6 +8,7 @@ import requests
 @pytest.fixture
 def open_port():
     from geth.utils import get_open_port
+
     return get_open_port()
 
 
@@ -15,7 +16,7 @@ def open_port():
 def rpc_client(open_port):
     from testrpc.client.utils import force_obj_to_text
 
-    endpoint = "http://127.0.0.1:{port}".format(port=open_port)
+    endpoint = f"http://127.0.0.1:{open_port}"
 
     def make_request(method, params=None):
         global nonce
@@ -32,16 +33,16 @@ def rpc_client(open_port):
             endpoint,
             data=payload_data,
             headers={
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
         )
 
         result = response.json()
 
-        if 'error' in result:
-            raise AssertionError(result['error'])
+        if "error" in result:
+            raise AssertionError(result["error"])
 
-        return result['result']
+        return result["result"]
 
     return make_request
 

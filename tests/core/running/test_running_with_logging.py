@@ -7,7 +7,7 @@ class WithLogging(LoggingMixin, DevGethProcess):
 
 
 def test_with_logging(base_dir):
-    geth = WithLogging('testing', base_dir=base_dir)
+    geth = WithLogging("testing", base_dir=base_dir)
 
     geth.start()
 

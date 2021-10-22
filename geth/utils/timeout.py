@@ -5,6 +5,7 @@ class Timeout(Exception):
     """
     A limited subset of the `gevent.Timeout` context manager.
     """
+
     seconds = None
     exception = None
     begun_at = None
@@ -22,14 +23,14 @@ class Timeout(Exception):
         return False
 
     def __str__(self):
-        if self.seconds is None:
-            return ''
-        return "{0} seconds".format(self.seconds)
+        return "" if self.seconds is None else f"{self.seconds} seconds"
 
     @property
     def expire_at(self):
         if self.seconds is None:
-            raise ValueError("Timeouts with `seconds == None` do not have an expiration time")
+            raise ValueError(
+                "Timeouts with `seconds == None` do not have an expiration time"
+            )
         elif self.begun_at is None:
             raise ValueError("Timeout has not been started")
         return self.begun_at + self.seconds

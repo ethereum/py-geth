@@ -23,7 +23,7 @@ INSTALLATION_TEST_PARAMS = tuple(
 
 
 @pytest.mark.skipif(
-    'GETH_RUN_INSTALL_TESTS' not in os.environ,
+    "GETH_RUN_INSTALL_TESTS" not in os.environ,
     reason=(
         "Installation tests will not run unless `GETH_RUN_INSTALL_TESTS` "
         "environment variable is set"
@@ -38,7 +38,7 @@ def test_geth_installation_as_function_call(monkeypatch, tmpdir, platform, versi
         pytest.skip("Wrong platform for install script")
 
     base_install_path = str(tmpdir.mkdir("temporary-dir"))
-    monkeypatch.setenv('GETH_BASE_INSTALL_PATH', base_install_path)
+    monkeypatch.setenv("GETH_BASE_INSTALL_PATH", base_install_path)
 
     # sanity check that it's not already installed.
     executable_path = get_executable_path(version)
@@ -47,9 +47,9 @@ def test_geth_installation_as_function_call(monkeypatch, tmpdir, platform, versi
     install_geth(identifier=version, platform=platform)
 
     assert os.path.exists(executable_path)
-    monkeypatch.setenv('GETH_BINARY', executable_path)
+    monkeypatch.setenv("GETH_BINARY", executable_path)
 
     actual_version = get_geth_version()
-    expected_version = semantic_version.Spec(version.lstrip('v'))
+    expected_version = semantic_version.Spec(version.lstrip("v"))
 
     assert actual_version in expected_version

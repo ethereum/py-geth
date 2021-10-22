@@ -7,14 +7,14 @@ from setuptools import (
 
 
 deps = {
-    'test': [
+    "test": [
         "pytest>=3.6,<3.7",
         "flaky==3.2.0",
     ],
-    'lint': [
+    "lint": [
         "flake8==3.9.2",
     ],
-    'dev': [
+    "dev": [
         "bumpversion>=0.5.3,<1",
         "wheel",
         "setuptools>=36.2.0",
@@ -30,42 +30,37 @@ deps = {
 }
 
 
-deps['dev'] = (
-    deps['dev'] +
-    deps['test'] +
-    deps['lint']
-)
+deps["dev"] = deps["dev"] + deps["test"] + deps["lint"]
 
 setup(
-    name='py-geth',
+    name="py-geth",
     # *IMPORTANT*: Don't manually change the version here. Use the 'bumpversion' utility.
-    version='3.5.0',
+    version="3.5.0",
     description="""Run Go-Ethereum as a subprocess""",
-    long_description_markdown_filename='README.md',
-    author='Piper Merriam',
-    author_email='pipermerriam@gmail.com',
-    url='https://github.com/ethereum/py-geth',
+    long_description_markdown_filename="README.md",
+    author="Piper Merriam",
+    author_email="pipermerriam@gmail.com",
+    url="https://github.com/ethereum/py-geth",
     include_package_data=True,
-    py_modules=['geth'],
+    py_modules=["geth"],
     install_requires=[
         "semantic-version>=2.6.0",
     ],
-    python_requires=">=3",
+    python_requires=">=3.7,<3.10",
     extras_require=deps,
-    setup_requires=['setuptools-markdown'],
+    setup_requires=["setuptools-markdown"],
     license="MIT",
     zip_safe=False,
-    keywords='ethereum go-ethereum geth',
+    keywords="ethereum go-ethereum geth",
     packages=find_packages(exclude=["tests", "tests.*"]),
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
-        'Natural Language :: English',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
+        "Development Status :: 2 - Pre-Alpha",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Natural Language :: English",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
     ],
 )

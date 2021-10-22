@@ -2,7 +2,7 @@ from geth import DevGethProcess
 
 
 def test_with_no_overrides(base_dir):
-    geth = DevGethProcess('testing', base_dir=base_dir)
+    geth = DevGethProcess("testing", base_dir=base_dir)
 
     geth.start()
 
@@ -15,5 +15,5 @@ def test_with_no_overrides(base_dir):
 
 
 def test_dev_geth_process_generates_accounts(base_dir):
-    geth = DevGethProcess('testing', base_dir=base_dir)
+    geth = DevGethProcess("testing", base_dir=base_dir)
     assert len(set(geth.accounts)) == 1
