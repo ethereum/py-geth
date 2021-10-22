@@ -102,7 +102,7 @@ def check_subprocess_call(command, message=None, stderr=subprocess.STDOUT, **pro
 
     return subprocess.check_call(
         command,
-        stderr=subprocess.STDOUT,
+        stderr=stderr,
         **proc_kwargs
     )
 
