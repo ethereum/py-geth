@@ -154,7 +154,7 @@ def construct_popen_command(data_dir=None,
         command.extend(('--http.addr', rpc_addr))
 
     if rpc_port is not None:
-        command.extend(('--http.port', rpc_port))
+        command.extend(('--http.port', str(rpc_port)))
 
     if rpc_api is not None:
         command.extend(('--http.api', rpc_api))
@@ -187,7 +187,7 @@ def construct_popen_command(data_dir=None,
         command.extend(('--networkid', network_id))
 
     if port is not None:
-        command.extend(('--port', port))
+        command.extend(('--port', str(port)))
 
     if ipc_disable:
         command.append('--ipcdisable')
