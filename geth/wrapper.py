@@ -101,6 +101,17 @@ def get_geth_binary_path():
     return os.environ.get('GETH_BINARY', 'geth')
 
 
+class CommandBuilder:
+    def __init__(self):
+        self.command = []
+
+    def append(self, value):
+        self.command.append(str(value))
+
+    def extend(self, value_list):
+        self.command.extend([str(v) for v in value_list])
+
+
 def construct_popen_command(data_dir=None,
                             geth_executable=None,
                             max_peers=None,
@@ -140,105 +151,105 @@ def construct_popen_command(data_dir=None,
             "The ipc_api flag has been deprecated.  The ipc API is now on by "
             "default.  Use `ipc_disable=True` to disable this API"
         )
-    command = []
+    builder = CommandBuilder()
 
     if nice and is_nice_available():
-        command.extend(('nice', '-n', '20'))
+        builder.extend(('nice', '-n', '20'))
 
-    command.append(geth_executable)
+    builder.append(geth_executable)
 
     if rpc_enabled:
-        command.append('--http')
+        builder.append('--http')
 
     if rpc_addr is not None:
-        command.extend(('--http.addr', rpc_addr))
+        builder.extend(('--http.addr', rpc_addr))
 
     if rpc_port is not None:
-        command.extend(('--http.port', str(rpc_port)))
+        builder.extend(('--http.port', rpc_port))
 
     if rpc_api is not None:
-        command.extend(('--http.api', rpc_api))
+        builder.extend(('--http.api', rpc_api))
 
     if rpc_cors_domain is not None:
-        command.extend(('--http.corsdomain', rpc_cors_domain))
+        builder.extend(('--http.corsdomain', rpc_cors_domain))
 
     if ws_enabled:
-        command.append('--ws')
+        builder.append('--ws')
 
     if ws_addr is not None:
-        command.extend(('--ws.addr', ws_addr))
+        builder.extend(('--ws.addr', ws_addr))
 
     if ws_origins is not None:
-        command.extend(('--ws.origins', ws_port))
+        builder.extend(('--ws.origins', ws_port))
 
     if ws_port is not None:
-        command.extend(('--ws.port', str(ws_port)))
+        builder.extend(('--ws.port', ws_port))
 
     if ws_api is not None:
-        command.extend(('--ws.api', ws_api))
+        builder.extend(('--ws.api', ws_api))
 
     if data_dir is not None:
-        command.extend(('--datadir', data_dir))
+        builder.extend(('--datadir', data_dir))
 
     if max_peers is not None:
-        command.extend(('--maxpeers', max_peers))
+        builder.extend(('--maxpeers', max_peers))
 
     if network_id is not None:
-        command.extend(('--networkid', network_id))
+        builder.extend(('--networkid', network_id))
 
     if port is not None:
-        command.extend(('--port', str(port)))
+        builder.extend(('--port', port))
 
     if ipc_disable:
-        command.append('--ipcdisable')
+        builder.append('--ipcdisable')
 
     if ipc_path is not None:
-        command.extend(('--ipcpath', ipc_path))
+        builder.extend(('--ipcpath', ipc_path))
 
     if verbosity is not None:
-        command.extend((
+        builder.extend((
             '--verbosity', verbosity,
         ))
 
     if unlock is not None:
-        command.extend((
+        builder.extend((
             '--unlock', unlock,
         ))
 
     if password is not None:
-        command.extend((
+        builder.extend((
             '--password', password,
         ))
 
     if no_discover:
-        command.append('--nodiscover')
+        builder.append('--nodiscover')
 
     if mine:
         if unlock is None:
             raise ValueError("Cannot mine without an unlocked account")
-        command.append('--mine')
+        builder.append('--mine')
 
     if miner_threads is not None:
         if not mine:
             raise ValueError("`mine` must be truthy when specifying `miner_threads`")
-        command.extend(('--miner.threads', miner_threads))
+        builder.extend(('--miner.threads', miner_threads))
 
     if autodag:
-        command.append('--autodag')
+        builder.append('--autodag')
 
     if shh:
-        command.append('--shh')
+        builder.append('--shh')
 
     if allow_insecure_unlock:
-        command.append('--allow-insecure-unlock')
+        builder.append('--allow-insecure-unlock')
 
     if suffix_kwargs:
-        command.extend(suffix_kwargs)
+        builder.extend(suffix_kwargs)
 
     if suffix_args:
-        command.extend(suffix_args)
+        builder.extend(suffix_args)
 
-    return command
+    return builder.command
 
 
 def geth_wrapper(**geth_kwargs):
