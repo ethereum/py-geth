@@ -1,5 +1,3 @@
-tests/core/accounts/projects/*/geth/*
-
 *.py[cod]
 
 # C extensions
@@ -26,6 +24,7 @@ venv*
 pip-log.txt
 
 # Unit test / coverage reports
+tests/core/accounts/projects/*/geth/*
 .coverage
 .tox
 nosetests.xml
