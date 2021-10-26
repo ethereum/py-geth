@@ -11,16 +11,14 @@ from geth.utils.timeout import (
 )
 
 
-def test_waiting_for_rpc_connection(base_dir, _amend_geth_overrides_for_1_9):
-    with DevGethProcess('testing',
-                        base_dir=base_dir,
-                        overrides=_amend_geth_overrides_for_1_9) as geth:
+def test_waiting_for_rpc_connection(base_dir):
+    with DevGethProcess('testing', base_dir=base_dir) as geth:
         assert geth.is_running
         geth.wait_for_rpc(timeout=60)
 
 
 @flaky(max_runs=3)
-def test_timeout_waiting_for_rpc_connection(base_dir, _amend_geth_overrides_for_1_9):
-    with DevGethProcess('testing', base_dir=base_dir, overrides=_amend_geth_overrides_for_1_9) as geth:
+def test_timeout_waiting_for_rpc_connection(base_dir):
+    with DevGethProcess('testing', base_dir=base_dir) as geth:
         with pytest.raises(Timeout):
             geth.wait_for_rpc(timeout=0.1)

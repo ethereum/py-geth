@@ -93,6 +93,7 @@ def construct_test_chain_kwargs(**overrides):
         )
 
     overrides.setdefault('verbosity', '5')
+    overrides.setdefault('allow_insecure_unlock', True)
 
     return overrides
 
