@@ -1,3 +1,5 @@
+tests/core/accounts/projects/*/geth/*
+
 *.py[cod]
 
 # C extensions
