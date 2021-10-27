@@ -124,6 +124,7 @@ def construct_popen_command(data_dir=None,
                             nice=True,
                             unlock=None,
                             password=None,
+                            preload=None,
                             port=None,
                             verbosity=None,
                             ipc_disable=None,
@@ -221,6 +222,9 @@ def construct_popen_command(data_dir=None,
         builder.extend((
             '--password', password,
         ))
+
+    if preload is not None:
+        builder.extend(('--preload', preload))
 
     if no_discover:
         builder.append('--nodiscover')
