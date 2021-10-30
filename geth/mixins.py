@@ -50,10 +50,17 @@ class JoinableQueue(queue.Queue):
     def __iter__(self):
         while True:
             item = self.get()
-            if isinstance(item, Exception):
+
+            is_stop_iteration_type = isinstance(item, type) and issubclass(item, StopIteration)
+            if isinstance(item, StopIteration) or is_stop_iteration_type:
+                return
+
+            elif isinstance(item, Exception):
                 raise item
+
             elif isinstance(item, type) and issubclass(item, Exception):
                 raise item
+
             yield item
 
     def join(self, timeout=None):
