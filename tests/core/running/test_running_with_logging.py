@@ -10,7 +10,7 @@ _errors = []
 @pytest.fixture(autouse=True)
 def fail_from_errors_on_other_threads():
     """
-    Causes errors when `LoggingMixing` is improperly implemented.
+    Causes errors when `LoggingMixin` is improperly implemented.
     Useful for preventing false-positives in logging-based tests.
     """
 
