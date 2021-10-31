@@ -9,7 +9,10 @@ _errors = []
 
 @pytest.fixture(autouse=True)
 def fail_from_errors_on_other_threads():
-    # Set excepthook to catch errors in child threads.
+    """
+    Causes errors when `LoggingMixing` is improperly implemented.
+    Useful for preventing false-positives in logging-based tests.
+    """
 
     def pytest_excepthook(*args, **kwargs):
         _errors.extend(args)
