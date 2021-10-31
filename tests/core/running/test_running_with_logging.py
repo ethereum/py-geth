@@ -1,6 +1,5 @@
 import pytest
 import threading
-import sys
 
 from geth import DevGethProcess
 from geth.mixins import LoggingMixin
@@ -18,15 +17,13 @@ def fail_from_errors_on_other_threads():
         global _ERRORS
         _ERRORS.extend(args)
 
-    sys.excepthook = pytest_excepthook
     threading.excepthook = pytest_excepthook
 
     yield
 
-    sys.excepthook = sys.__excepthook__
     if _ERRORS:
         caught_errors_str = ', '.join([str(err) for err in _ERRORS])
-        pytest.fail(f'Caught exceptions from other threads :\n{caught_errors_str}')
+        pytest.fail(f'Caught exceptions from other threads:\n{caught_errors_str}')
 
 
 class WithLogging(LoggingMixin, DevGethProcess):
