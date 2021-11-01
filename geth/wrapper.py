@@ -94,6 +94,7 @@ def construct_test_chain_kwargs(**overrides):
 
     overrides.setdefault('verbosity', '5')
     overrides.setdefault('allow_insecure_unlock', True)
+    overrides.setdefault('is_dev', True)
 
     return overrides
 
@@ -143,7 +144,8 @@ def construct_popen_command(data_dir=None,
                             suffix_args=None,
                             suffix_kwargs=None,
                             shh=None,
-                            allow_insecure_unlock=None):
+                            allow_insecure_unlock=None,
+                            is_dev=None):
     if geth_executable is None:
         geth_executable = get_geth_binary_path()
 
@@ -243,6 +245,9 @@ def construct_popen_command(data_dir=None,
 
     if allow_insecure_unlock:
         builder.append('--allow-insecure-unlock')
+
+    if is_dev is not None:
+        builder.append("--dev")
 
     if suffix_kwargs:
         builder.extend(suffix_kwargs)
