@@ -143,7 +143,8 @@ def construct_popen_command(data_dir=None,
                             suffix_args=None,
                             suffix_kwargs=None,
                             shh=None,
-                            allow_insecure_unlock=None):
+                            allow_insecure_unlock=None,
+                            cache=None):
     if geth_executable is None:
         geth_executable = get_geth_binary_path()
 
@@ -243,6 +244,9 @@ def construct_popen_command(data_dir=None,
 
     if allow_insecure_unlock:
         builder.append('--allow-insecure-unlock')
+
+    if cache:
+        builder.extend(("--cache", cache))
 
     if suffix_kwargs:
         builder.extend(suffix_kwargs)
