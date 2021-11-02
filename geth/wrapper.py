@@ -247,10 +247,10 @@ def construct_popen_command(data_dir=None,
         builder.append('--allow-insecure-unlock')
 
     if tx_pool_global_slots is not None:
-        builder.extend(("--txpool.globalslots", tx_pool_global_slots))
+        builder.extend(('--txpool.globalslots', tx_pool_global_slots))
 
     if tx_pool_price_limit is not None:
-        builder.extend(("--txpool.pricelimit", tx_pool_price_limit))
+        builder.extend(('--txpool.pricelimit', tx_pool_price_limit))
 
     if suffix_kwargs:
         builder.extend(suffix_kwargs)
