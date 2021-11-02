@@ -124,6 +124,7 @@ def construct_popen_command(data_dir=None,
                             nice=True,
                             unlock=None,
                             password=None,
+                            preload=None,
                             port=None,
                             verbosity=None,
                             ipc_disable=None,
@@ -145,7 +146,8 @@ def construct_popen_command(data_dir=None,
                             shh=None,
                             allow_insecure_unlock=None,
                             tx_pool_global_slots=None,
-                            tx_pool_price_limit=None):
+                            tx_pool_price_limit=None,
+                            cache=None):
     if geth_executable is None:
         geth_executable = get_geth_binary_path()
 
@@ -224,6 +226,9 @@ def construct_popen_command(data_dir=None,
             '--password', password,
         ))
 
+    if preload is not None:
+        builder.extend(('--preload', preload))
+
     if no_discover:
         builder.append('--nodiscover')
 
@@ -251,6 +256,9 @@ def construct_popen_command(data_dir=None,
 
     if tx_pool_price_limit is not None:
         builder.extend(('--txpool.pricelimit', tx_pool_price_limit))
+
+    if cache:
+        builder.extend(('--cache', cache))
 
     if suffix_kwargs:
         builder.extend(suffix_kwargs)
