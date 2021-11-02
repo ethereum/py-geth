@@ -145,6 +145,8 @@ def construct_popen_command(data_dir=None,
                             suffix_kwargs=None,
                             shh=None,
                             allow_insecure_unlock=None,
+                            tx_pool_global_slots=None,
+                            tx_pool_price_limit=None,
                             cache=None):
     if geth_executable is None:
         geth_executable = get_geth_binary_path()
@@ -248,6 +250,12 @@ def construct_popen_command(data_dir=None,
 
     if allow_insecure_unlock:
         builder.append('--allow-insecure-unlock')
+
+    if tx_pool_global_slots is not None:
+        builder.extend(('--txpool.globalslots', tx_pool_global_slots))
+
+    if tx_pool_price_limit is not None:
+        builder.extend(('--txpool.pricelimit', tx_pool_price_limit))
 
     if cache:
         builder.extend(('--cache', cache))
