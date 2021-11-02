@@ -246,7 +246,7 @@ def construct_popen_command(data_dir=None,
         builder.append('--allow-insecure-unlock')
 
     if cache:
-        builder.extend(("--cache", cache))
+        builder.extend(('--cache', cache))
 
     if suffix_kwargs:
         builder.extend(suffix_kwargs)
