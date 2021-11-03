@@ -2,6 +2,17 @@
 -----
 
 - Add support for geth 1.10.9-1.10.11
+- Add support for python 3.9
+- Update flake8 requirement to 3.9.2
+- Add script to update geth versions
+- Set upgrade block numbers in default config
+- Allow passing a port by both string and integer to overrides
+- Add --preload flag option
+- Add --cache flag option
+- Add --tx_pool_global_slots flag option
+- Add --tx_pool_price_limit flag option
+- Handle StopIteration in JoinableQueues when using LoggingMixin
+- General code cleanup
 
 3.5.0
 -----
