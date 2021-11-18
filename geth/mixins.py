@@ -25,7 +25,7 @@ def construct_logger_file_path(prefix, suffix):
     return os.path.join('logs', timestamp)
 
 
-def get_file_logger(name, filename, formatter=None):
+def get_file_logger(name, filename, log_format=None):
     # create logger with 'spam_application'
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
@@ -36,7 +36,8 @@ def get_file_logger(name, filename, formatter=None):
     ch = logging.StreamHandler()
     ch.setLevel(logging.ERROR)
     # create formatter and add it to the handlers
-    formatter = formatter or logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    default_log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    formatter = logging.Formatter(log_format or default_log_format)
     fh.setFormatter(formatter)
     ch.setFormatter(formatter)
     # add the handlers to the logger
@@ -154,13 +155,11 @@ class LoggingMixin(InterceptedStreamsMixin):
 
         super(LoggingMixin, self).__init__(*args, **kwargs)
 
-        clean_formatter = logging.Formatter('%(message)s')
-
         stdout_logger = get_file_logger(
-            'geth-stdout', stdout_logfile_path, formatter=clean_formatter
+            'geth-stdout', stdout_logfile_path, log_format='%(message)s'
         )
         stderr_logger = get_file_logger(
-            'geth-stderr', stderr_logfile_path, formatter=clean_formatter
+            'geth-stderr', stderr_logfile_path, log_format='%(message)s'
         )
 
         self.register_stdout_callback(stdout_logger.info)
