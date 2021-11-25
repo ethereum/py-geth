@@ -129,19 +129,19 @@ the current list of supported versions.
 Installation can be done via the command line:
 
 ```bash
-$ python -m geth.install v1.10.11
+$ python -m geth.install v1.10.13
 ```
 
 Or from python using the `install_geth` function.
 
 ```python
 >>> from geth import install_geth
->>> install_geth('v1.10.11')
+>>> install_geth('v1.10.13')
 ```
 
 The installed binary can be found in the `$HOME/.py-geth` directory, under your
-home directory.  The `v1.10.11` binary would be located at
-`$HOME/.py-geth/geth-v1.10.11/bin/geth`.
+home directory.  The `v1.10.13` binary would be located at
+`$HOME/.py-geth/geth-v1.10.13/bin/geth`.
 
 
 # About `DevGethProcess`
@@ -249,14 +249,14 @@ the version for the one you wish to add support for. Note that the `v` in the ve
 optional.
 
 ```shell
-$ python update_geth.py v1.10.11
+$ python update_geth.py v1.10.13
 ```
 
 To introduce support for more than one version, pass in the versions in increasing order,
 ending with the latest version.
 
 ```shell
-$ python update_geth.py v1.10.7 v1.10.8 v1.10.11
+$ python update_geth.py v1.10.7 v1.10.8 v1.10.9
 ```
 
 Always review your changes before committing as something may cause this existing pattern to change at some point. 
