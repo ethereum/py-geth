@@ -69,7 +69,7 @@ GETH_INSTALL_PATTERN = {
 
 user_provided_versions = sys.argv[1:]
 normalized_user_versions = []
-for user_provided_version in user_provided_versions:
+for index, user_provided_version in enumerate(user_provided_versions):
     if 'v' not in user_provided_version:
         user_provided_version = f'v{user_provided_version}'
     normalized_user_versions.append(user_provided_version)
@@ -84,6 +84,9 @@ for user_provided_version in user_provided_versions:
     latest_user_provided_version = normalized_user_versions[-1]
 
     # set up .circleci/config.yml pattern
+    if index > 0:
+        CIRCLE_CI_PATTERN['workflow_test_jobs'] += '\n'
+
     for py_version in circleci_python_versions:
         py_version_decimal = f'{py_version[0]}.{py_version[1]}'
         CIRCLE_CI_PATTERN['jobs'] += (
