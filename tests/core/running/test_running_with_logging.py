@@ -30,12 +30,34 @@ class WithLogging(LoggingMixin, DevGethProcess):
     pass
 
 
-def test_with_logging(base_dir):
-    geth = WithLogging('testing', base_dir=base_dir)
+def test_with_logging(base_dir, caplog):
+    test_stdout_path = f'{base_dir}/testing/stdoutlogs.log'
+    test_stderr_path = f'{base_dir}/testing/stderrlogs.log'
+
+    geth = WithLogging(
+        'testing',
+        base_dir=base_dir,
+        stdout_logfile_path=test_stdout_path,
+        stderr_logfile_path=test_stderr_path
+    )
 
     geth.start()
 
     assert geth.is_running
     assert geth.is_alive
+
+    stdout_logger_info = geth.stdout_callbacks[0]
+    stderr_logger_info = geth.stderr_callbacks[0]
+
+    stdout_logger_info("test_out")
+    stderr_logger_info("test_err")
+
+    with open(test_stdout_path) as out_log_file:
+        line = out_log_file.readline()
+        assert line == "test_out\n"
+
+    with open(test_stderr_path) as err_log_file:
+        line = err_log_file.readline()
+        assert line == "test_err\n"
 
     geth.stop()
