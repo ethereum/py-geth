@@ -1,3 +1,8 @@
+Unreleased
+-----
+
+- Remove extraneous logging formatting from the LoggingMixin
+
 3.6.0
 -----
 
