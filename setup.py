@@ -42,6 +42,7 @@ setup(
     version='3.7.0',
     description="""Run Go-Ethereum as a subprocess""",
     long_description_markdown_filename='README.md',
+    long_description_content_type='text/markdown',
     author='Piper Merriam',
     author_email='pipermerriam@gmail.com',
     url='https://github.com/ethereum/py-geth',
