@@ -1,7 +1,8 @@
-Unreleased
+3.7.0
 -----
 
 - Remove extraneous logging formatting from the LoggingMixin
+- Add support for geth 1.10.12-1.10.13
 
 3.6.0
 -----
