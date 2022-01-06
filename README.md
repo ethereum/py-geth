@@ -164,7 +164,7 @@ preconfigured as follows.
 
 # Gotchas
 
-If you are running with `mining` enabled (which is default for `DevGethProcess`
+If you are running with `mining` enabled, which is default for `DevGethProcess`,
 then you will likely need to generate the `DAG` manually.  If you do not, then
 it will auto-generate the first time you run the process and this takes a
 while.
