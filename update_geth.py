@@ -29,10 +29,10 @@ GETH_VERSION_REGEX = re.compile(r'v\d*\.\d+')  # v0.0.0 pattern
 # get the current go version
 go_version = None
 with open('.circleci/config.yml') as circleci_config:
-    goland_keyword = '&common_go_v_'
+    golang_keyword = '&common_go_v_'
     for line in circleci_config:
-        if goland_keyword in line:
-            go_version = line[line.find(goland_keyword)+len(goland_keyword):].strip()
+        if golang_keyword in line:
+            go_version = line[line.find(golang_keyword) + len(golang_keyword):].strip()
             break
 if go_version is None:
     raise ValueError('go version was not properly parsed from config')
