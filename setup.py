@@ -39,7 +39,7 @@ deps['dev'] = (
 setup(
     name='py-geth',
     # *IMPORTANT*: Don't manually change the version here. Use the 'bumpversion' utility.
-    version='3.7.0',
+    version='3.8.0',
     description="""Run Go-Ethereum as a subprocess""",
     long_description_markdown_filename='README.md',
     long_description_content_type='text/markdown',
