@@ -88,12 +88,12 @@ for index, user_provided_version in enumerate(user_provided_versions):
         CIRCLE_CI_PATTERN['workflow_test_jobs'] += '\n'
 
     for py_version in circleci_python_versions:
-        py_version_decimal = f'{py_version[0]}.{py_version[1]}'
+        py_version_decimal = f'{py_version[0]}.{py_version[1:]}'
         CIRCLE_CI_PATTERN['jobs'] += (
             f"  py{py_version}-install-geth-{user_provided_version}:\n"
             f"    <<: *common_go_v_{go_version}\n"
             "    docker:\n"
-            f"      - image: circleci/python:{py_version_decimal}\n"
+            f"      - image: cimg/python:{py_version_decimal}\n"
             "        environment:\n"
             f"          GETH_VERSION: {user_provided_version}\n"
             f"          TOXENV: py{py_version}-install-geth-{user_provided_version}\n"
