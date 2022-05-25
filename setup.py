@@ -8,23 +8,19 @@ from setuptools import (
 
 deps = {
     'test': [
-        "pytest>=3.6,<3.7",
-        "flaky==3.2.0",
+        "pytest>=6.2.5,<8",
+        "flaky>=3.2.0,<4",
+        "pluggy>=0.7.1,<1",
     ],
     'lint': [
-        "flake8==3.9.2",
+        "flake8>=3.9.2,<4",
     ],
     'dev': [
         "bumpversion>=0.5.3,<1",
         "wheel",
-        "setuptools>=36.2.0",
-        # Fixing this dependency due to: pytest 3.6.4 has requirement pluggy<0.8,>=0.5, but you'll have pluggy 0.8.0 which is incompatible.
-        "pluggy==0.7.1",
-        # Fixing this dependency due to: requests 2.20.1 has requirement idna<2.8,>=2.5, but you'll have idna 2.8 which is incompatible.
-        "idna==2.7",
-        # idna 2.7 is not supported by requests 2.18
+        "setuptools>=38.6.0",
         "requests>=2.20,<3",
-        "tox==2.7.0",
+        "tox>=2.7.0",
         "twine",
     ],
 }
@@ -36,13 +32,16 @@ deps['dev'] = (
     deps['lint']
 )
 
+with open('./README.md') as readme:
+    long_description = readme.read()
+
 setup(
     name='py-geth',
     # *IMPORTANT*: Don't manually change the version here. Use the 'bumpversion' utility.
     version='3.8.0',
     description="""Run Go-Ethereum as a subprocess""",
-    long_description_markdown_filename='README.md',
     long_description_content_type='text/markdown',
+    long_description=long_description,
     author='Piper Merriam',
     author_email='pipermerriam@gmail.com',
     url='https://github.com/ethereum/py-geth',
@@ -53,7 +52,6 @@ setup(
     ],
     python_requires=">=3",
     extras_require=deps,
-    setup_requires=['setuptools-markdown'],
     license="MIT",
     zip_safe=False,
     keywords='ethereum go-ethereum geth',
@@ -63,10 +61,10 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
     ],
 )
