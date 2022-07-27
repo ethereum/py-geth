@@ -1,3 +1,15 @@
+Unreleased
+
+- Add support for geth `1.10.18`-`1.10.21`
+- Remove support for geth versions `1.9.X`
+- Upgrade CI Go version to `1.18.1`
+- Some updates to `setup.py`, `tox.ini`, and circleci `config.yml`
+- Update supported python versions to reflect what is being tested
+- Add python 3.10 support
+- Remove dependency on `idna`
+- Remove deprecated `setuptools-markdown`
+- Updates to `pytest`, `tox`, `setuptools`, `flake8`, and `pluggy` dependencies
+
 3.8.0
 -----
 
