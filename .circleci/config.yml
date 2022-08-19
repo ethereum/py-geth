@@ -37,7 +37,7 @@ common_go_v_1_18_1: &common_go_v_1_18_1
         command: ./.circleci/install_golang.sh 1.18.1
     - run:
         name: run tox
-        command: ~/.local/bin/tox
+        command: python -m tox
     - save_cache:
         paths:
           - .hypothesis
