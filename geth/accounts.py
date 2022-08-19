@@ -90,7 +90,7 @@ def create_new_account(data_dir, password, **geth_kwargs):
     :param data_dir: Geth data fir path - where to keep "keystore" folder
     :param password: Path to a file containing the password
         for newly created account
-    :param geth_kwargs: Extra command line arguments passwrord to geth
+    :param geth_kwargs: Extra command line arguments password to geth
     :return: Account as 0x prefixed hex string
     """
     if os.path.exists(password):

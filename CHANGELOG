@@ -9,6 +9,7 @@ Unreleased
 - Remove dependency on `idna`
 - Remove deprecated `setuptools-markdown`
 - Updates to `pytest`, `tox`, `setuptools`, `flake8`, and `pluggy` dependencies
+- Spelling fix in `create_new_account` docstring
 
 3.8.0
 -----
