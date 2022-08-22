@@ -1,6 +1,6 @@
 Unreleased
 
-- Add support for geth `1.10.18`-`1.10.21`
+- Add support for geth `1.10.18`-`1.10.22`
 - Remove support for geth versions `1.9.X`
 - Upgrade CI Go version to `1.18.1`
 - Some updates to `setup.py`, `tox.ini`, and circleci `config.yml`
