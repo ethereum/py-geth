@@ -1,4 +1,5 @@
-Unreleased
+3.9.0
+-----
 
 - Add support for geth `1.10.18`-`1.10.23`
 - Remove support for geth versions `1.9.X`
