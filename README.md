@@ -129,19 +129,19 @@ the current list of supported versions.
 Installation can be done via the command line:
 
 ```bash
-$ python -m geth.install v1.10.22
+$ python -m geth.install v1.10.23
 ```
 
 Or from python using the `install_geth` function.
 
 ```python
 >>> from geth import install_geth
->>> install_geth('v1.10.22')
+>>> install_geth('v1.10.23')
 ```
 
 The installed binary can be found in the `$HOME/.py-geth` directory, under your
-home directory.  The `v1.10.22` binary would be located at
-`$HOME/.py-geth/geth-v1.10.22/bin/geth`.
+home directory.  The `v1.10.23` binary would be located at
+`$HOME/.py-geth/geth-v1.10.23/bin/geth`.
 
 
 # About `DevGethProcess`
