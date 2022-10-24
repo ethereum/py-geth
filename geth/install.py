@@ -243,31 +243,33 @@ def extract_source_code_release(identifier):
     source_code_extract_path = get_source_code_extract_path(identifier)
     ensure_path_exists(source_code_extract_path)
 
-    print("Extracting archive: {0} -> {1}".format(
-        source_code_archive_path,
-        source_code_extract_path,
-    ))
+    print(
+        "Extracting archive: {0} -> {1}".format(
+            source_code_archive_path,
+            source_code_extract_path,
+        )
+    )
 
-    with tarfile.open(source_code_archive_path, 'r:gz') as archive_file:
+    with tarfile.open(source_code_archive_path, "r:gz") as archive_file:
+
         def is_within_directory(directory, target):
-            
+
             abs_directory = os.path.abspath(directory)
             abs_target = os.path.abspath(target)
-        
+
             prefix = os.path.commonprefix([abs_directory, abs_target])
-            
+
             return prefix == abs_directory
-        
-        def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
-        
+
+        def safe_extract(tar, path="."):
+
             for member in tar.getmembers():
                 member_path = os.path.join(path, member.name)
                 if not is_within_directory(path, member_path):
                     raise Exception("Attempted Path Traversal in Tar File")
-        
-            tar.extractall(path, members, numeric_owner=numeric_owner) 
-            
-        
+
+            tar.extractall(path)
+
         safe_extract(archive_file, source_code_extract_path)
 
 

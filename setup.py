@@ -14,6 +14,7 @@ deps = {
     ],
     'lint': [
         "flake8>=3.9.2,<4",
+        "importlib-metadata<5;python_version<'3.8'",
     ],
     'dev': [
         "bumpversion>=0.5.3,<1",
