@@ -1,7 +1,8 @@
-UNRELEASED
-----------
+3.10.0
+------
 
 - Add support for geth `1.10.24`-`1.10.25`
+- Patch CVE-2007-4559 - directory traversal vulnerability
 
 3.9.1
 -----
