@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Install solc 
+# Install geth
 #
 
 set -e
