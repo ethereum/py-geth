@@ -29,7 +29,7 @@ PYGETH_DIR = os.path.abspath(os.path.dirname(__file__))
 DEFAULT_PASSWORD_PATH = os.path.join(PYGETH_DIR, 'default_blockchain_password')
 
 
-ALL_APIS = "admin,debug,eth,miner,net,personal,shh,txpool,web3,ws"
+ALL_APIS = "admin,clique,debug,eth,miner,net,personal,shh,txpool,web3,ws"
 
 
 def get_max_socket_path_length():
