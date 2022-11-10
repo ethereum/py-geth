@@ -1,7 +1,7 @@
 Unreleased
 -----
 
- - fix incorrect comment in `install_geth.sh`
+ - Fix incorrect comment in `install_geth.sh`
  - Add `clique` to `ALL_APIS`
 
 3.10.0
