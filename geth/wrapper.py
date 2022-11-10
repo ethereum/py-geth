@@ -260,8 +260,6 @@ def construct_popen_command(data_dir=None,
     if cache:
         builder.extend(('--cache', cache))
 
-    builder.extend(('--gcmode', 'full'))
-
     if suffix_kwargs:
         builder.extend(suffix_kwargs)
 
