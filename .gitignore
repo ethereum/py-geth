@@ -30,6 +30,7 @@ tests/core/accounts/projects/*/geth/*
 nosetests.xml
 .cache
 .pytest_cache
+**/.hypothesis/
 
 # Translations
 *.mo
