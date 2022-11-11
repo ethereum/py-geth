@@ -3,6 +3,7 @@ Unreleased
 
  - Fix incorrect comment in `install_geth.sh`
  - Add `clique` to `ALL_APIS`
+ - Add `gcmode` option to Geth process wrapper
 
 3.10.0
 ------
