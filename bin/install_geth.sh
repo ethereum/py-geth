@@ -12,7 +12,7 @@ if [ ! -e geth-versions/geth-$GETH_VERSION/go-ethereum-$GETH_VERSION/build/bin/g
     wget -O geth.tar.gz "https://github.com/ethereum/go-ethereum/archive/v$GETH_VERSION.tar.gz"
     tar -zxvf geth.tar.gz
     cd go-ethereum-$GETH_VERSION
-    PATH=/usr/lib/go-1.7/bin:$PATH make geth
+    PATH=/usr/lib/go-1.19.3/bin:$PATH make geth
     echo "Geth installed at $TRAVIS_BUILD_DIR/geth-versions/geth-$GETH_VERSION/go-ethereum-$GETH_VERSION/build/bin/geth"
 else
     echo "Geth found at $TRAVIS_BUILD_DIR/geth-versions/geth-$GETH_VERSION/go-ethereum-$GETH_VERSION/build/bin/geth"
