@@ -29,7 +29,7 @@ PYGETH_DIR = os.path.abspath(os.path.dirname(__file__))
 DEFAULT_PASSWORD_PATH = os.path.join(PYGETH_DIR, 'default_blockchain_password')
 
 
-ALL_APIS = "admin,debug,eth,miner,net,personal,shh,txpool,web3,ws"
+ALL_APIS = "admin,clique,debug,eth,miner,net,personal,shh,txpool,web3,ws"
 
 
 def get_max_socket_path_length():
@@ -147,7 +147,8 @@ def construct_popen_command(data_dir=None,
                             allow_insecure_unlock=None,
                             tx_pool_global_slots=None,
                             tx_pool_price_limit=None,
-                            cache=None):
+                            cache=None,
+                            gcmode=None):
     if geth_executable is None:
         geth_executable = get_geth_binary_path()
 
@@ -259,6 +260,9 @@ def construct_popen_command(data_dir=None,
 
     if cache:
         builder.extend(('--cache', cache))
+
+    if gcmode:
+        builder.extend(("--gcmode", gcmode))
 
     if suffix_kwargs:
         builder.extend(suffix_kwargs)
