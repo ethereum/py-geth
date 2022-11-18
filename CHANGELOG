@@ -1,6 +1,6 @@
 Unreleased
 -----
- - Add support for geth `1.10.26`
+
  - Fix incorrect comment in `install_geth.sh`
  - Add `clique` to `ALL_APIS`
  - Add `gcmode` option to Geth process wrapper
