@@ -1,6 +1,7 @@
 Unreleased
 -----
 
+ - Add support for geth `1.11.0` and `1.11.1`
  - Add support for geth `1.10.26`
  - Fix incorrect comment in `install_geth.sh`
  - Add `clique` to `ALL_APIS`
