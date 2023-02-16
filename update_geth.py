@@ -49,6 +49,7 @@ with open('tox.ini') as tox_ini:
         if GETH_VERSION_REGEX.search(line):
             line = line.replace(' ', '')  # clean space
             line = line.replace('\n', '')  # remove trailing indent
+            line = line.replace('\\', '')  # remove the multiline backslash
             line = line if line[-1] != ',' else line[:-1]
             for version in line.split(','):
                 currently_supported_geth_versions.append(version.strip())
@@ -178,9 +179,9 @@ with fileinput.FileInput('tox.ini', inplace=True) as tox_ini:
             print('        ', end='')
             for num, v in enumerate(all_versions, start=1):
                 if num == len(all_versions):
-                    print(f'{v},')
-                elif not num % 10:
-                    print(f'{v},\n        ', end='')
+                    print(f'{v} \\')
+                elif not num % 7:
+                    print(f'{v}, \\\n        ', end='')
                 else:
                     print(v, end=', ')
             write_versions = False
