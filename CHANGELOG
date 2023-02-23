@@ -1,11 +1,12 @@
-Unreleased
------
- - Upgrade circleci golang version to `1.20.1`
- - Add support for python `3.11`
- - Add support for geth `1.10.26`, `1.11.0`, `1.11.1`, and `1.11.2`
- - Fix incorrect comment in `install_geth.sh`
- - Add `clique` to `ALL_APIS`
- - Add `gcmode` option to Geth process wrapper
+3.11.0
+------
+
+- Upgrade circleci golang version to `1.20.1`
+- Add support for python `3.11`
+- Add support for geth `1.10.26`, `1.11.0`, `1.11.1`, and `1.11.2`
+- Fix incorrect comment in `install_geth.sh`
+- Add `clique` to `ALL_APIS`
+- Add `gcmode` option to Geth process wrapper
 
 3.10.0
 ------
