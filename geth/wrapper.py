@@ -121,6 +121,7 @@ def construct_popen_command(data_dir=None,
                             mine=False,
                             autodag=False,
                             miner_threads=None,
+                            miner_etherbase=None,
                             nice=True,
                             unlock=None,
                             password=None,
@@ -242,6 +243,11 @@ def construct_popen_command(data_dir=None,
         if not mine:
             raise ValueError("`mine` must be truthy when specifying `miner_threads`")
         builder.extend(('--miner.threads', miner_threads))
+
+    if miner_etherbase is not None:
+        if not mine:
+            raise ValueError('`mine` must be truthy when specifying `miner_etherbase`')
+        builder.extend(('--miner.etherbase', miner_etherbase))
 
     if autodag:
         builder.append('--autodag')
