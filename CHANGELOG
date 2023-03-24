@@ -2,6 +2,7 @@ Unreleased
 ------
 
 - Add support for geth `1.11.3`, `1.11.4`, and `1.11.5`
+- Add `miner_etherbase` to supported geth kwargs
 
 3.11.0
 ------
