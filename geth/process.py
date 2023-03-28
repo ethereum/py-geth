@@ -54,9 +54,16 @@ logger = logging.getLogger(__name__)
 class BaseGethProcess(object):
     _proc = None
 
-    def __init__(self, geth_kwargs):
+    def __init__(self,
+                 geth_kwargs,
+                 stdin=subprocess.PIPE,
+                 stdout=subprocess.PIPE,
+                 stderr=subprocess.PIPE):
         self.geth_kwargs = geth_kwargs
         self.command = construct_popen_command(**geth_kwargs)
+        self.stdin = stdin
+        self.stdout = stdout
+        self.stderr = stderr
 
     is_running = False
 
@@ -68,9 +75,9 @@ class BaseGethProcess(object):
         logger.info("Launching geth: %s", " ".join(self.command))
         self.proc = subprocess.Popen(
             self.command,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            stdin=self.stdin,
+            stdout=self.stdout,
+            stderr=self.stderr,
         )
 
     def __enter__(self):

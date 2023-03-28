@@ -1,3 +1,8 @@
+Unreleased
+----------
+
+- Allow initializing `BaseGethProcess` with `stdin`, `stdout`, and `stderr`
+
 3.12.0
 ------
 
