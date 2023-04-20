@@ -21,7 +21,7 @@ deps = {
         "wheel",
         "setuptools>=38.6.0",
         "requests>=2.20,<3",
-        "tox>=2.7.0",
+        "tox>=3.18.0",
         "twine",
     ],
 }
