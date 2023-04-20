@@ -30,8 +30,8 @@ common_go_v_1_20_1: &common_go_v_1_20_1
     - run:
         name: install dependencies
         command: |
-          pip install --user tox
-          pip install --user checksumdir
+          python -m pip install tox
+          python -m pip install checksumdir
     - run:
         name: install golang-1.20.1
         command: ./.circleci/install_golang.sh 1.20.1
