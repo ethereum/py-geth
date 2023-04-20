@@ -1207,6 +1207,41 @@ jobs:
         environment:
           GETH_VERSION: v1.11.5
           TOXENV: py311-install-geth-v1.11.5
+  py37-install-geth-v1.11.6:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.7
+        environment:
+          GETH_VERSION: v1.11.6
+          TOXENV: py37-install-geth-v1.11.6
+  py38-install-geth-v1.11.6:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.8
+        environment:
+          GETH_VERSION: v1.11.6
+          TOXENV: py38-install-geth-v1.11.6
+  py39-install-geth-v1.11.6:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.9
+        environment:
+          GETH_VERSION: v1.11.6
+          TOXENV: py39-install-geth-v1.11.6
+  py310-install-geth-v1.11.6:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.10
+        environment:
+          GETH_VERSION: v1.11.6
+          TOXENV: py310-install-geth-v1.11.6
+  py311-install-geth-v1.11.6:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.11
+        environment:
+          GETH_VERSION: v1.11.6
+          TOXENV: py311-install-geth-v1.11.6
 
   py37-lint:
     <<: *common_go_v_1_20_1
@@ -1441,6 +1476,12 @@ workflows:
       - py39-install-geth-v1.11.5
       - py310-install-geth-v1.11.5
       - py311-install-geth-v1.11.5
+
+      - py37-install-geth-v1.11.6
+      - py38-install-geth-v1.11.6
+      - py39-install-geth-v1.11.6
+      - py310-install-geth-v1.11.6
+      - py311-install-geth-v1.11.6
 
       - py37-lint
       - py38-lint
