@@ -1,6 +1,6 @@
-<MODULE_NAME>
-<PYPI_NAME>
-<REPO_NAME>
+geth
+py-geth
+py-geth
 <RTD_NAME>
-<PROJECT_NAME>
-<SHORT_DESCRIPTION>
+PyGeth
+Python wrapper around running `geth` as a subprocess

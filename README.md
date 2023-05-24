@@ -1,9 +1,9 @@
 # PyGeth
 
 [![Join the conversation on Discord](https://img.shields.io/discord/809793915578089484?color=blue&label=chat&logo=discord&logoColor=white)](https://discord.gg/GHryRvPB84)
-[![Build Status](https://circleci.com/gh/ethereum/<REPO_NAME>.svg?style=shield)](https://circleci.com/gh/ethereum/<REPO_NAME>)
-[![PyPI version](https://badge.fury.io/py/<PYPI_NAME>.svg)](https://badge.fury.io/py/<PYPI_NAME>)
-[![Python versions](https://img.shields.io/pypi/pyversions/<PYPI_NAME>.svg)](https://pypi.python.org/pypi/<PYPI_NAME>)
+[![Build Status](https://circleci.com/gh/ethereum/py-geth.svg?style=shield)](https://circleci.com/gh/ethereum/py-geth)
+[![PyPI version](https://badge.fury.io/py/py-geth.svg)](https://badge.fury.io/py/py-geth)
+[![Python versions](https://img.shields.io/pypi/pyversions/py-geth.svg)](https://pypi.python.org/pypi/py-geth)
 
 Python wrapper around running `geth` as a subprocess
 
@@ -199,7 +199,7 @@ pytest tests
 
 ## Developer Setup
 
-If you would like to hack on <REPO_NAME>, please check out the [Snake Charmers
+If you would like to hack on py-geth, please check out the [Snake Charmers
 Tactical Manual](https://github.com/ethereum/snake-charmers-tactical-manual)
 for information on how we do:
 
@@ -213,8 +213,8 @@ for information on how we do:
 You can set up your dev environment with:
 
 ```sh
-git clone git@github.com:ethereum/<REPO_NAME>.git
-cd <REPO_NAME>
+git clone git@github.com:ethereum/py-geth.git
+cd py-geth
 virtualenv -p python3 venv
 . venv/bin/activate
 python -m pip install -e ".[dev]"

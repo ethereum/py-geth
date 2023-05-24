@@ -41,8 +41,8 @@ body:
   - type: input
     id: lib-version
     attributes:
-      label: <PYPI_NAME> Version
-      description: Which version of <PYPI_NAME> are you using?
+      label: py-geth Version
+      description: Which version of py-geth are you using?
       placeholder: x.x.x
     validations:
       required: false
