@@ -5,36 +5,48 @@ from setuptools import (
     find_packages,
 )
 
-
-deps = {
-    'test': [
-        "pytest>=6.2.5,<8",
+extras_require = {
+    "test": [
+        "pytest>=7.0.0",
+        "pytest-xdist>=2.4.0",
         "flaky>=3.2.0,<4",
         "pluggy>=0.7.1,<1",
     ],
-    'lint': [
-        "flake8>=3.9.2,<4",
+    "lint": [
+        "flake8==6.0.0",  # flake8 claims semver but adds new warnings at minor releases, leave it pinned.
+        "flake8-bugbear==23.3.23",  # flake8-bugbear does not follow semver, leave it pinned.
+        "isort>=5.10.1",
+        "mypy==0.971",  # mypy does not follow semver, leave it pinned.
+        "pydocstyle>=6.0.0",
+        "black>=23",
         "importlib-metadata<5;python_version<'3.8'",
     ],
-    'dev': [
-        "bumpversion>=0.5.3,<1",
+    "docs": [
+        "towncrier>=21,<22",
+    ],
+    "dev": [
+        "bumpversion>=0.5.3",
+        "pytest-watch>=4.1.0",
+        "tox>=4.0.0",
+        "build>=0.9.0",
         "wheel",
-        "setuptools>=38.6.0",
-        "requests>=2.20,<3",
-        "tox>=3.18.0",
         "twine",
+        "ipython",
+        "requests>=2.20",
     ],
 }
 
-
-deps['dev'] = (
-    deps['dev'] +
-    deps['test'] +
-    deps['lint']
+extras_require["dev"] = (
+    extras_require["dev"]
+    + extras_require["test"]
+    + extras_require["lint"]
+    + extras_require["docs"]
 )
 
-with open('./README.md') as readme:
+
+with open("./README.md") as readme:
     long_description = readme.read()
+
 
 setup(
     name='py-geth',
@@ -51,8 +63,8 @@ setup(
     install_requires=[
         "semantic-version>=2.6.0",
     ],
-    python_requires=">=3",
-    extras_require=deps,
+    python_requires=">=3.7, <4",
+    extras_require=extras_require,
     license="MIT",
     zip_safe=False,
     keywords='ethereum go-ethereum geth',

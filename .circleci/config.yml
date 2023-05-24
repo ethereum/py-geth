@@ -1,7 +1,6 @@
-version: 2.0
+version: 2.1
 
-# heavily inspired by:
-# https://raw.githubusercontent.com/pinax/pinax-wiki/6bd2a99ab6f702e300d708532a6d1d9aa638b9f8/.circleci/config.yml
+# heavily inspired by https://raw.githubusercontent.com/pinax/pinax-wiki/6bd2a99ab6f702e300d708532a6d1d9aa638b9f8/.circleci/config.yml
 
 common_go_v_1_20_1: &common_go_v_1_20_1
   working_directory: ~/repo
@@ -37,7 +36,7 @@ common_go_v_1_20_1: &common_go_v_1_20_1
         command: ./.circleci/install_golang.sh 1.20.1
     - run:
         name: run tox
-        command: python -m tox
+        command: python -m tox run -r
     - save_cache:
         paths:
           - .hypothesis
@@ -50,6 +49,29 @@ common_go_v_1_20_1: &common_go_v_1_20_1
         paths:
           - ~/.ethash
         key: cache-v5-{{ arch }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
+
+windows_steps: &windows_steps
+  executor:
+    name: win/default
+    shell: bash.exe
+  working_directory: C:\Users\circleci\project\<REPO_NAME>
+  steps:
+    - checkout
+    - restore_cache:
+        keys:
+          - cache-v1-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
+    - run:
+        name: install dependencies
+        command: |
+          python -m pip install --upgrade pip
+          python -m pip install tox
+    - run:
+        name: run tox
+        command: python -m tox run -r
+    - save_cache:
+        paths:
+          - .tox
+        key: cache-v1-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
 
 jobs:
   py37-install-geth-v1.10.0:
@@ -1274,6 +1296,41 @@ jobs:
         environment:
           TOXENV: py311-lint
 
+  py37-wheel:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.7
+        environment:
+          TOXENV: py37-wheel
+  py38-wheel:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.8
+        environment:
+          TOXENV: py38-wheel
+  py39-wheel:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.9
+        environment:
+          TOXENV: py39-wheel
+  py310-wheel:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.10
+        environment:
+          TOXENV: py310-wheel
+  py311-wheel:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.11
+        environment:
+          TOXENV: py311-wheel
+
+  py311-wheel-windows:
+    <<: *windows_steps
+    environment:
+      TOXENV: py311-wheel-windows
 
 workflows:
   version: 2
@@ -1488,3 +1545,11 @@ workflows:
       - py39-lint
       - py310-lint
       - py311-lint
+
+      - py37-wheel
+      - py38-wheel
+      - py39-wheel
+      - py310-wheel
+      - py311-wheel
+
+      - py311-wheel-windows

@@ -1,12 +1,9 @@
 include LICENSE
 include README.md
-include requirements.txt
+
+global-include *.pyi
 
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
-
-include geth/default_blockchain_password
-include geth/genesis.json
-
-prune venv*
 prune .tox
+prune venv*
