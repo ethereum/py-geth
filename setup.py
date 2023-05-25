@@ -9,8 +9,7 @@ extras_require = {
     "test": [
         "pytest>=7.0.0",
         "pytest-xdist>=2.4.0",
-        "flaky>=3.2.0,<4",
-        "pluggy>=0.7.1,<1",
+        "flaky>=3.2.0",
     ],
     "lint": [
         "flake8==6.0.0",  # flake8 claims semver but adds new warnings at minor releases, leave it pinned.
