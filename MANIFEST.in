@@ -7,3 +7,6 @@ recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
 prune .tox
 prune venv*
+
+include geth/default_blockchain_password
+include geth/genesis.json
