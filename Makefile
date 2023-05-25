@@ -6,11 +6,12 @@ CURRENT_SIGN_SETTING := $(shell git config commit.gpgSign)
 help:
 	@echo "clean-build - remove build artifacts"
 	@echo "clean-pyc - remove Python file artifacts"
-	@echo "lint - check style with flake8"
-	@echo "lint-roll - automatically fix problems with isort, flake8, etc"
+	@echo "clean - combines clean-build and clean-pyc"
+	@echo "lint - check style with flake8, isort, and black"
+	@echo "lint-roll - automatically fix style with isort and black"
 	@echo "test - run tests quickly with the default Python"
-	@echo "docs - generate docs and open in browser (linux-docs for version on linux)"
-	@echo "notes - consume towncrier newsfragments/ and update release notes in docs/"
+	@echo "docs - view draft of newsfragments to be added to CHANGELOG"
+	@echo "notes - consume towncrier newsfragments/ and update CHANGELOG"
 	@echo "release - package and upload a release (does not run notes target)"
 	@echo "dist - package"
 
@@ -54,16 +55,13 @@ notes: check-bump
 	$(eval UPCOMING_VERSION=$(shell bumpversion $(bump) --dry-run --list | grep new_version= | sed 's/new_version=//g'))
 	# Now generate the release notes to have them included in the release commit
 	towncrier build --yes --version $(UPCOMING_VERSION)
-	# Before we bump the version, make sure that the towncrier-generated docs will build
-	make build-docs
 	git commit -m "Compile release notes"
 
 release: check-bump clean
-	# require that you be on a branch that's linked to upstream/main
-	git status -s -b | head -1 | grep "\.\.upstream/main"
+	# require that you be on a branch that's linked to upstream/master
+	git status -s -b | head -1 | grep "\.\.upstream/master"
 	# verify that docs build correctly
 	./newsfragments/validate_files.py is-empty
-	make build-docs
 	CURRENT_SIGN_SETTING=$(git config commit.gpgSign)
 	git config commit.gpgSign true
 	bumpversion $(bump)
@@ -71,7 +69,6 @@ release: check-bump clean
 	python -m build
 	twine upload dist/*
 	git config commit.gpgSign "$(CURRENT_SIGN_SETTING)"
-
 
 dist: clean
 	python -m build

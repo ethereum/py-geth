@@ -16,7 +16,7 @@ This library requires the `geth` executable to be present.
 Installation
 
 ```bash
-pip install py-geth
+python -m pip install py-geth
 ```
 
 ## Quickstart
@@ -186,7 +186,7 @@ $ git clone git@github.com:ethereum/py-geth.git
 Next, run the following from the newly-created `py-geth` directory:
 
 ```sh
-$ pip install -e ".[dev]"
+$ python -m pip install -e ".[dev]"
 ```
 
 ### Running the tests
@@ -203,10 +203,10 @@ If you would like to hack on py-geth, please check out the [Snake Charmers
 Tactical Manual](https://github.com/ethereum/snake-charmers-tactical-manual)
 for information on how we do:
 
-- Testing
-- Pull Requests
-- Code Style
-- Documentation
+* Testing
+* Pull Requests
+* Code Style
+* Documentation
 
 ### Development Environment Setup
 
@@ -235,14 +235,13 @@ The version format for this repo is `{major}.{minor}.{patch}` for stable, and
 
 To issue the next version in line, specify which part to bump,
 like `make release bump=minor` or `make release bump=devnum`. This is typically done from the
-main branch, except when releasing a beta (in which case the beta is released from main,
+master branch, except when releasing a beta (in which case the beta is released from master,
 and the previous stable branch is released from said branch).
 
 If you are in a beta version, `make release bump=stage` will switch to a stable.
 
 To issue an unstable version when the current version is stable, specify the
 new version explicitly, like `make release bump="--new-version 4.0.0-alpha.1 devnum"`
-
 
 ## Adding Support For New Geth Versions
 

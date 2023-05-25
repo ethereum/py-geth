@@ -1,12 +1,11 @@
-import sys
 import contextlib
-import time
 import socket
+import sys
+import time
 
 from .timeout import (
     Timeout,
 )
-
 
 if sys.version_info.major == 2:
     ConnectionRefusedError = socket.timeout
@@ -15,7 +14,7 @@ if sys.version_info.major == 2:
 def is_port_open(port):
     sock = socket.socket()
     try:
-        sock.bind(('127.0.0.1', port))
+        sock.bind(("127.0.0.1", port))
     except socket.error:
         return False
     else:
@@ -26,7 +25,7 @@ def is_port_open(port):
 
 def get_open_port():
     sock = socket.socket()
-    sock.bind(('127.0.0.1', 0))
+    sock.bind(("127.0.0.1", 0))
     port = sock.getsockname()[1]
     sock.close()
     return str(port)
@@ -49,7 +48,7 @@ def wait_for_http_connection(port, timeout=5):
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.settimeout(1)
             try:
-                s.connect(('127.0.0.1', port))
+                s.connect(("127.0.0.1", port))
             except (socket.timeout, ConnectionRefusedError):
                 time.sleep(0.1)
                 _timeout.check()

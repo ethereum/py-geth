@@ -1,4 +1,6 @@
-from __future__ import absolute_import
+from __future__ import (
+    absolute_import,
+)
 
 import datetime
 import logging
@@ -6,7 +8,9 @@ import os
 import queue
 import time
 
-from geth.utils.filesystem import ensure_path_exists
+from geth.utils.filesystem import (
+    ensure_path_exists,
+)
 from geth.utils.thread import (
     spawn,
 )
@@ -16,13 +20,14 @@ from geth.utils.timeout import (
 
 
 def construct_logger_file_path(prefix, suffix):
-    ensure_path_exists('./logs')
+    ensure_path_exists("./logs")
     timestamp = datetime.datetime.now().strftime(
-        '{prefix}-%Y%m%d-%H%M%S-{suffix}.log'.format(
-            prefix=prefix, suffix=suffix,
+        "{prefix}-%Y%m%d-%H%M%S-{suffix}.log".format(
+            prefix=prefix,
+            suffix=suffix,
         ),
     )
-    return os.path.join('logs', timestamp)
+    return os.path.join("logs", timestamp)
 
 
 def _get_file_logger(name, filename):
@@ -36,7 +41,7 @@ def _get_file_logger(name, filename):
     ch = logging.StreamHandler()
     ch.setLevel(logging.ERROR)
     # create formatter and add it to the handlers
-    formatter = logging.Formatter('%(message)s')
+    formatter = logging.Formatter("%(message)s")
     fh.setFormatter(formatter)
     ch.setFormatter(formatter)
     # add the handlers to the logger
@@ -51,7 +56,9 @@ class JoinableQueue(queue.Queue):
         while True:
             item = self.get()
 
-            is_stop_iteration_type = isinstance(item, type) and issubclass(item, StopIteration)
+            is_stop_iteration_type = isinstance(item, type) and issubclass(
+                item, StopIteration
+            )
             if isinstance(item, StopIteration) or is_stop_iteration_type:
                 return
 
@@ -75,6 +82,7 @@ class InterceptedStreamsMixin(object):
     Mixin class for GethProcess instances that feeds all of the stdout and
     stderr lines into some set of provided callback functions.
     """
+
     stdout_callbacks = None
     stderr_callbacks = None
 
@@ -93,12 +101,12 @@ class InterceptedStreamsMixin(object):
         self.stderr_callbacks.append(callback_fn)
 
     def produce_stdout_queue(self):
-        for line in iter(self.proc.stdout.readline, b''):
+        for line in iter(self.proc.stdout.readline, b""):
             self.stdout_queue.put(line)
             time.sleep(0)
 
     def produce_stderr_queue(self):
-        for line in iter(self.proc.stderr.readline, b''):
+        for line in iter(self.proc.stderr.readline, b""):
             self.stderr_queue.put(line)
             time.sleep(0)
 
@@ -144,18 +152,18 @@ class InterceptedStreamsMixin(object):
 class LoggingMixin(InterceptedStreamsMixin):
     def __init__(self, *args, **kwargs):
         stdout_logfile_path = kwargs.pop(
-            'stdout_logfile_path',
-            construct_logger_file_path('geth', 'stdout'),
+            "stdout_logfile_path",
+            construct_logger_file_path("geth", "stdout"),
         )
         stderr_logfile_path = kwargs.pop(
-            'stderr_logfile_path',
-            construct_logger_file_path('geth', 'stderr'),
+            "stderr_logfile_path",
+            construct_logger_file_path("geth", "stderr"),
         )
 
         super(LoggingMixin, self).__init__(*args, **kwargs)
 
-        stdout_logger = _get_file_logger('geth-stdout', stdout_logfile_path)
-        stderr_logger = _get_file_logger('geth-stderr', stderr_logfile_path)
+        stdout_logger = _get_file_logger("geth-stdout", stdout_logfile_path)
+        stderr_logger = _get_file_logger("geth-stderr", stderr_logfile_path)
 
         self.register_stdout_callback(stdout_logger.info)
         self.register_stderr_callback(stderr_logger.info)

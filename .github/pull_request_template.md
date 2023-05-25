@@ -10,7 +10,7 @@ Closes #
 
 - [ ] Add or update documentation related to these changes
 
-- [ ] Add entry to the [release notes](https://github.com/ethereum/py-geth/blob/main/newsfragments/README.md)
+- [ ] Add entry to the [release notes](https://github.com/ethereum/py-geth/blob/master/newsfragments/README.md)
 
 #### Cute Animal Picture
 

@@ -19,7 +19,7 @@ def rpc_client(open_port):
 
     def make_request(method, params=None):
         global nonce
-        nonce += 1  # NOQA
+        nonce += 1
         payload = {
             "id": nonce,
             "jsonrpc": "2.0",

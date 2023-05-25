@@ -1,8 +1,7 @@
-import os
-import sys
-import shutil
 import errno
-
+import os
+import shutil
+import sys
 
 if sys.version_info.major == 2:
     FileNotFoundError = OSError

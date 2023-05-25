@@ -1,5 +1,5 @@
 [tool.towncrier]
-# Read https://github.com/ethereum/py-geth/blob/main/newsfragments/README.md for instructions
+# Read https://github.com/ethereum/py-geth/blob/master/newsfragments/README.md for instructions
 package = "geth"
 filename = "CHANGELOG"
 directory = "newsfragments"
