@@ -45,7 +45,6 @@ def construct_test_chain_kwargs(**overrides):
     overrides.setdefault("unlock", "0")
     overrides.setdefault("password", DEFAULT_PASSWORD_PATH)
     overrides.setdefault("mine", True)
-    overrides.setdefault("miner_threads", "1")
     overrides.setdefault("no_discover", True)
     overrides.setdefault("max_peers", "0")
     overrides.setdefault("network_id", "1234")
