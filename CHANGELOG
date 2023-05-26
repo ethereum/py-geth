@@ -1,6 +1,7 @@
 Unreleased
 ----------
 
+- Remove `miner.thread` default since no longer supported
 - Update ``tox`` and the way it is installed for CircleCI runs
 - Add support for geth ``1.11.6``
 - Allow initializing `BaseGethProcess` with `stdin`, `stdout`, and `stderr`
