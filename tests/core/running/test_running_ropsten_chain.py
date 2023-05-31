@@ -1,6 +1,12 @@
-from geth import RopstenGethProcess
-from geth.mixins import LoggingMixin
-from geth.utils.networking import get_open_port
+from geth import (
+    RopstenGethProcess,
+)
+from geth.mixins import (
+    LoggingMixin,
+)
+from geth.utils.networking import (
+    get_open_port,
+)
 
 
 class LoggedRopstenGethProcess(LoggingMixin, RopstenGethProcess):
@@ -8,7 +14,7 @@ class LoggedRopstenGethProcess(LoggingMixin, RopstenGethProcess):
 
 
 def test_testnet_chain_with_no_overrides():
-    geth = LoggedRopstenGethProcess(geth_kwargs={'port': get_open_port()})
+    geth = LoggedRopstenGethProcess(geth_kwargs={"port": get_open_port()})
 
     geth.start()
 

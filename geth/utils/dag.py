@@ -1,21 +1,25 @@
 import os
 import sys
 
+MAGIC_PREFIX = b"\xfe\xca\xdd\xba\xad\xde\xe1\xfe"  # 0xfee1deadbaddcafe
 
-MAGIC_PREFIX = b'\xfe\xca\xdd\xba\xad\xde\xe1\xfe'  # 0xfee1deadbaddcafe
 
-
-def get_dag_file_path(revision=23, seedhash='0000000000000000', base_dir=None):
-    if seedhash != '0000000000000000':
+def get_dag_file_path(revision=23, seedhash="0000000000000000", base_dir=None):
+    if seedhash != "0000000000000000":
         raise NotImplementedError("Non-zero seedhashes are not supported")
 
     if base_dir is None:
-        if sys.platform in {'darwin', 'linux', 'linux2', 'linux3'}:
-            base_dir = os.path.expanduser(os.path.join('~', '.ethash'))
-        elif sys.platform in {'win32', 'cygwin'}:
-            base_dir = os.path.expanduser(os.path.join(
-                '~', 'Appdata', 'Local', 'Ethash',
-            ))
+        if sys.platform in {"darwin", "linux", "linux2", "linux3"}:
+            base_dir = os.path.expanduser(os.path.join("~", ".ethash"))
+        elif sys.platform in {"win32", "cygwin"}:
+            base_dir = os.path.expanduser(
+                os.path.join(
+                    "~",
+                    "Appdata",
+                    "Local",
+                    "Ethash",
+                )
+            )
         else:
             raise ValueError("Unknown platform: {0}".format(sys.platform))
 
@@ -29,7 +33,7 @@ def get_dag_file_path(revision=23, seedhash='0000000000000000', base_dir=None):
 
 
 def get_magic_bytes(dag_file_path):
-    with open(dag_file_path, 'rb') as dag_file:
+    with open(dag_file_path, "rb") as dag_file:
         return dag_file.read(8)
 
 

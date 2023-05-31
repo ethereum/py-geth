@@ -1,23 +1,22 @@
 # PyGeth
 
+[![Join the conversation on Discord](https://img.shields.io/discord/809793915578089484?color=blue&label=chat&logo=discord&logoColor=white)](https://discord.gg/GHryRvPB84)
 [![Build Status](https://circleci.com/gh/ethereum/py-geth.svg?style=shield)](https://circleci.com/gh/ethereum/py-geth)
-[![PyPi version](https://img.shields.io/pypi/v/py-geth.svg)](https://pypi.python.org/pypi/py-geth)
-
+[![PyPI version](https://badge.fury.io/py/py-geth.svg)](https://badge.fury.io/py/py-geth)
+[![Python versions](https://img.shields.io/pypi/pyversions/py-geth.svg)](https://pypi.python.org/pypi/py-geth)
 
 Python wrapper around running `geth` as a subprocess
-
 
 ## System Dependency
 
 This library requires the `geth` executable to be present.
-
 
 ## Installation
 
 Installation
 
 ```bash
-pip install py-geth
+python -m pip install py-geth
 ```
 
 ## Quickstart
@@ -117,8 +116,7 @@ True
 
 > The DAG functionality currently only applies to the DAG for epoch 0.
 
-
-# Installing specific versions of `geth`
+## Installing specific versions of `geth`
 
 > This feature is experimental and subject to breaking changes.
 
@@ -143,8 +141,7 @@ The installed binary can be found in the `$HOME/.py-geth` directory, under your
 home directory.  The `v1.11.6` binary would be located at
 `$HOME/.py-geth/geth-v1.11.6/bin/geth`.
 
-
-# About `DevGethProcess`
+## About `DevGethProcess`
 
 The `DevGethProcess` is designed to facilitate testing.  In that regard, it is
 preconfigured as follows.
@@ -161,8 +158,7 @@ preconfigured as follows.
 * The DevP2P interface *tries* to bind to 30303 but will find an open port if this
   port is not available.
 
-
-# Gotchas
+## Gotchas
 
 If you are running with `mining` enabled, which is default for `DevGethProcess`,
 then you will likely need to generate the `DAG` manually.  If you do not, then
@@ -179,7 +175,7 @@ This is especially important in CI environments like Travis-CI where your
 process will likely timeout during generation.
 
 
-# Development
+## Development
 
 Clone the repository:
 
@@ -190,9 +186,8 @@ $ git clone git@github.com:ethereum/py-geth.git
 Next, run the following from the newly-created `py-geth` directory:
 
 ```sh
-$ pip install -e ".[dev]"
+$ python -m pip install -e ".[dev]"
 ```
-
 
 ### Running the tests
 
@@ -202,25 +197,30 @@ You can run the tests with:
 pytest tests
 ```
 
-Or you can install `tox` to run the full test suite.
+## Developer Setup
 
+If you would like to hack on py-geth, please check out the [Snake Charmers
+Tactical Manual](https://github.com/ethereum/snake-charmers-tactical-manual)
+for information on how we do:
 
-### Releasing
+* Testing
+* Pull Requests
+* Code Style
+* Documentation
 
-Pandoc is required for transforming the markdown README to the proper format to
-render correctly on pypi.
+### Development Environment Setup
 
-For Debian-like systems:
-
-```
-apt install pandoc
-```
-
-Or on OSX:
+You can set up your dev environment with:
 
 ```sh
-brew install pandoc
+git clone git@github.com:ethereum/py-geth.git
+cd py-geth
+virtualenv -p python3 venv
+. venv/bin/activate
+python -m pip install -e ".[dev]"
 ```
+
+### Release setup
 
 To release a new version:
 
@@ -228,17 +228,20 @@ To release a new version:
 make release bump=$$VERSION_PART_TO_BUMP$$
 ```
 
+#### How to bumpversion
+
 The version format for this repo is `{major}.{minor}.{patch}` for stable, and
 `{major}.{minor}.{patch}-{stage}.{devnum}` for unstable (`stage` can be alpha or beta).
 
 To issue the next version in line, specify which part to bump,
-like `make release bump=minor` or `make release bump=devnum`.
+like `make release bump=minor` or `make release bump=devnum`. This is typically done from the
+master branch, except when releasing a beta (in which case the beta is released from master,
+and the previous stable branch is released from said branch).
 
 If you are in a beta version, `make release bump=stage` will switch to a stable.
 
 To issue an unstable version when the current version is stable, specify the
 new version explicitly, like `make release bump="--new-version 4.0.0-alpha.1 devnum"`
-
 
 ## Adding Support For New Geth Versions
 
@@ -249,14 +252,14 @@ the version for the one you wish to add support for. Note that the `v` in the ve
 optional.
 
 ```shell
-$ python update_geth.py v1.10.9
+$ python update_geth.py v1_10_9
 ```
 
 To introduce support for more than one version, pass in the versions in increasing order,
 ending with the latest version.
 
 ```shell
-$ python update_geth.py v1.10.7 v1.10.8 v1.10.9
+$ python update_geth.py v1_10_7 v1_10_8 v1_10_9
 ```
 
 Always review your changes before committing as something may cause this existing pattern to change at some point. 

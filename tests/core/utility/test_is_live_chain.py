@@ -1,11 +1,14 @@
-import pytest
 import os
 
-from geth.chain import is_live_chain
+import pytest
+
+from geth.chain import (
+    is_live_chain,
+)
 
 
 @pytest.mark.parametrize(
-    'platform,data_dir,should_be_live',
+    "platform,data_dir,should_be_live",
     (
         ("darwin", "~", False),
         ("darwin", "~/Library/Ethereum", True),
@@ -14,9 +17,9 @@ from geth.chain import is_live_chain
     ),
 )
 def test_is_live_chain(monkeypatch, platform, data_dir, should_be_live):
-    monkeypatch.setattr('sys.platform', platform)
+    monkeypatch.setattr("sys.platform", platform)
     if platform == "win32":
-        monkeypatch.setattr('os.path.sep', '\\')
+        monkeypatch.setattr("os.path.sep", "\\")
 
     expanded_data_dir = os.path.expanduser(data_dir)
     relative_data_dir = os.path.relpath(expanded_data_dir)

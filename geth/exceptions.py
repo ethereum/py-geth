@@ -1,11 +1,13 @@
 import textwrap
 
-from .utils.encoding import force_text
+from .utils.encoding import (
+    force_text,
+)
 
 
 def force_text_maybe(value):
     if value is not None:
-        return force_text(value, 'utf8')
+        return force_text(value, "utf8")
 
 
 DEFAULT_MESSAGE = "An error occurred during execution"
@@ -14,7 +16,9 @@ DEFAULT_MESSAGE = "An error occurred during execution"
 class GethError(Exception):
     message = DEFAULT_MESSAGE
 
-    def __init__(self, command, return_code, stdin_data, stdout_data, stderr_data, message=None):
+    def __init__(
+        self, command, return_code, stdin_data, stdout_data, stderr_data, message=None
+    ):
         if message is not None:
             self.message = message
         self.command = command
@@ -24,7 +28,9 @@ class GethError(Exception):
         self.stdout_data = force_text_maybe(stdout_data)
 
     def __str__(self):
-        return textwrap.dedent(("""
+        return textwrap.dedent(
+            (
+                """
         {s.message}
         > command: `{command}`
         > return code: `{s.return_code}`
@@ -32,7 +38,9 @@ class GethError(Exception):
         {s.stdout_data}
         > stdout:
         {s.stderr_data}
-        """).format(
-            s=self,
-            command=' '.join(self.command),
-        )).strip()
+        """
+            ).format(
+                s=self,
+                command=" ".join(self.command),
+            )
+        ).strip()

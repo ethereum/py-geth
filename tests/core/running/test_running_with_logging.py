@@ -1,8 +1,13 @@
-import pytest
 import threading
 
-from geth import DevGethProcess
-from geth.mixins import LoggingMixin
+import pytest
+
+from geth import (
+    DevGethProcess,
+)
+from geth.mixins import (
+    LoggingMixin,
+)
 
 _errors = []
 
@@ -22,8 +27,8 @@ def fail_from_errors_on_other_threads():
     yield
 
     if _errors:
-        caught_errors_str = ', '.join([str(err) for err in _errors])
-        pytest.fail(f'Caught exceptions from other threads:\n{caught_errors_str}')
+        caught_errors_str = ", ".join([str(err) for err in _errors])
+        pytest.fail(f"Caught exceptions from other threads:\n{caught_errors_str}")
 
 
 class WithLogging(LoggingMixin, DevGethProcess):
@@ -31,14 +36,14 @@ class WithLogging(LoggingMixin, DevGethProcess):
 
 
 def test_with_logging(base_dir, caplog):
-    test_stdout_path = f'{base_dir}/testing/stdoutlogs.log'
-    test_stderr_path = f'{base_dir}/testing/stderrlogs.log'
+    test_stdout_path = f"{base_dir}/testing/stdoutlogs.log"
+    test_stderr_path = f"{base_dir}/testing/stderrlogs.log"
 
     geth = WithLogging(
-        'testing',
+        "testing",
         base_dir=base_dir,
         stdout_logfile_path=test_stdout_path,
-        stderr_logfile_path=test_stderr_path
+        stderr_logfile_path=test_stderr_path,
     )
 
     geth.start()
