@@ -15,7 +15,7 @@ def open_port():
 def rpc_client(open_port):
     from testrpc.client.utils import force_obj_to_text
 
-    endpoint = "http://127.0.0.1:{port}".format(port=open_port)
+    endpoint = f"http://127.0.0.1:{open_port}"
 
     def make_request(method, params=None):
         global nonce

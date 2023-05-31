@@ -25,7 +25,7 @@ class Timeout(Exception):
     def __str__(self):
         if self.seconds is None:
             return ""
-        return "{0} seconds".format(self.seconds)
+        return f"{self.seconds} seconds"
 
     @property
     def expire_at(self):

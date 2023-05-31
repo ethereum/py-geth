@@ -1,14 +1,10 @@
 import contextlib
 import socket
-import sys
 import time
 
 from .timeout import (
     Timeout,
 )
-
-if sys.version_info.major == 2:
-    ConnectionRefusedError = socket.timeout
 
 
 def is_port_open(port):

@@ -48,9 +48,9 @@ def get_live_data_dir():
     else:
         raise ValueError(
             (
-                "Unsupported platform: '{0}'.  Only darwin/linux2/win32 are "
-                "supported.  You must specify the geth datadir manually"
-            ).format(sys.platform)
+                f"Unsupported platform: '{sys.platform}'.  Only darwin/linux2/win32 are"
+                " supported.  You must specify the geth datadir manually"
+            )
         )
     return data_dir
 
@@ -152,4 +152,4 @@ def initialize_chain(genesis_data, data_dir, **geth_kwargs):
     stdoutdata, stderrdata = proc.communicate()
 
     if proc.returncode:
-        raise ValueError("Error: {0}".format(stdoutdata + stderrdata))
+        raise ValueError(f"Error: {stdoutdata + stderrdata}")
