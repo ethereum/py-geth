@@ -21,12 +21,7 @@ from geth.utils.timeout import (
 
 def construct_logger_file_path(prefix, suffix):
     ensure_path_exists("./logs")
-    timestamp = datetime.datetime.now().strftime(
-        "{prefix}-%Y%m%d-%H%M%S-{suffix}.log".format(
-            prefix=prefix,
-            suffix=suffix,
-        ),
-    )
+    timestamp = datetime.datetime.now().strftime(f"{prefix}-%Y%m%d-%H%M%S-{suffix}.log")
     return os.path.join("logs", timestamp)
 
 

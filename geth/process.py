@@ -124,12 +124,7 @@ class BaseGethProcess(object):
     @property
     def is_rpc_ready(self):
         try:
-            urlopen(
-                "http://{0}:{1}".format(
-                    self.rpc_host,
-                    self.rpc_port,
-                )
-            )
+            urlopen(f"http://{self.rpc_host}:{self.rpc_port}")
         except URLError:
             return False
         else:
@@ -239,11 +234,11 @@ class RopstenGethProcess(BaseGethProcess):
 
         if "data_dir" in geth_kwargs:
             raise ValueError(
-                "You cannot specify `data_dir` for a {0}".format(type(self).__name__)
+                f"You cannot specify `data_dir` for a {type(self).__name__}"
             )
         if "network_id" in geth_kwargs:
             raise ValueError(
-                "You cannot specify `network_id` for a {0}".format(type(self).__name__)
+                f"You cannot specify `network_id` for a {type(self).__name__}"
             )
 
         geth_kwargs["network_id"] = "3"

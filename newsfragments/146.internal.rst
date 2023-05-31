@@ -1,0 +1,1 @@
+Changed `.format` strings to f-strings, removed other python2 code

@@ -83,7 +83,7 @@ def get_platform():
     elif sys.platform == WINDOWS:
         return WINDOWS
     else:
-        raise KeyError("Unknown platform: {0}".format(sys.platform))
+        raise KeyError(f"Unknown platform: {sys.platform}")
 
 
 def is_executable_available(program):
@@ -123,7 +123,7 @@ def check_subprocess_call(
 ):
     if message:
         print(message)
-    print("Executing: {0}".format(" ".join(command)))
+    print(f"Executing: {' '.join(command)}")
 
     return subprocess.check_call(command, stderr=stderr, **proc_kwargs)
 
@@ -133,7 +133,7 @@ def check_subprocess_output(
 ):
     if message:
         print(message)
-    print("Executing: {0}".format(" ".join(command)))
+    print(f"Executing: {' '.join(command)}")
 
     return subprocess.check_output(command, stderr=stderr, **proc_kwargs)
 
@@ -158,14 +158,14 @@ def get_base_install_path(identifier):
     if "GETH_BASE_INSTALL_PATH" in os.environ:
         return os.path.join(
             os.environ["GETH_BASE_INSTALL_PATH"],
-            "geth-{0}".format(identifier),
+            f"geth-{identifier}",
         )
     else:
         return os.path.expanduser(
             os.path.join(
                 "~",
                 ".py-geth",
-                "geth-{0}".format(identifier),
+                f"geth-{identifier}",
             )
         )
 
@@ -188,7 +188,7 @@ def get_source_code_path(identifier):
     return os.path.join(
         get_base_install_path(identifier),
         "source",
-        "go-ethereum-{0}".format(identifier.lstrip("v")),
+        f"go-ethereum-{identifier.lstrip('v')}",
     )
 
 
@@ -242,7 +242,7 @@ def download_source_code_release(identifier):
 
     return check_subprocess_call(
         command,
-        message="Downloading source code release from {0}".format(download_uri),
+        message=f"Downloading source code release from {download_uri}",
     )
 
 
@@ -253,10 +253,7 @@ def extract_source_code_release(identifier):
     ensure_path_exists(source_code_extract_path)
 
     print(
-        "Extracting archive: {0} -> {1}".format(
-            source_code_archive_path,
-            source_code_extract_path,
-        )
+        f"Extracting archive: {source_code_archive_path} -> {source_code_extract_path}"
     )
 
     with tarfile.open(source_code_archive_path, "r:gz") as archive_file:
@@ -301,9 +298,9 @@ def build_from_source_code(identifier):
     if not os.path.exists(built_executable_path):
         raise OSError(
             "Built executable not found in expected location: "
-            "{0}".format(built_executable_path)
+            f"{built_executable_path}"
         )
-    print("Making built binary executable: chmod +x {0}".format(built_executable_path))
+    print(f"Making built binary executable: chmod +x {built_executable_path}")
     chmod_plus_x(built_executable_path)
 
     executable_path = get_executable_path(identifier)
@@ -312,9 +309,7 @@ def build_from_source_code(identifier):
         if os.path.islink(executable_path):
             os.remove(executable_path)
         else:
-            raise OSError(
-                "Non-symlink file already present at `{0}`".format(executable_path)
-            )
+            raise OSError(f"Non-symlink file already present at `{executable_path}`")
     os.symlink(built_executable_path, executable_path)
     chmod_plus_x(executable_path)
 
@@ -325,23 +320,16 @@ def install_from_source_code_release(identifier):
     build_from_source_code(identifier)
 
     executable_path = get_executable_path(identifier)
-    assert os.path.exists(executable_path), "Executable not found @ {0}".format(
-        executable_path
-    )
+    assert os.path.exists(executable_path), f"Executable not found @ {executable_path}"
 
     check_version_command = [executable_path, "version"]
 
     version_output = check_subprocess_output(
         check_version_command,
-        message="Checking installed executable version @ {0}".format(executable_path),
+        message=f"Checking installed executable version @ {executable_path}",
     )
 
-    print(
-        "geth successfully installed at: {0}\n\n{1}\n\n".format(
-            executable_path,
-            version_output,
-        )
-    )
+    print(f"geth successfully installed at: {executable_path}\n\n{version_output}\n\n")
 
 
 install_v1_9_14 = functools.partial(install_from_source_code_release, V1_9_14)
@@ -498,18 +486,14 @@ def install_geth(identifier, platform=None):
 
     if platform not in INSTALL_FUNCTIONS:
         raise ValueError(
-            "Installation of go-ethereum is not supported on your platform ({0}). "
-            "Supported platforms are: {1}".format(
-                platform,
-                ", ".join(sorted(INSTALL_FUNCTIONS.keys())),
-            )
+            "Installation of go-ethereum is not supported on your platform "
+            f"({platform}). Supported platforms are: "
+            f"{', '.join(sorted(INSTALL_FUNCTIONS.keys()))}"
         )
     elif identifier not in INSTALL_FUNCTIONS[platform]:
         raise ValueError(
-            "Installation of geth=={0} is not supported.  Must be one of {1}".format(
-                identifier,
-                ", ".join(sorted(INSTALL_FUNCTIONS[platform].keys())),
-            )
+            f"Installation of geth=={identifier} is not supported. Must be one of "
+            f"{', '.join(sorted(INSTALL_FUNCTIONS[platform].keys()))}"
         )
 
     install_fn = INSTALL_FUNCTIONS[platform][identifier]
@@ -521,7 +505,7 @@ if __name__ == "__main__":
         identifier = sys.argv[1]
     except IndexError:
         print(
-            "Invocation error.  Should be invoked as `python -m geth.install <release-tag>`"  # noqa: E501
+            "Invocation error. Should be invoked as `python -m geth.install <release-tag>`"  # noqa: E501
         )
         sys.exit(1)
 

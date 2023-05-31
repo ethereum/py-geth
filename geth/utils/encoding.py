@@ -1,14 +1,8 @@
 import codecs
-import sys
 
-if sys.version_info.major == 2:
-    binary_types = (bytes, bytearray)
-    text_types = (unicode,)  # noqa: F821
-    string_types = (basestring, bytearray)  # noqa: F821
-else:
-    binary_types = (bytes, bytearray)
-    text_types = (str,)
-    string_types = (bytes, str, bytearray)
+binary_types = (bytes, bytearray)
+text_types = (str,)
+string_types = (bytes, str, bytearray)
 
 
 def is_binary(value):
@@ -29,7 +23,7 @@ def force_bytes(value, encoding="iso-8859-1"):
     elif is_text(value):
         return codecs.encode(value, encoding)
     else:
-        raise TypeError("Unsupported type: {0}".format(type(value)))
+        raise TypeError(f"Unsupported type: {type(value)}")
 
 
 def force_text(value, encoding="iso-8859-1"):
@@ -38,7 +32,7 @@ def force_text(value, encoding="iso-8859-1"):
     elif is_binary(value):
         return codecs.decode(value, encoding)
     else:
-        raise TypeError("Unsupported type: {0}".format(type(value)))
+        raise TypeError(f"Unsupported type: {type(value)}")
 
 
 def force_obj_to_text(obj):

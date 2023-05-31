@@ -46,16 +46,16 @@ def kill_proc(proc):
 def format_error_message(prefix, command, return_code, stdoutdata, stderrdata):
     lines = [prefix]
 
-    lines.append("Command    : {0}".format(" ".join(command)))
-    lines.append("Return Code: {0}".format(return_code))
+    lines.append(f"Command    : {' '.join(command)}")
+    lines.append(f"Return Code: {return_code}")
 
     if stdoutdata:
-        lines.append("stdout:\n`{0}`".format(stdoutdata))
+        lines.append(f"stdout:\n`{stdoutdata}`")
     else:
         lines.append("stdout: N/A")
 
     if stderrdata:
-        lines.append("stderr:\n`{0}`".format(stderrdata))
+        lines.append(f"stderr:\n`{stderrdata}`")
     else:
         lines.append("stderr: N/A")
 

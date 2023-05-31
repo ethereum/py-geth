@@ -29,9 +29,7 @@ def get_geth_version(**geth_kwargs):
     version_match = re.search(VERSION_REGEX, force_text(version_info_string, "utf8"))
     if not version_match:
         raise ValueError(
-            "Did not match version string in geth output:\n{0}".format(
-                version_info_string
-            )
+            f"Did not match version string in geth output:\n{version_info_string}"
         )
     version_string = version_match.groups()[0]
     return semantic_version.Version(version_string)

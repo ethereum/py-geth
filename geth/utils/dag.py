@@ -21,12 +21,9 @@ def get_dag_file_path(revision=23, seedhash="0000000000000000", base_dir=None):
                 )
             )
         else:
-            raise ValueError("Unknown platform: {0}".format(sys.platform))
+            raise ValueError(f"Unknown platform: {sys.platform}")
 
-    dag_filename = "full-R{revision}-{seedhash}".format(
-        revision=revision,
-        seedhash=seedhash,
-    )
+    dag_filename = f"full-R{revision}-{seedhash}"
 
     dag_file_path = os.path.join(base_dir, dag_filename)
     return dag_file_path
