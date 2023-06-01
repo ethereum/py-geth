@@ -4,6 +4,7 @@ version: 2.1
 
 common_go_v_1_20_1: &common_go_v_1_20_1
   working_directory: ~/repo
+  resource_class: xlarge
   steps:
     - checkout
     - run:
@@ -29,6 +30,7 @@ common_go_v_1_20_1: &common_go_v_1_20_1
     - run:
         name: install dependencies
         command: |
+          python -m pip install --upgrade pip
           python -m pip install tox
           python -m pip install checksumdir
     - run:
