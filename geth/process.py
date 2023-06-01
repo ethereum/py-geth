@@ -21,7 +21,6 @@ from geth.accounts import (
     get_accounts,
 )
 from geth.chain import (
-    get_chain_data_dir,
     get_default_base_dir,
     get_genesis_file_path,
     get_live_data_dir,
