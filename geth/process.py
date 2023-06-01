@@ -282,11 +282,7 @@ class DevGethProcess(BaseGethProcess):
         if base_dir is None:
             base_dir = get_default_base_dir()
 
-<<<<<<< HEAD
-        self.data_dir = get_chain_data_dir(base_dir, chain_name)
-=======
         self.data_dir = base_dir
->>>>>>> 28c21bc (Fix 1.12.0 tests)
         geth_kwargs = construct_test_chain_kwargs(data_dir=self.data_dir, **overrides)
 
         # ensure that an account is present
@@ -311,13 +307,8 @@ class DevGethProcess(BaseGethProcess):
                         (
                             coinbase,
                             {
-<<<<<<< HEAD
                                 "balance": "1000000000000000000000000000000"  # 1 billion ether  # noqa: E501
                             },
-=======
-                                "balance": "1000000000000000000000000000000"
-                            },  # 1 billion ether.
->>>>>>> 28c21bc (Fix 1.12.0 tests)
                         ),
                     ]
                 ),
