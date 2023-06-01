@@ -6,7 +6,6 @@ import pytest
 from geth import (
     DevGethProcess,
 )
-
 from geth.utils.timeout import (
     Timeout,
 )
