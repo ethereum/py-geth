@@ -21,6 +21,7 @@ from geth.accounts import (
     get_accounts,
 )
 from geth.chain import (
+    get_chain_data_dir,
     get_default_base_dir,
     get_genesis_file_path,
     get_live_data_dir,
@@ -168,7 +169,8 @@ class BaseGethProcess(object):
         try:
             with get_ipc_socket(self.ipc_path):
                 pass
-        except socket.error:
+        except socket.error as e:
+            print(e)
             return False
         else:
             return True
@@ -281,7 +283,7 @@ class DevGethProcess(BaseGethProcess):
         if base_dir is None:
             base_dir = get_default_base_dir()
 
-        self.data_dir = base_dir
+        self.data_dir = get_chain_data_dir(base_dir, chain_name)
         geth_kwargs = construct_test_chain_kwargs(data_dir=self.data_dir, **overrides)
 
         # ensure that an account is present
