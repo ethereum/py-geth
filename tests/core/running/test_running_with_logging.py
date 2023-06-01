@@ -36,8 +36,8 @@ class WithLogging(LoggingMixin, DevGethProcess):
 
 
 def test_with_logging(base_dir, caplog):
-    test_stdout_path = f"{base_dir}/testing/stdoutlogs.log"
-    test_stderr_path = f"{base_dir}/testing/stderrlogs.log"
+    test_stdout_path = f"{base_dir}/stdoutlogs.log"
+    test_stderr_path = f"{base_dir}/stderrlogs.log"
 
     geth = WithLogging(
         "testing",
