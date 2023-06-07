@@ -1,2 +1,0 @@
-Update `tox` and the way it is installed for CircleCI runs
-

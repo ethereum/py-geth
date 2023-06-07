@@ -1,3 +1,27 @@
+py-geth v3.13.0 (2023-06-07)
+----------------------------
+
+Features
+~~~~~~~~
+
+- Allow initializing `BaseGethProcess` with `stdin`, `stdout`, and `stderr` (`#139 <https://github.com/ethereum/py-geth/issues/139>`__)
+- Add support for geth `1.11.6` (`#141 <https://github.com/ethereum/py-geth/issues/141>`__)
+
+
+Internal Changes - for py-geth Contributors
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Update `tox` and the way it is installed for CircleCI runs (`#141 <https://github.com/ethereum/py-geth/issues/141>`__)
+- merge in python project template (`#142 <https://github.com/ethereum/py-geth/issues/142>`__)
+- Changed `.format` strings to f-strings, removed other python2 code (`#146 <https://github.com/ethereum/py-geth/issues/146>`__)
+
+
+Removals
+~~~~~~~~
+
+- Remove `miner.thread` default since no longer supported (`#144 <https://github.com/ethereum/py-geth/issues/144>`__)
+
+
 3.12.0
 ------
 

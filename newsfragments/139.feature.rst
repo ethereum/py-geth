@@ -1,2 +1,0 @@
-Allow initializing `BaseGethProcess` with `stdin`, `stdout`, and `stderr`
-
