@@ -151,6 +151,12 @@ def construct_popen_command(
     if geth_executable is None:
         geth_executable = get_geth_binary_path()
 
+    if not is_executable_available(geth_executable):
+        raise ValueError(
+            "No geth executable found.  Please ensure geth is installed and "
+            "available on your PATH or use the GETH_BINARY environment variable"
+        )
+
     if ipc_api is not None:
         raise DeprecationWarning(
             "The ipc_api flag has been deprecated.  The ipc API is now on by "

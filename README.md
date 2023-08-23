@@ -11,6 +11,8 @@ Python wrapper around running `geth` as a subprocess
 
 This library requires the `geth` executable to be present.
 
+> If managing your own bundled version of geth, set the path to the binary using the `GETH_BINARY` environment variable.
+
 ## Installation
 
 Installation
