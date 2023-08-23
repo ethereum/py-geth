@@ -1,0 +1,1 @@
+Fail fast if ``geth`` is unavailable.
