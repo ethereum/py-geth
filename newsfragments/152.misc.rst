@@ -1,1 +1,1 @@
-Fail fast if ``geth`` is unavailable.
+Fix tests when runnning recent versions of ``geth``. Fail fast if ``geth`` is unavailable.

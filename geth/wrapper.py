@@ -1,4 +1,5 @@
 import functools
+import logging
 import os
 import subprocess
 import sys
@@ -117,7 +118,7 @@ def construct_popen_command(
     no_discover=None,
     mine=False,
     autodag=False,
-    miner_threads=None,
+    miner_threads=None,  # deprecated
     miner_etherbase=None,
     nice=True,
     unlock=None,
@@ -255,6 +256,9 @@ def construct_popen_command(
     if miner_threads is not None:
         if not mine:
             raise ValueError("`mine` must be truthy when specifying `miner_threads`")
+        logging.warning(
+            "`--miner.threads` is deprecated and will be removed in a future release."
+        )
         builder.extend(("--miner.threads", miner_threads))
 
     if miner_etherbase is not None:

@@ -94,7 +94,7 @@ def write_genesis_file(
     nonce="0xdeadbeefdeadbeef",
     timestamp="0x0",
     parentHash="0x0000000000000000000000000000000000000000000000000000000000000000",
-    extraData="0x686f727365",
+    extraData=None,
     gasLimit="0x47d5cc",
     difficulty="0x01",
     mixhash="0x0000000000000000000000000000000000000000000000000000000000000000",
@@ -124,7 +124,14 @@ def write_genesis_file(
             "londonBlock": 0,
             "daoForkBlock": 0,
             "daoForSupport": True,
+            # Using the Ethash consensus algorithm is deprecated
+            # Instead, use the Clique consensus algorithm
+            # https://geth.ethereum.org/docs/interface/private-network
+            "clique": {"period": 5, "epoch": 30000},
         }
+
+    # Assign a signer (coinbase) to the genesis block for Clique
+    extraData = bytes("0x" + "0" * 64 + coinbase[2:] + "0" * 130, "ascii")
 
     genesis_data = {
         "nonce": nonce,
