@@ -254,11 +254,11 @@ def construct_popen_command(
         builder.append("--mine")
 
     if miner_threads is not None:
-        if not mine:
-            raise ValueError("`mine` must be truthy when specifying `miner_threads`")
         logging.warning(
             "`--miner.threads` is deprecated and will be removed in a future release."
         )
+        if not mine:
+            raise ValueError("`mine` must be truthy when specifying `miner_threads`")
         builder.extend(("--miner.threads", miner_threads))
 
     if miner_etherbase is not None:
