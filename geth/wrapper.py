@@ -1,4 +1,5 @@
 import functools
+import logging
 import os
 import subprocess
 import sys
@@ -117,7 +118,7 @@ def construct_popen_command(
     no_discover=None,
     mine=False,
     autodag=False,
-    miner_threads=None,
+    miner_threads=None,  # deprecated
     miner_etherbase=None,
     nice=True,
     unlock=None,
@@ -150,6 +151,12 @@ def construct_popen_command(
 ):
     if geth_executable is None:
         geth_executable = get_geth_binary_path()
+
+    if not is_executable_available(geth_executable):
+        raise ValueError(
+            "No geth executable found.  Please ensure geth is installed and "
+            "available on your PATH or use the GETH_BINARY environment variable"
+        )
 
     if ipc_api is not None:
         raise DeprecationWarning(
@@ -247,6 +254,9 @@ def construct_popen_command(
         builder.append("--mine")
 
     if miner_threads is not None:
+        logging.warning(
+            "`--miner.threads` is deprecated and will be removed in a future release."
+        )
         if not mine:
             raise ValueError("`mine` must be truthy when specifying `miner_threads`")
         builder.extend(("--miner.threads", miner_threads))
