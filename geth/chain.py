@@ -16,7 +16,7 @@ from .wrapper import (
 
 def get_live_data_dir():
     """
-    pygeth needs a base directory to store it's chain data.  By default this is
+    `py-geth` needs a base directory to store it's chain data.  By default this is
     the directory that `geth` uses as it's `datadir`.
     """
     if sys.platform == "darwin":

@@ -1,4 +1,4 @@
-exclude: '.project-template|docs/conf.py'
+exclude: '.project-template|tests/core/accounts/projects/'
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
@@ -42,4 +42,4 @@ repos:
     rev: v1.5.1
     hooks:
     -   id: mypy
-        exclude: tests/
+        exclude: 'conftest.py|tests/|geth/'

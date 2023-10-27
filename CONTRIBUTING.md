@@ -6,12 +6,10 @@ To start development for `py-geth` you should begin by cloning the repo.
 $ git clone git@github.com:ethereum/py-geth.git
 ```
 
-
 # Cute Animal Pictures
 
 All pull requests need to have a cute animal picture.  This is a very important
 part of the development process.
-
 
 # Pull Requests
 
@@ -33,6 +31,5 @@ order to check that your modifications don't break anything.
 
 Once you've made a pull request take a look at the travis build status in the
 GitHub interface and make sure the tests are running as you'd expect.
-
 
 [pull-requests]: https://help.github.com/articles/about-pull-requests
