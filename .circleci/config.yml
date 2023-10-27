@@ -35,6 +35,9 @@ common_go_v1_21_3: &common_go_v1_21_3
         name: install golang-1.21.3
         command: ./.circleci/install_golang.sh 1.21.3
     - run:
+        name: install pre-commit
+        command: python -m pip install --progress-bar=off pre-commit
+    - run:
         name: run tox
         command: python -m tox run -r
     - save_cache:
@@ -43,12 +46,7 @@ common_go_v1_21_3: &common_go_v1_21_3
           - .tox
           - ~/.cache/pip
           - ~/.local
-          - ./eggs
-        key: cache-v6-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
-    - save_cache:
-        paths:
-          - ~/.ethash
-        key: cache-v5-{{ arch }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
+        key: cache-v1-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
 
 orbs:
   win: circleci/windows@5.0.0

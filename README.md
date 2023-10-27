@@ -1,4 +1,4 @@
-# PyGeth
+# py-geth
 
 [![Join the conversation on Discord](https://img.shields.io/discord/809793915578089484?color=blue&label=chat&logo=discord&logoColor=white)](https://discord.gg/GHryRvPB84)
 [![Build Status](https://circleci.com/gh/ethereum/py-geth.svg?style=shield)](https://circleci.com/gh/ethereum/py-geth)
@@ -205,10 +205,14 @@ If you would like to hack on py-geth, please check out the [Snake Charmers
 Tactical Manual](https://github.com/ethereum/snake-charmers-tactical-manual)
 for information on how we do:
 
-* Testing
-* Pull Requests
-* Code Style
-* Documentation
+- Testing
+- Pull Requests
+- Documentation
+
+We use [pre-commit](https://pre-commit.com/) to maintain consistent code style. Once
+installed, it will run automatically with every commit. You can also run it manually
+with `make lint`. If you need to make a commit that skips the `pre-commit` checks, you
+can do so with `git commit --no-verify`.
 
 ### Development Environment Setup
 
@@ -220,6 +224,7 @@ cd py-geth
 virtualenv -p python3 venv
 . venv/bin/activate
 python -m pip install -e ".[dev]"
+pre-commit install
 ```
 
 ### Release setup
