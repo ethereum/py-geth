@@ -1,1 +1,0 @@
-Drop support for geth ``v1.9`` and ``v1.10`` series. Shanghai was introduced in geth ``v1.11.0`` so this is a good place to draw the line. Drop official support for Python 3.7.

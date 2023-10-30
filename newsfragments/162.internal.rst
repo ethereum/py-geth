@@ -1,1 +1,0 @@
-Merge template updates, including using pre-commit for linting and drop ``pkg_resources`` for version info

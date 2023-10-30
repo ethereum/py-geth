@@ -1,3 +1,32 @@
+py-geth v4.0.0 (2023-10-30)
+---------------------------
+
+Breaking Changes
+~~~~~~~~~~~~~~~~
+
+- Drop support for geth ``v1.9`` and ``v1.10`` series. Shanghai was introduced in geth ``v1.11.0`` so this is a good place to draw the line. Drop official support for Python 3.7. (`#160 <https://github.com/ethereum/py-geth/issues/160>`__)
+
+
+Features
+~~~~~~~~
+
+- Add support for geth ``1.12.0`` and ``1.12.1`` (`#151 <https://github.com/ethereum/py-geth/issues/151>`__)
+- Add support for geth versions v1.12.2 to v1.13.4 (`#160 <https://github.com/ethereum/py-geth/issues/160>`__)
+
+
+Internal Changes - for py-geth Contributors
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Use golang version ``1.21.3`` for CI builds to ensure compatibility with the latest version. (`#160 <https://github.com/ethereum/py-geth/issues/160>`__)
+- Merge template updates, including using pre-commit for linting and drop ``pkg_resources`` for version info (`#162 <https://github.com/ethereum/py-geth/issues/162>`__)
+
+
+Miscellaneous Changes
+~~~~~~~~~~~~~~~~~~~~~
+
+- `#152 <https://github.com/ethereum/py-geth/issues/152>`__
+
+
 py-geth v3.13.0 (2023-06-07)
 ----------------------------
 

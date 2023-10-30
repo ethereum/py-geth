@@ -1,1 +1,0 @@
-Use golang version ``1.21.3`` for CI builds to ensure compatibility with the latest version.
