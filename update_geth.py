@@ -1,23 +1,23 @@
 """
-This script is meant to automate adding support for new geth versions.
+A script to automate adding support for new geth versions.
 
-To add support for a geth version, run the following line from the py-geth directory, substituting
-the version for the one you wish to add support for. Note that the 'v' in the versioning is
-optional.
+To add support for a geth version, run the following line from the py-geth directory,
+substituting the version for the one you wish to add support for. Note that the 'v' in
+the versioning is optional.
 
 .. code-block:: shell
 
     $ python update_geth.py v1_10_9
 
-To introduce support for more than one version, pass in the versions in increasing order,
-ending with the latest version.
+To introduce support for more than one version, pass in the versions in increasing
+order, ending with the latest version.
 
 .. code-block:: shell
 
     $ python update_geth.py v1_10_7 v1_10_8 v1_10_9
 
-Note: Always review your changes before committing as something may cause this existing pattern to
-change at some point.
+Note: Always review your changes before committing as something may cause this existing
+pattern to change at some point.
 """
 
 import fileinput
@@ -129,7 +129,7 @@ for index, user_provided_version in enumerate(user_provided_versions):
 with fileinput.FileInput(".circleci/config.yml", inplace=True) as cci_config:
     for line in cci_config:
         if (
-            f"TOXENV: py{LATEST_PYTHON_VERSION}-install-geth-{LATEST_SUPPORTED_GETH_VERSION}"
+            f"TOXENV: py{LATEST_PYTHON_VERSION}-install-geth-{LATEST_SUPPORTED_GETH_VERSION}"  # noqa: E501
         ) in line:
             print(
                 f"          TOXENV: py{LATEST_PYTHON_VERSION}-install-geth-"
@@ -140,7 +140,7 @@ with fileinput.FileInput(".circleci/config.yml", inplace=True) as cci_config:
             f"- py{LATEST_PYTHON_VERSION}-install-geth-{LATEST_SUPPORTED_GETH_VERSION}"
         ) in line:
             print(
-                f"      - py{LATEST_PYTHON_VERSION}-install-geth-{LATEST_SUPPORTED_GETH_VERSION}\n"
+                f"      - py{LATEST_PYTHON_VERSION}-install-geth-{LATEST_SUPPORTED_GETH_VERSION}\n"  # noqa: E501
                 + CIRCLE_CI_PATTERN["workflow_test_jobs"]
             )
         else:
@@ -152,10 +152,7 @@ with fileinput.FileInput("geth/install.py", inplace=True) as geth_install:
     latest_supported_period = LATEST_SUPPORTED_GETH_VERSION.replace("_", ".")
     latest_version_install = f"install_v{latest_supported_upper[1:]}"
     for line in geth_install:
-        if (
-            f'{latest_supported_upper} = "{latest_supported_period}"'
-            in line
-        ):
+        if f'{latest_supported_upper} = "{latest_supported_period}"' in line:
             print(
                 f'{latest_supported_upper} = "{latest_supported_period}"\n'
                 + GETH_INSTALL_PATTERN["versions"],

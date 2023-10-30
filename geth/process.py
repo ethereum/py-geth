@@ -256,8 +256,6 @@ class TestnetGethProcess(RopstenGethProcess):
     Alias for whatever the current primary testnet chain is.
     """
 
-    pass
-
 
 class DevGethProcess(BaseGethProcess):
     """

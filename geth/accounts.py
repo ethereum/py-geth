@@ -42,7 +42,8 @@ account_regex = re.compile(b"([a-f0-9]{40})")
 
 
 def create_new_account(data_dir, password, **geth_kwargs):
-    """Creates a new Ethereum account on geth.
+    """
+    Creates a new Ethereum account on geth.
 
     This is useful for testing when you want to stress
     interaction (transfers) between Ethereum accounts.

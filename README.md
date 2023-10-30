@@ -1,4 +1,4 @@
-# PyGeth
+# py-geth
 
 [![Join the conversation on Discord](https://img.shields.io/discord/809793915578089484?color=blue&label=chat&logo=discord&logoColor=white)](https://discord.gg/GHryRvPB84)
 [![Build Status](https://circleci.com/gh/ethereum/py-geth.svg?style=shield)](https://circleci.com/gh/ethereum/py-geth)
@@ -23,9 +23,7 @@ python -m pip install py-geth
 
 ## Quickstart
 
-
 To run geth connected to the mainnet
-
 
 ```python
 >>> from geth import LiveGethProcess
@@ -49,7 +47,6 @@ chains, you can specify an alternative `base_dir`.
 >>> geth = DevGethProcess('testing', '/tmp/some-other-base-dir/')
 >>> geth.start()
 ```
-
 
 Each instance has a few convenient properties.
 
@@ -148,16 +145,16 @@ home directory.  The `v1.13.4` binary would be located at
 The `DevGethProcess` is designed to facilitate testing.  In that regard, it is
 preconfigured as follows.
 
-* A single account is created and allocated 1 billion ether.
-* All APIs are enabled on both `rpc` and `ipc` interfaces.
-* Account 0 is unlocked
-* Networking is configured to not look for or connect to any peers.
-* The `networkid` of `1234` is used.
-* Verbosity is set to `5` (DEBUG)
-* Mining is enabled with a single thread.
-* The RPC interface *tries* to bind to 8545 but will find an open port if this
+- A single account is created and allocated 1 billion ether.
+- All APIs are enabled on both `rpc` and `ipc` interfaces.
+- Account 0 is unlocked
+- Networking is configured to not look for or connect to any peers.
+- The `networkid` of `1234` is used.
+- Verbosity is set to `5` (DEBUG)
+- Mining is enabled with a single thread.
+- The RPC interface *tries* to bind to 8545 but will find an open port if this
   port is not available.
-* The DevP2P interface *tries* to bind to 30303 but will find an open port if this
+- The DevP2P interface *tries* to bind to 30303 but will find an open port if this
   port is not available.
 
 ## Gotchas
@@ -176,14 +173,13 @@ $ geth makedag 0 ~/.ethash
 This is especially important in CI environments like Travis-CI where your
 process will likely timeout during generation.
 
-
 ## Development
 
 Clone the repository:
 
 ```shell
 $ git clone git@github.com:ethereum/py-geth.git
-````
+```
 
 Next, run the following from the newly-created `py-geth` directory:
 
@@ -205,10 +201,14 @@ If you would like to hack on py-geth, please check out the [Snake Charmers
 Tactical Manual](https://github.com/ethereum/snake-charmers-tactical-manual)
 for information on how we do:
 
-* Testing
-* Pull Requests
-* Code Style
-* Documentation
+- Testing
+- Pull Requests
+- Documentation
+
+We use [pre-commit](https://pre-commit.com/) to maintain consistent code style. Once
+installed, it will run automatically with every commit. You can also run it manually
+with `make lint`. If you need to make a commit that skips the `pre-commit` checks, you
+can do so with `git commit --no-verify`.
 
 ### Development Environment Setup
 
@@ -220,6 +220,7 @@ cd py-geth
 virtualenv -p python3 venv
 . venv/bin/activate
 python -m pip install -e ".[dev]"
+pre-commit install
 ```
 
 ### Release setup
@@ -264,6 +265,6 @@ ending with the latest version.
 $ python update_geth.py v1_10_7 v1_10_8 v1_10_9
 ```
 
-Always review your changes before committing as something may cause this existing pattern to change at some point. 
-It is best to compare the git difference with a previous commit that introduced support for a new geth version to make 
+Always review your changes before committing as something may cause this existing pattern to change at some point.
+It is best to compare the git difference with a previous commit that introduced support for a new geth version to make
 sure everything looks good.

@@ -8,6 +8,7 @@
 *.egg-info
 dist
 build
+.build
 eggs
 .eggs
 parts
@@ -20,6 +21,7 @@ lib
 lib64
 pip-wheel-metadata
 venv*
+.venv*
 
 # Installer logs
 pip-log.txt
@@ -72,6 +74,9 @@ logs
 
 # pyenv
 .python-version
+
+# vs-code
+.vscode
 
 # py-geth-specific
 tests/core/accounts/projects/*/geth/*
