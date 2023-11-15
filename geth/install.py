@@ -24,6 +24,7 @@ V1_13_1 = "v1.13.1"
 V1_13_2 = "v1.13.2"
 V1_13_3 = "v1.13.3"
 V1_13_4 = "v1.13.4"
+V1_13_5 = "v1.13.5"
 
 
 LINUX = "linux"
@@ -316,6 +317,7 @@ install_v1_13_1 = functools.partial(install_from_source_code_release, V1_13_1)
 install_v1_13_2 = functools.partial(install_from_source_code_release, V1_13_2)
 install_v1_13_3 = functools.partial(install_from_source_code_release, V1_13_3)
 install_v1_13_4 = functools.partial(install_from_source_code_release, V1_13_4)
+install_v1_13_5 = functools.partial(install_from_source_code_release, V1_13_5)
 
 
 INSTALL_FUNCTIONS = {
@@ -335,6 +337,7 @@ INSTALL_FUNCTIONS = {
         V1_13_2: install_v1_13_2,
         V1_13_3: install_v1_13_3,
         V1_13_4: install_v1_13_4,
+        V1_13_5: install_v1_13_5,
     },
     OSX: {
         V1_11_0: install_v1_11_0,
@@ -352,6 +355,7 @@ INSTALL_FUNCTIONS = {
         V1_13_2: install_v1_13_2,
         V1_13_3: install_v1_13_3,
         V1_13_4: install_v1_13_4,
+        V1_13_5: install_v1_13_5,
     },
 }
 

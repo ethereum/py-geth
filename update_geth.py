@@ -29,7 +29,7 @@ GETH_VERSION_REGEX = re.compile(r"v\d*_\d+")  # v0_0_0 pattern
 # get the current go version
 go_version = None
 with open(".circleci/config.yml") as circleci_config:
-    golang_keyword = "&common_go_v_"
+    golang_keyword = "&common_go_v"
     for line in circleci_config:
         if golang_keyword in line:
             go_version = line[line.find(golang_keyword) + len(golang_keyword) :].strip()
@@ -97,7 +97,7 @@ for index, user_provided_version in enumerate(user_provided_versions):
         py_version_decimal = f"{py_version[0]}.{py_version[1:]}"
         CIRCLE_CI_PATTERN["jobs"] += (
             f"  py{py_version}-install-geth-{user_provided_version}:\n"
-            f"    <<: *common_go_v_{go_version}\n"
+            f"    <<: *common_go_v{go_version}\n"
             "    docker:\n"
             f"      - image: cimg/python:{py_version_decimal}\n"
             "        environment:\n"
