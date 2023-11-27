@@ -120,7 +120,7 @@ True
 > This feature is experimental and subject to breaking changes.
 
 Versions of `geth` dating back to v1.11.0 can be installed using `py-geth`.
-See [install.py](https://github.com/ethereum/py-geth/blob/master/geth/install.py) for
+See [install.py](https://github.com/ethereum/py-geth/blob/main/geth/install.py) for
 the current list of supported versions.
 
 Installation can be done via the command line:
@@ -238,7 +238,7 @@ The version format for this repo is `{major}.{minor}.{patch}` for stable, and
 
 To issue the next version in line, specify which part to bump,
 like `make release bump=minor` or `make release bump=devnum`. This is typically done from the
-master branch, except when releasing a beta (in which case the beta is released from master,
+main branch, except when releasing a beta (in which case the beta is released from main,
 and the previous stable branch is released from said branch).
 
 If you are in a beta version, `make release bump=stage` will switch to a stable.
