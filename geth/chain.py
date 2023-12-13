@@ -131,7 +131,11 @@ def write_genesis_file(
         }
 
     # Assign a signer (coinbase) to the genesis block for Clique
-    extraData = bytes("0x" + "0" * 64 + coinbase[2:] + "0" * 130, "ascii")
+    extraData = (
+        bytes("0x" + "0" * 64 + coinbase[2:] + "0" * 130, "ascii")
+        if extraData is None
+        else extraData
+    )
 
     genesis_data = {
         "nonce": nonce,
