@@ -101,6 +101,8 @@ def write_genesis_file(
     coinbase="0x3333333333333333333333333333333333333333",
     alloc=None,
     config=None,
+    clique_period: int = 5,
+    clique_epoch: int = 30000,
 ):
     if os.path.exists(genesis_file_path) and not overwrite:
         raise ValueError(
@@ -127,7 +129,7 @@ def write_genesis_file(
             # Using the Ethash consensus algorithm is deprecated
             # Instead, use the Clique consensus algorithm
             # https://geth.ethereum.org/docs/interface/private-network
-            "clique": {"period": 5, "epoch": 30000},
+            "clique": {"period": clique_period, "epoch": clique_epoch},
         }
 
     # Assign a signer (coinbase) to the genesis block for Clique
