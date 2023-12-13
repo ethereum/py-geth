@@ -1,0 +1,1 @@
+Fix issue where could not set custom extraData in chain genesis
