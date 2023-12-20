@@ -523,6 +523,62 @@ jobs:
         environment:
           GETH_VERSION: v1.13.5
           TOXENV: py311-install-geth-v1_13_5
+  py38-install-geth-v1_13_6:
+    <<: *common_go_v1_21_3
+    docker:
+      - image: cimg/python:3.8
+        environment:
+          GETH_VERSION: v1.13.6
+          TOXENV: py38-install-geth-v1_13_6
+  py39-install-geth-v1_13_6:
+    <<: *common_go_v1_21_3
+    docker:
+      - image: cimg/python:3.9
+        environment:
+          GETH_VERSION: v1.13.6
+          TOXENV: py39-install-geth-v1_13_6
+  py310-install-geth-v1_13_6:
+    <<: *common_go_v1_21_3
+    docker:
+      - image: cimg/python:3.10
+        environment:
+          GETH_VERSION: v1.13.6
+          TOXENV: py310-install-geth-v1_13_6
+  py311-install-geth-v1_13_6:
+    <<: *common_go_v1_21_3
+    docker:
+      - image: cimg/python:3.11
+        environment:
+          GETH_VERSION: v1.13.6
+          TOXENV: py311-install-geth-v1_13_6
+  py38-install-geth-v1_13_7:
+    <<: *common_go_v1_21_3
+    docker:
+      - image: cimg/python:3.8
+        environment:
+          GETH_VERSION: v1.13.7
+          TOXENV: py38-install-geth-v1_13_7
+  py39-install-geth-v1_13_7:
+    <<: *common_go_v1_21_3
+    docker:
+      - image: cimg/python:3.9
+        environment:
+          GETH_VERSION: v1.13.7
+          TOXENV: py39-install-geth-v1_13_7
+  py310-install-geth-v1_13_7:
+    <<: *common_go_v1_21_3
+    docker:
+      - image: cimg/python:3.10
+        environment:
+          GETH_VERSION: v1.13.7
+          TOXENV: py310-install-geth-v1_13_7
+  py311-install-geth-v1_13_7:
+    <<: *common_go_v1_21_3
+    docker:
+      - image: cimg/python:3.11
+        environment:
+          GETH_VERSION: v1.13.7
+          TOXENV: py311-install-geth-v1_13_7
 
   py38-lint:
     <<: *common_go_v1_21_3
@@ -662,6 +718,16 @@ workflows:
       - py39-install-geth-v1_13_5
       - py310-install-geth-v1_13_5
       - py311-install-geth-v1_13_5
+
+      - py38-install-geth-v1_13_6
+      - py39-install-geth-v1_13_6
+      - py310-install-geth-v1_13_6
+      - py311-install-geth-v1_13_6
+
+      - py38-install-geth-v1_13_7
+      - py39-install-geth-v1_13_7
+      - py310-install-geth-v1_13_7
+      - py311-install-geth-v1_13_7
 
       - py38-lint
       - py39-lint
