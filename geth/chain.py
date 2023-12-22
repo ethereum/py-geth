@@ -124,6 +124,7 @@ def write_genesis_file(
             "istanbulBlock": 0,
             "berlinBlock": 0,
             "londonBlock": 0,
+            "shanghaiBlock": 0,
             "daoForkBlock": 0,
             "daoForSupport": True,
             # Using the Ethash consensus algorithm is deprecated
