@@ -1,1 +1,0 @@
-Allow clique consensus parameters period and epoch in chain genesis

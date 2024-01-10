@@ -1,3 +1,28 @@
+py-geth v4.1.0 (2024-01-10)
+---------------------------
+
+Bugfixes
+~~~~~~~~
+
+- Fix issue where could not set custom extraData in chain genesis (`#167 <https://github.com/ethereum/py-geth/issues/167>`__)
+
+
+Features
+~~~~~~~~
+
+- Add support for geth ``1.13.5`` (`#165 <https://github.com/ethereum/py-geth/issues/165>`__)
+- Allow clique consensus parameters period and epoch in chain genesis (`#169 <https://github.com/ethereum/py-geth/issues/169>`__)
+- Add support for geth ``v1.13.6`` and ``v1.13.7`` (`#173 <https://github.com/ethereum/py-geth/issues/173>`__)
+- Add support for geth ``v1.13.8`` (`#175 <https://github.com/ethereum/py-geth/issues/175>`__)
+- Added support for ``geth v1.13.9`` (`#176 <https://github.com/ethereum/py-geth/issues/176>`__)
+
+
+Internal Changes - for py-geth Contributors
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Change the name of ``master`` branch to ``main`` (`#166 <https://github.com/ethereum/py-geth/issues/166>`__)
+
+
 py-geth v4.0.0 (2023-10-30)
 ---------------------------
 
