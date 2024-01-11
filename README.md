@@ -126,19 +126,19 @@ the current list of supported versions.
 Installation can be done via the command line:
 
 ```bash
-$ python -m geth.install v1.13.9
+$ python -m geth.install v1.13.10
 ```
 
 Or from python using the `install_geth` function.
 
 ```python
 >>> from geth import install_geth
->>> install_geth('v1.13.9')
+>>> install_geth('v1.13.10')
 ```
 
 The installed binary can be found in the `$HOME/.py-geth` directory, under your
-home directory.  The `v1.13.9` binary would be located at
-`$HOME/.py-geth/geth-v1.13.9/bin/geth`.
+home directory.  The `v1.13.10` binary would be located at
+`$HOME/.py-geth/geth-v1.13.10/bin/geth`.
 
 ## About `DevGethProcess`
 
