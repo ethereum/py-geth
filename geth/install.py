@@ -474,8 +474,11 @@ def build_image(docker_install_version=None):
     # check if "py-geth:{docker_install_version}" exists
     import docker
     client = docker.from_env()
+
+    tag = f"py-geth:{docker_install_version}"
+
     try:
-        client.images.get(f"py-geth:{docker_install_version}")
+        client.images.get(tag)
         print(f"py-geth:{docker_install_version} already exists, skipping build...")
         return
     except docker.errors.ImageNotFound:
@@ -484,10 +487,16 @@ def build_image(docker_install_version=None):
     geth_docker_folder = os.path.expanduser(f"~/.py-geth/{docker_install_version}")
     
     # build image
-    print(f"Building image py-geth:{docker_install_version} at {geth_docker_folder}...")
-    client.images.build(path=geth_docker_folder, tag=f"py-geth:{docker_install_version}")
+    print(f"Building image {tag} at {geth_docker_folder}...")
+    client.images.build(path=geth_docker_folder, tag=tag)
+
+    try:
+        # check if image exists
+        client.images.get(tag)
+    except docker.errors.ImageNotFound:
+        raise ValueError(f"Unable to find image {tag} after building it!")
     
-    print(f"Successfully built image py-geth:{docker_install_version}!")
+    print(f"Successfully built image {tag}!")
 
 def install_geth(identifier, platform=None, docker=False, docker_install_version=None):
     if docker:
