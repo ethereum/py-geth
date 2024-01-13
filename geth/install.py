@@ -384,7 +384,9 @@ def map_architecture(architecture: str):
     architecture_mapping = {
         "x86_64": "amd64",
         "armv7l": "arm",
+        "arm64": "arm64",
         "aarch64": "arm64",
+        "amd64": "amd64"
     }
 
     if architecture not in architecture_mapping:
@@ -398,11 +400,15 @@ def generate_dockerfile(docker_install_version=None):
     if docker_install_version is None:
         docker_install_version = "latest"
     else:
-        docker_install_version = f"tags/{docker_install_version}"
+        docker_install_version = f"{docker_install_version}"
 
-    r = requests.get(f"{GITHUB_API}/{docker_install_version}")
+    RELEASES_API = GITHUB_API + "releases/"
+
+    release_url = f"{RELEASES_API}{docker_install_version}"
+
+    r = requests.get(release_url)
     if r.status_code == 404:
-        raise ValueError(f"Unable to find docker install version: {docker_install_version}")
+        raise ValueError(f"Unable to find docker install version: {docker_install_version} from URL: {release_url}")
     elif r.status_code != 200:
         raise ValueError(f"Unexpected status code while checking for geth versions: {r.status_code}")
     
@@ -428,8 +434,10 @@ def generate_dockerfile(docker_install_version=None):
     arc = os.uname().machine
     architecture = map_architecture(arc)
 
-    if docker_install_version.startswith("tags/"):
-        docker_install_version = docker_install_version[5:]
+    if docker_install_version.startswith("v"):
+        docker_install_version = docker_install_version[1:]
+
+    commit_hash = commit_hash[:8]
 
     # https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.13.10-bc0be1b1.tar.gz
     gethstore_url = f"https://gethstore.blob.core.windows.net/builds/geth-linux-{architecture}-{docker_install_version}-{commit_hash}.tar.gz"
@@ -437,16 +445,18 @@ def generate_dockerfile(docker_install_version=None):
     check_existence = requests.head(gethstore_url)
     if check_existence.status_code != 200:
         raise ValueError(f"Unable to find binary at: {gethstore_url}")
+    
+    # check if file Dockerfile.template exists, if not, download from github
 
-    # upload this somewhere
-    with open("Dockerfile.template", "r") as f:
+    # get Dockerfile.template at ~/.py-geth/Dockerfile.template
+    with open(os.path.expanduser("~/.py-geth/Dockerfile.template"), "r") as f:
         template = f.read()
     
     template = template.replace("${PLATFORM}", architecture)
-    template = template.replace("${VERSION}", docker_install_version)
-    template = template.replace("${COMMIT_HASH}", commit_hash[:8])
+    template = template.replace("${GETH_VERSION}", docker_install_version)
+    template = template.replace("${COMMIT-HASH}", commit_hash) # ${COMMIT-HASH}
 
-    with open("Dockerfile", "w") as f:
+    with open("/Users/aditya/Documents/OSS/py-geth/geth/Dockerfile", "w") as f:
         f.write(template)
 
     print(f"Generated Dockerfile for geth {docker_install_version} ({commit_hash[:8]})")
@@ -481,7 +491,7 @@ if __name__ == "__main__":
     try:
         identifier = sys.argv[1]
         if len(sys.argv) > 2:
-            docker = sys.argv[2]
+            docker = sys.argv[2] == "docker"
     
     except IndexError:
         print(
