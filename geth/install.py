@@ -446,7 +446,7 @@ def generate_dockerfile(docker_install_version=None):
     if check_existence.status_code != 200:
         raise ValueError(f"Unable to find binary at: {gethstore_url}")
     
-    # check if file Dockerfile.template exists, if not, download from github
+    # check if file Dockerfile.template exists, if not, download from github    
 
     # get Dockerfile.template at ~/.py-geth/Dockerfile.template
     with open(os.path.expanduser("~/.py-geth/Dockerfile.template"), "r") as f:
