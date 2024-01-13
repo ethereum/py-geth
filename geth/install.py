@@ -446,7 +446,16 @@ def generate_dockerfile(docker_install_version=None):
     if check_existence.status_code != 200:
         raise ValueError(f"Unable to find binary at: {gethstore_url}")
     
-    # check if file Dockerfile.template exists, if not, download from github    
+    # check if file Dockerfile.template exists, if not, download from github
+    if not os.path.exists(os.path.expanduser("~/.py-geth/Dockerfile.template")):
+        # for now
+        dockerfile_template_url = "https://raw.githubusercontent.com/0x0elliot/py-geth/0x0elliot/py-geth-docker/Dockerfile.template"
+        r = requests.get(dockerfile_template_url)
+        if r.status_code != 200:
+            raise ValueError(f"Unable to download Dockerfile.template from github: {r.status_code}")
+        
+        with open(os.path.expanduser("~/.py-geth/Dockerfile.template"), "w") as f:
+            f.write(r.text)
 
     # get Dockerfile.template at ~/.py-geth/Dockerfile.template
     with open(os.path.expanduser("~/.py-geth/Dockerfile.template"), "r") as f:
@@ -456,10 +465,10 @@ def generate_dockerfile(docker_install_version=None):
     template = template.replace("${GETH_VERSION}", docker_install_version)
     template = template.replace("${COMMIT-HASH}", commit_hash) # ${COMMIT-HASH}
 
-    with open("/Users/aditya/Documents/OSS/py-geth/geth/Dockerfile", "w") as f:
+    with open(os.path.expanduser("~/.py-geth/Dockerfile"), "w") as f:
         f.write(template)
 
-    print(f"Generated Dockerfile for geth {docker_install_version} ({commit_hash[:8]})")
+    print(f"Generated Dockerfile for geth {docker_install_version}/{commit_hash} at ~/.py-geth/Dockerfile!")
 
 
 def install_geth(identifier, platform=None, docker=False, docker_install_version=None):
