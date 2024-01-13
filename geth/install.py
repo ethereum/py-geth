@@ -394,7 +394,8 @@ def map_architecture(architecture: str):
     
     return architecture_mapping[architecture]
 
-def generate_dockerfile(docker_install_version=None):
+# returns the latest version of geth
+def generate_dockerfile(docker_install_version=None) -> str:
     GITHUB_API = "https://api.github.com/repos/ethereum/go-ethereum/"
 
     if docker_install_version is None:
@@ -458,23 +459,42 @@ def generate_dockerfile(docker_install_version=None):
             f.write(r.text)
 
     # get Dockerfile.template at ~/.py-geth/Dockerfile.template
-    with open(os.path.expanduser("~/.py-geth/Dockerfile.template"), "r") as f:
+    with open(os.path.expanduser(f"~/.py-geth/Dockerfile.template"), "r") as f:
         template = f.read()
     
     template = template.replace("${PLATFORM}", architecture)
     template = template.replace("${GETH_VERSION}", docker_install_version)
     template = template.replace("${COMMIT-HASH}", commit_hash) # ${COMMIT-HASH}
 
-    with open(os.path.expanduser("~/.py-geth/Dockerfile"), "w") as f:
+    with open(os.path.expanduser(f"~/.py-geth/Dockerfile.{docker_install_version}"), "w") as f:
         f.write(template)
 
     print(f"Generated Dockerfile for geth {docker_install_version}/{commit_hash} at ~/.py-geth/Dockerfile!")
+    return docker_install_version
 
+def build_image(docker_install_version=None):
+    docker_install_version = generate_dockerfile(docker_install_version=docker_install_version)
+
+    # check if "py-geth:{docker_install_version}" exists
+    import docker
+    client = docker.from_env()
+    try:
+        client.images.get(f"py-geth:{docker_install_version}")
+        print(f"py-geth:{docker_install_version} already exists, skipping build...")
+        return
+    except docker.errors.ImageNotFound:
+        pass
+    
+    # build image
+    print(f"Building image py-geth:{docker_install_version}...")
+    client.images.build(path=os.path.expanduser("~/.py-geth"), tag=f"py-geth:{docker_install_version}")
+    
+    print(f"Successfully built image py-geth:{docker_install_version}!")
 
 def install_geth(identifier, platform=None, docker=False, docker_install_version=None):
     if docker:
         # for testing purposes
-        generate_dockerfile(docker_install_version=docker_install_version)
+        build_image(docker_install_version=docker_install_version)
         return
 
     if platform is None:
