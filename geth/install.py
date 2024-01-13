@@ -466,10 +466,12 @@ def generate_dockerfile(docker_install_version=None) -> str:
     template = template.replace("${GETH_VERSION}", docker_install_version)
     template = template.replace("${COMMIT-HASH}", commit_hash) # ${COMMIT-HASH}
 
-    with open(os.path.expanduser(f"~/.py-geth/Dockerfile.{docker_install_version}"), "w") as f:
+    geth_docker_path = os.path.expanduser(f"~/.py-geth/Dockerfile.{docker_install_version}")
+
+    with open(geth_docker_path, "w") as f:
         f.write(template)
 
-    print(f"Generated Dockerfile for geth {docker_install_version}/{commit_hash} at ~/.py-geth/Dockerfile!")
+    print(f"Generated Dockerfile for geth {docker_install_version}/{commit_hash} at {geth_docker_path}!")
     return docker_install_version
 
 def build_image(docker_install_version=None):
@@ -484,10 +486,12 @@ def build_image(docker_install_version=None):
         return
     except docker.errors.ImageNotFound:
         pass
+
+    geth_docker_path = os.path.expanduser(f"~/.py-geth/Dockerfile.{docker_install_version}")
     
     # build image
     print(f"Building image py-geth:{docker_install_version}...")
-    client.images.build(path=os.path.expanduser("~/.py-geth"), tag=f"py-geth:{docker_install_version}")
+    client.images.build(path=geth_docker_path, tag=f"py-geth:{docker_install_version}")
     
     print(f"Successfully built image py-geth:{docker_install_version}!")
 
