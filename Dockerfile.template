@@ -11,8 +11,8 @@ RUN apk update && apk add --no-cache wget
 # Download and install Ethereum Geth binary (the plan is to keep updating this)
 RUN wget https://gethstore.blob.core.windows.net/builds/geth-linux-${PLATFORM}-${GETH_VERSION}-${COMMIT-HASH}.tar.gz -O /tmp/geth.tar.gz && \
     tar -zxvf /tmp/geth.tar.gz -C /tmp/ && \
-    mv /tmp/geth-linux-amd64-1.11.10-3e064192/geth /usr/local/bin/geth && \
-    rm -rf /tmp/geth.tar.gz /tmp/geth-linux-amd64-1.11.10-3e064192
+    mv /tmp/geth-linux-${PLATFORM}-${GETH_VERSION}-${COMMIT-HASH}/geth /usr/local/bin/geth && \
+    rm -rf /tmp/geth.tar.gz /tmp/geth-linux-${PLATFORM}-${GETH_VERSION}-${COMMIT-HASH}
 
 # Expose Ethereum network ports
 EXPOSE 8545 8546 30303 30303/udp
