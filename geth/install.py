@@ -440,31 +440,23 @@ def generate_dockerfile(docker_install_version=None) -> str:
 
     commit_hash = commit_hash[:8]
 
-    # https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.13.10-bc0be1b1.tar.gz
     gethstore_url = f"https://gethstore.blob.core.windows.net/builds/geth-linux-{architecture}-{docker_install_version}-{commit_hash}.tar.gz"
 
     check_existence = requests.head(gethstore_url)
     if check_existence.status_code != 200:
         raise ValueError(f"Unable to find binary at: {gethstore_url}")
     
-    # check if file Dockerfile.template exists, if not, download from github
-    if not os.path.exists(os.path.expanduser("~/.py-geth/Dockerfile.template")):
-        # for now
-        dockerfile_template_url = "https://raw.githubusercontent.com/0x0elliot/py-geth/0x0elliot/py-geth-docker/Dockerfile.template"
-        r = requests.get(dockerfile_template_url)
-        if r.status_code != 200:
-            raise ValueError(f"Unable to download Dockerfile.template from github: {r.status_code}")
-        
-        with open(os.path.expanduser("~/.py-geth/Dockerfile.template"), "w") as f:
-            f.write(r.text)
 
-    # get Dockerfile.template at ~/.py-geth/Dockerfile.template
-    with open(os.path.expanduser(f"~/.py-geth/Dockerfile.template"), "r") as f:
-        template = f.read()
+    dockerfile_template_url = "https://raw.githubusercontent.com/0x0elliot/py-geth/0x0elliot/py-geth-docker/Dockerfile.template"
+    r = requests.get(dockerfile_template_url)
+    if r.status_code != 200:
+        raise ValueError(f"Unable to download Dockerfile.template from github: {r.status_code}")    
+
+    template = r.text
     
     template = template.replace("${PLATFORM}", architecture)
     template = template.replace("${GETH_VERSION}", docker_install_version)
-    template = template.replace("${COMMIT-HASH}", commit_hash) # ${COMMIT-HASH}
+    template = template.replace("${COMMIT-HASH}", commit_hash)
 
     geth_docker_path = os.path.expanduser(f"~/.py-geth/{docker_install_version}")
     if not os.path.exists(geth_docker_path):
