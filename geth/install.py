@@ -446,7 +446,6 @@ def generate_dockerfile(docker_install_version=None) -> str:
     if check_existence.status_code != 200:
         raise ValueError(f"Unable to find binary at: {gethstore_url}")
     
-
     dockerfile_template_url = "https://raw.githubusercontent.com/0x0elliot/py-geth/0x0elliot/py-geth-docker/Dockerfile.template"
     r = requests.get(dockerfile_template_url)
     if r.status_code != 200:
@@ -525,7 +524,8 @@ def install_geth(identifier, platform=None, docker=False, docker_install_version
 
 if __name__ == "__main__":
     try:
-        identifier = sys.argv[1]
+        identifier: str = sys.argv[1]
+        docker: bool = False
         if len(sys.argv) > 2:
             docker = sys.argv[2] == "docker"
     
