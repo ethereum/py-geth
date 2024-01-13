@@ -6,6 +6,7 @@ import functools
 import os
 import stat
 import subprocess
+import requests
 import sys
 import tarfile
 
@@ -376,11 +377,87 @@ INSTALL_FUNCTIONS = {
         V1_13_8: install_v1_13_8,
         V1_13_9: install_v1_13_9,
         V1_13_10: install_v1_13_10,
-    },
+    }
 }
 
+def map_architecture(architecture: str):
+    architecture_mapping = {
+        "x86_64": "amd64",
+        "armv7l": "arm",
+        "aarch64": "arm64",
+    }
 
-def install_geth(identifier, platform=None):
+    if architecture not in architecture_mapping:
+        raise ValueError(f"Unknown architecture: {architecture}")
+    
+    return architecture_mapping[architecture]
+
+def generate_dockerfile(docker_install_version=None):
+    GITHUB_API = "https://api.github.com/repos/ethereum/go-ethereum/"
+
+    if docker_install_version is None:
+        docker_install_version = "latest"
+    else:
+        docker_install_version = f"tags/{docker_install_version}"
+
+    r = requests.get(f"{GITHUB_API}/{docker_install_version}")
+    if r.status_code == 404:
+        raise ValueError(f"Unable to find docker install version: {docker_install_version}")
+    elif r.status_code != 200:
+        raise ValueError(f"Unexpected status code while checking for geth versions: {r.status_code}")
+    
+    release_data = r.json()
+    if docker_install_version == "latest":
+        docker_install_version = release_data.get("tag_name")
+        commit_tag = release_data.get("target_commitish")
+
+    if docker_install_version is None or commit_tag is None:
+        raise ValueError(f"Unable to find docker install version/commit tag: {docker_install_version}/{commit_tag}")
+    
+    COMMIT_HASH_API = GITHUB_API + "git/refs/heads/" + commit_tag
+    r = requests.get(COMMIT_HASH_API)
+    if r.status_code != 200:
+        raise ValueError(f"Unexpected status code while checking for commit hash: {r.status_code}")
+    
+    commit_data = r.json()
+    commit_hash = commit_data.get("object", {}).get("sha")
+    if commit_hash is None:
+        raise ValueError(f"Unable to find commit hash: {commit_hash}")
+
+    # detect arm or amd64
+    arc = os.uname().machine
+    architecture = map_architecture(arc)
+
+    if docker_install_version.startswith("tags/"):
+        docker_install_version = docker_install_version[5:]
+
+    # https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.13.10-bc0be1b1.tar.gz
+    gethstore_url = f"https://gethstore.blob.core.windows.net/builds/geth-linux-{architecture}-{docker_install_version}-{commit_hash}.tar.gz"
+
+    check_existence = requests.head(gethstore_url)
+    if check_existence.status_code != 200:
+        raise ValueError(f"Unable to find binary at: {gethstore_url}")
+
+    # upload this somewhere
+    with open("Dockerfile.template", "r") as f:
+        template = f.read()
+    
+    template = template.replace("${PLATFORM}", architecture)
+    template = template.replace("${VERSION}", docker_install_version)
+    template = template.replace("${COMMIT_HASH}", commit_hash[:8])
+
+    with open("Dockerfile", "w") as f:
+        f.write(template)
+
+    print(f"Generated Dockerfile for geth {docker_install_version} ({commit_hash[:8]})")
+
+
+def install_geth(identifier, platform=None, docker=False, docker_install_version=None):
+    if docker:
+        # for testing purposes
+        generate_dockerfile(docker_install_version=docker_install_version)
+        return
+
     if platform is None:
         platform = get_platform()
 
@@ -403,10 +480,13 @@ def install_geth(identifier, platform=None):
 if __name__ == "__main__":
     try:
         identifier = sys.argv[1]
+        if len(sys.argv) > 2:
+            docker = sys.argv[2]
+    
     except IndexError:
         print(
             "Invocation error. Should be invoked as `python -m geth.install <release-tag>`"  # noqa: E501
         )
         sys.exit(1)
 
-    install_geth(identifier)
+    install_geth(identifier, docker=docker)
