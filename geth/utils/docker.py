@@ -108,7 +108,7 @@ def stop_container(container: docker.models.containers.Container):
     container.remove()
 
 # returns a list of all containers using image_name
-def image_to_containers(image_name: str, running=False) -> List[docker.models.containers.Container]:
+def image_to_containers(image_name: str) -> List[docker.models.containers.Container]:
     if image_name == "latest":
         image_name = verify_and_get_tag()
 
@@ -121,7 +121,6 @@ def image_to_containers(image_name: str, running=False) -> List[docker.models.co
         all=True, 
         filters={
             "ancestor": image_name,
-            "status": "running" if running else "all"
         }
     )
 
@@ -135,10 +134,6 @@ def fix_containers(image_name: str):
     for container in containers:
         container.stop()
         container.remove()
-
-def check_image_container(image_name: str):
-    containers = image_to_containers(image_name, running=True)
-    return len(containers) > 0
 
 # image must be existing
 # this function assumes that image_name has

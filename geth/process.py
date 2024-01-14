@@ -127,7 +127,7 @@ class BaseGethProcess(object):
         if self.docker:
             stop_container(self.container)
 
-        if self.proc.poll() is None:
+        if self.proc.poll() is None and not self.docker:
             kill_proc(self.proc)
 
         self.is_running = False
