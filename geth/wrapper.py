@@ -167,7 +167,7 @@ def construct_popen_command(
         )
     builder = CommandBuilder()
 
-    if nice and is_nice_available():
+    if nice and is_nice_available() and not docker:
         builder.extend(("nice", "-n", "20"))
 
     builder.append(geth_executable)
