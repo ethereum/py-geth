@@ -97,7 +97,6 @@ def construct_test_chain_kwargs(**overrides):
 def get_geth_binary_path():
     return os.environ.get("GETH_BINARY", "geth")
 
-
 class CommandBuilder:
     def __init__(self):
         self.command = []
