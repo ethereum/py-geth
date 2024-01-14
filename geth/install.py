@@ -6,10 +6,10 @@ import functools
 import os
 import stat
 import subprocess
-import docker
-import requests
 import sys
 import tarfile
+
+from geth.utils.docker import image_fix
 
 V1_11_0 = "v1.11.0"
 V1_11_1 = "v1.11.1"
@@ -380,102 +380,6 @@ INSTALL_FUNCTIONS = {
         V1_13_10: install_v1_13_10,
     }
 }
-
-def map_architecture(architecture: str):
-    architecture_mapping = {
-        "x86_64": "amd64",
-        "armv7l": "arm",
-        "arm64": "arm64",
-        "aarch64": "arm64",
-        "amd64": "amd64"
-    }
-
-    if architecture not in architecture_mapping:
-        raise ValueError(f"Unknown architecture: {architecture}")
-    
-    return architecture_mapping[architecture]
-
-# returns the latest version of geth
-def verify_and_get_tag(docker_install_version=None) -> str:
-    # if docker_install_version="latest", return latest tag
-
-    GITHUB_API = "https://api.github.com/repos/ethereum/go-ethereum/"
-
-    if docker_install_version is None:
-        docker_install_version = "latest"
-    else:
-        docker_install_version = f"{docker_install_version}"
-
-    RELEASES_API = GITHUB_API + "releases/"
-
-    release_url = f"{RELEASES_API}{docker_install_version}"
-
-    r = requests.get(release_url)
-    if r.status_code == 404:
-        raise ValueError(f"Unable to find docker install version: {docker_install_version} from URL: {release_url}")
-    elif r.status_code != 200:
-        raise ValueError(f"Unexpected status code while checking for geth versions: {r.status_code}")
-    
-    release_data = r.json()
-    if docker_install_version == "latest":
-        docker_install_version = release_data.get("tag_name")
-        commit_tag = release_data.get("target_commitish")
-
-    if docker_install_version is None or commit_tag is None:
-        raise ValueError(f"Unable to find docker install version/commit tag: {docker_install_version}/{commit_tag}")
-   
-    # detect arm or amd64
-    arc = os.uname().machine
-    architecture = map_architecture(arc)
-
-    # check if image ethereum/client-go:{docker_install_version}-{architecture} exists
-    repository = "ethereum/client-go"
-    tag = f"{docker_install_version}-{architecture}"
-
-    # check if tag exists on docker hub
-    image_url = f"https://hub.docker.com/v2/repositories/{repository}/tags/{tag}"
-    r = requests.head(image_url)
-    if r.status_code != 200:
-        raise ValueError(f"Unable to find docker image {tag} from URL: {image_url}")
-    
-    total_image_tag = f"{repository}:{tag}"
-
-    return total_image_tag
-
-# return image tag (useful for external use)
-# just in case, "latest" was given
-def image_fix(docker_install_version=None, docker_image_tag=None) -> str:
-    tag = docker_image_tag
-    if tag is None:
-        # get the latest version of geth
-        tag = verify_and_get_tag(docker_install_version=docker_install_version)
-
-    # build image
-    client = docker.from_env()
-    
-    # check if image exists
-    try:
-        client.images.get(tag)
-        print(f"Image already exists: {tag}")
-    except docker.errors.ImageNotFound:
-        print(f"Pulling image: {tag}")
-        try:
-            client.images.pull(tag)
-        except docker.errors.APIError as e:
-            raise ValueError(f"Unable to pull image: {tag}") from e
-
-    # create folder with geth version in ~/.py-geth
-    geth_version = tag.split(":")[1]
-    path = os.path.join(os.path.expanduser("~"), ".py-geth", geth_version, "geth")
-    ethereum_path = os.path.join(os.path.expanduser("~"), ".ethereum")
-
-    if not os.path.exists(path):
-        os.makedirs(path)
-    
-    if not os.path.exists(ethereum_path):
-        os.makedirs(ethereum_path)
-    
-    return tag
 
 def install_geth(identifier, platform=None, docker=False, docker_install_version=None):
     if docker:

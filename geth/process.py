@@ -1,5 +1,6 @@
 import logging
 import os
+import docker
 import socket
 import subprocess
 import time
@@ -52,6 +53,7 @@ logger = logging.getLogger(__name__)
 
 class BaseGethProcess(object):
     _proc = None
+    container = None
 
     def __init__(
         self,
@@ -71,6 +73,10 @@ class BaseGethProcess(object):
     def start(self):
         if self.is_running:
             raise ValueError("Already running")
+        
+        if self.docker:
+            self.start_docker()
+
         self.is_running = True
 
         logger.info("Launching geth: %s", " ".join(self.command))
@@ -80,6 +86,9 @@ class BaseGethProcess(object):
             stdout=self.stdout,
             stderr=self.stderr,
         )
+    
+    def start_docker(self):
+        
 
     def __enter__(self):
         self.start()

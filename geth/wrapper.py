@@ -94,7 +94,6 @@ def construct_test_chain_kwargs(**overrides):
 
     return overrides
 
-
 def get_geth_binary_path():
     return os.environ.get("GETH_BINARY", "geth")
 
@@ -147,7 +146,7 @@ def construct_popen_command(
     tx_pool_global_slots=None,
     tx_pool_price_limit=None,
     cache=None,
-    gcmode=None,
+    gcmode=None
 ):
     if geth_executable is None:
         geth_executable = get_geth_binary_path()
@@ -156,6 +155,7 @@ def construct_popen_command(
         raise ValueError(
             "No geth executable found.  Please ensure geth is installed and "
             "available on your PATH or use the GETH_BINARY environment variable"
+            "Or else, use the docker flag to run geth in a docker container"
         )
 
     if ipc_api is not None:
