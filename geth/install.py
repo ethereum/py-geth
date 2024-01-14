@@ -396,7 +396,7 @@ def map_architecture(architecture: str):
     return architecture_mapping[architecture]
 
 # returns the latest version of geth
-def verify_to_tag(docker_install_version=None) -> str:
+def verify_and_get_tag(docker_install_version=None) -> str:
     # if docker_install_version="latest", return latest tag
 
     GITHUB_API = "https://api.github.com/repos/ethereum/go-ethereum/"
@@ -442,9 +442,11 @@ def verify_to_tag(docker_install_version=None) -> str:
 
     return total_image_tag
 
-def image_fix(docker_install_version=None):
+# return image tag (useful for external use)
+# just in case, "latest" was given
+def image_fix(docker_install_version=None) -> str:
     # get the latest version of geth
-    tag = verify_to_tag(docker_install_version=docker_install_version)
+    tag = verify_and_get_tag(docker_install_version=docker_install_version)
 
     # build image
     client = docker.from_env()
@@ -459,6 +461,19 @@ def image_fix(docker_install_version=None):
             client.images.pull(tag)
         except docker.errors.APIError as e:
             raise ValueError(f"Unable to pull image: {tag}") from e
+    
+    # create folder with geth version in ~/.py-geth
+    geth_version = tag.split(":")[1]
+    path = os.path.join(os.path.expanduser("~"), ".py-geth", geth_version, "geth")
+    ethereum_path = os.path.join(os.path.expanduser("~"), ".ethereum")
+
+    if not os.path.exists(path):
+        os.makedirs(path)
+    
+    if not os.path.exists(ethereum_path):
+        os.makedirs(ethereum_path)
+    
+    return tag
 
 def install_geth(identifier, platform=None, docker=False, docker_install_version=None):
     if docker:
