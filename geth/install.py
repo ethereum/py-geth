@@ -444,9 +444,11 @@ def verify_and_get_tag(docker_install_version=None) -> str:
 
 # return image tag (useful for external use)
 # just in case, "latest" was given
-def image_fix(docker_install_version=None) -> str:
-    # get the latest version of geth
-    tag = verify_and_get_tag(docker_install_version=docker_install_version)
+def image_fix(docker_install_version=None, docker_image_tag=None) -> str:
+    tag = docker_image_tag
+    if tag is None:
+        # get the latest version of geth
+        tag = verify_and_get_tag(docker_install_version=docker_install_version)
 
     # build image
     client = docker.from_env()
@@ -461,7 +463,7 @@ def image_fix(docker_install_version=None) -> str:
             client.images.pull(tag)
         except docker.errors.APIError as e:
             raise ValueError(f"Unable to pull image: {tag}") from e
-    
+
     # create folder with geth version in ~/.py-geth
     geth_version = tag.split(":")[1]
     path = os.path.join(os.path.expanduser("~"), ".py-geth", geth_version, "geth")
