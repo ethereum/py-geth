@@ -235,14 +235,14 @@ class BaseGethProcess(object):
 
 
 class MainnetGethProcess(BaseGethProcess):
-    def __init__(self, geth_kwargs=None):
+    def __init__(self, geth_kwargs=None, docker=False):
         if geth_kwargs is None:
             geth_kwargs = {}
 
         if "data_dir" in geth_kwargs:
             raise ValueError("You cannot specify `data_dir` for a MainnetGethProcess")
 
-        super(MainnetGethProcess, self).__init__(geth_kwargs)
+        super(MainnetGethProcess, self).__init__(geth_kwargs, docker=docker)
 
     @property
     def data_dir(self):
