@@ -9,6 +9,8 @@ client = docker.from_env()
 # one geth container running at a time for simplicity, for a single version
 # multiple geth containers can be unstable and unpredictable for now
 
+# and right now, we will only be supporting linux/unix systems for simplicity
+
 def map_architecture(architecture: str):
     architecture_mapping = {
         "x86_64": "amd64",
@@ -107,6 +109,9 @@ def stop_containers(image_name: str):
 
 # returns a list of all containers using image_name
 def image_to_containers(image_name: str) -> List[docker.models.containers.Container]:
+    if image_name == "latest":
+        image_name = verify_and_get_tag()
+
     try:
         client.images.get(image_name)
     except docker.errors.ImageNotFound:
@@ -118,21 +123,13 @@ def image_to_containers(image_name: str) -> List[docker.models.containers.Contai
     else:
         return containers
 
-# returns if container exists and if so, the container id
-def check_container_existence(version: str) ->(bool, str):
-    docker_info_path = os.path.join(os.path.expanduser("~"), ".py-geth", version, ".docker_info")
-    if not os.path.exists(docker_info_path):
-        return False, None
-    
-    with open(docker_info_path, "r") as f:
-        container_id = f.read()
-    
-    try:
-        client.containers.get(container_id)
-    except docker.errors.NotFound:
-        return False, None
-    
-    return True, container_id
+def fix_containers(image_name: str):
+    containers = image_to_containers(image_name)
+    for container in containers:
+        container.stop()
+        container.remove()
+
+
 
 # image must be existing
 # this function assumes that image_name has
@@ -151,12 +148,8 @@ def start_container(image_name: str):
 
     if not os.path.exists(ethereum_path):
         os.makedirs(ethereum_path)
-
-    docker_info_path = os.path.join(os.path.expanduser("~"), ".py-geth", image_version, ".docker_info")
-
-    # check if container already exists in ~/.py-geth/{image_version}/.docker_info
-    with open(docker_info_path, "r") as f:
-        container_id = f.read()
+    
+    fix_containers(image_name)
 
     # build container with image_name
     # and mount ethereum_path to /root/.ethereum
@@ -170,8 +163,5 @@ def start_container(image_name: str):
             }
         }
     )
-
-    with open(docker_info_path, "w") as f:
-        f.write(container.id)
 
     return container

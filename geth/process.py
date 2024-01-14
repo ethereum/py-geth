@@ -6,6 +6,8 @@ import subprocess
 import time
 import warnings
 
+from geth.utils.docker import verify_and_get_tag
+
 try:
     from urllib.request import (
         URLError,
@@ -61,12 +63,20 @@ class BaseGethProcess(object):
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
+        docker=False,
+        client_version_for_docker=None,
     ):
         self.geth_kwargs = geth_kwargs
         self.command = construct_popen_command(**geth_kwargs)
         self.stdin = stdin
         self.stdout = stdout
         self.stderr = stderr
+        self.docker = docker
+        self.client: docker.DockerClient = None
+        self.client_version_for_docker = client_version_for_docker
+        if self.docker:
+            # exposing for easier testing
+            self.client = docker.from_env()
 
     is_running = False
 
@@ -88,8 +98,16 @@ class BaseGethProcess(object):
         )
     
     def start_docker(self):
+        if self.client_version_for_docker is None:
+            # default to latest
+            self.client_version_for_docker = "latest"
         
+        # check if image exists
+        image_name = verify_and_get_tag(self.client_version_for_docker)
 
+        if self.client_version_for_docker == "latest":
+            self.client_version_for_docker = image_name.split(":")[1]
+        
     def __enter__(self):
         self.start()
         return self
