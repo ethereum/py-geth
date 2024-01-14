@@ -396,7 +396,7 @@ def map_architecture(architecture: str):
     return architecture_mapping[architecture]
 
 # returns the latest version of geth
-def verify_version_and_get_tag(docker_install_version=None) -> str:
+def verify_to_tag(docker_install_version=None) -> str:
     # if docker_install_version="latest", return latest tag
 
     GITHUB_API = "https://api.github.com/repos/ethereum/go-ethereum/"
@@ -442,9 +442,9 @@ def verify_version_and_get_tag(docker_install_version=None) -> str:
 
     return total_image_tag
 
-def build_container(docker_install_version=None):
+def image_fix(docker_install_version=None):
     # get the latest version of geth
-    tag = verify_version_and_get_tag(docker_install_version=docker_install_version)
+    tag = verify_to_tag(docker_install_version=docker_install_version)
 
     # build image
     client = docker.from_env()
@@ -452,28 +452,18 @@ def build_container(docker_install_version=None):
     # check if image exists
     try:
         client.images.get(tag)
+        print(f"Image already exists: {tag}")
     except docker.errors.ImageNotFound:
         print(f"Pulling image: {tag}")
         try:
             client.images.pull(tag)
         except docker.errors.APIError as e:
             raise ValueError(f"Unable to pull image: {tag}") from e
-    
-    # check if container exists
-    try:
-        client.containers.get(tag)
-    except docker.errors.NotFound:
-        # create container
-        print(f"Creating container: {tag}")
-        try:
-            client.containers.create(tag, detach=True)
-        except docker.errors.APIError as e:
-            raise ValueError(f"Unable to create container: {tag}") from e
 
 def install_geth(identifier, platform=None, docker=False, docker_install_version=None):
     if docker:
         # for testing purposes
-        build_container(docker_install_version=docker_install_version)
+        image_fix(docker_install_version=docker_install_version)
         return
 
     if platform is None:
