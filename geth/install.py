@@ -6,6 +6,7 @@ import functools
 import os
 import stat
 import subprocess
+import docker
 import requests
 import sys
 import tarfile
@@ -395,7 +396,9 @@ def map_architecture(architecture: str):
     return architecture_mapping[architecture]
 
 # returns the latest version of geth
-def generate_dockerfile(docker_install_version=None) -> str:
+def verify_version_and_get_tag(docker_install_version=None) -> str:
+    # if docker_install_version="latest", return latest tag
+
     GITHUB_API = "https://api.github.com/repos/ethereum/go-ethereum/"
 
     if docker_install_version is None:
@@ -420,87 +423,57 @@ def generate_dockerfile(docker_install_version=None) -> str:
 
     if docker_install_version is None or commit_tag is None:
         raise ValueError(f"Unable to find docker install version/commit tag: {docker_install_version}/{commit_tag}")
-    
-    COMMIT_HASH_API = GITHUB_API + "git/refs/heads/" + commit_tag
-    r = requests.get(COMMIT_HASH_API)
-    if r.status_code != 200:
-        raise ValueError(f"Unexpected status code while checking for commit hash: {r.status_code}")
-    
-    commit_data = r.json()
-    commit_hash = commit_data.get("object", {}).get("sha")
-    if commit_hash is None:
-        raise ValueError(f"Unable to find commit hash: {commit_hash}")
-
+   
     # detect arm or amd64
     arc = os.uname().machine
     architecture = map_architecture(arc)
 
-    if docker_install_version.startswith("v"):
-        docker_install_version = docker_install_version[1:]
+    # check if image ethereum/client-go:{docker_install_version}-{architecture} exists
+    repository = "ethereum/client-go"
+    tag = f"{docker_install_version}-{architecture}"
 
-    commit_hash = commit_hash[:8]
-
-    gethstore_url = f"https://gethstore.blob.core.windows.net/builds/geth-linux-{architecture}-{docker_install_version}-{commit_hash}.tar.gz"
-
-    check_existence = requests.head(gethstore_url)
-    if check_existence.status_code != 200:
-        raise ValueError(f"Unable to find binary at: {gethstore_url}")
-    
-    dockerfile_template_url = "https://raw.githubusercontent.com/0x0elliot/py-geth/0x0elliot/py-geth-docker/Dockerfile.template"
-    r = requests.get(dockerfile_template_url)
+    # check if tag exists on docker hub
+    image_url = f"https://hub.docker.com/v2/repositories/{repository}/tags/{tag}"
+    r = requests.head(image_url)
     if r.status_code != 200:
-        raise ValueError(f"Unable to download Dockerfile.template from github: {r.status_code}")    
-
-    template = r.text
+        raise ValueError(f"Unable to find docker image {tag} from URL: {image_url}")
     
-    template = template.replace("${PLATFORM}", architecture)
-    template = template.replace("${GETH_VERSION}", docker_install_version)
-    template = template.replace("${COMMIT-HASH}", commit_hash)
+    total_image_tag = f"{repository}:{tag}"
 
-    geth_docker_path = os.path.expanduser(f"~/.py-geth/{docker_install_version}")
-    if not os.path.exists(geth_docker_path):
-        os.makedirs(geth_docker_path)
+    return total_image_tag
 
-    with open(f"{geth_docker_path}/Dockerfile", "w") as f:
-        f.write(template)
+def build_container(docker_install_version=None):
+    # get the latest version of geth
+    tag = verify_version_and_get_tag(docker_install_version=docker_install_version)
 
-    print(f"Generated Dockerfile for geth {docker_install_version}/{commit_hash} at {geth_docker_path}!")
-    return docker_install_version
-
-def build_image(docker_install_version=None):
-    docker_install_version = generate_dockerfile(docker_install_version=docker_install_version)
-
-    # check if "py-geth:{docker_install_version}" exists
-    import docker
-    client = docker.from_env()
-
-    tag = f"py-geth:{docker_install_version}"
-
-    try:
-        client.images.get(tag)
-        print(f"py-geth:{docker_install_version} already exists, skipping build...")
-        return
-    except docker.errors.ImageNotFound:
-        pass
-
-    geth_docker_folder = os.path.expanduser(f"~/.py-geth/{docker_install_version}")
-    
     # build image
-    print(f"Building image {tag} at {geth_docker_folder}...")
-    client.images.build(path=geth_docker_folder, tag=tag)
-
+    client = docker.from_env()
+    
+    # check if image exists
     try:
-        # check if image exists
         client.images.get(tag)
     except docker.errors.ImageNotFound:
-        raise ValueError(f"Unable to find image {tag} after building it!")
+        print(f"Pulling image: {tag}")
+        try:
+            client.images.pull(tag)
+        except docker.errors.APIError as e:
+            raise ValueError(f"Unable to pull image: {tag}") from e
     
-    print(f"Successfully built image {tag}!")
+    # check if container exists
+    try:
+        client.containers.get(tag)
+    except docker.errors.NotFound:
+        # create container
+        print(f"Creating container: {tag}")
+        try:
+            client.containers.create(tag, detach=True)
+        except docker.errors.APIError as e:
+            raise ValueError(f"Unable to create container: {tag}") from e
 
 def install_geth(identifier, platform=None, docker=False, docker_install_version=None):
     if docker:
         # for testing purposes
-        build_image(docker_install_version=docker_install_version)
+        build_container(docker_install_version=docker_install_version)
         return
 
     if platform is None:
@@ -525,9 +498,9 @@ def install_geth(identifier, platform=None, docker=False, docker_install_version
 if __name__ == "__main__":
     try:
         identifier: str = sys.argv[1]
-        docker: bool = False
+        docker_option: bool = False
         if len(sys.argv) > 2:
-            docker = sys.argv[2] == "docker"
+            docker_option = sys.argv[2] == "docker"
     
     except IndexError:
         print(
@@ -535,4 +508,4 @@ if __name__ == "__main__":
         )
         sys.exit(1)
 
-    install_geth(identifier, docker=docker)
+    install_geth(identifier, docker=docker_option)
