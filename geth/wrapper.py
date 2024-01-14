@@ -146,10 +146,14 @@ def construct_popen_command(
     tx_pool_global_slots=None,
     tx_pool_price_limit=None,
     cache=None,
-    gcmode=None
+    gcmode=None,
+    docker=False
 ):
     if geth_executable is None:
         geth_executable = get_geth_binary_path()
+
+    if docker:
+        geth_executable = " "
 
     if not is_executable_available(geth_executable):
         raise ValueError(

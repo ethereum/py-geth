@@ -1,9 +1,12 @@
 import os
 import docker
+import logging
 import requests
 from typing import List
 
 client = docker.from_env()
+
+logger = logging.getLogger(__name__)
 
 # the philosophy of this module is that, for now we will only support
 # one geth container running at a time for simplicity, for a single version
@@ -83,9 +86,9 @@ def image_fix(docker_install_version=None, docker_image_tag=None) -> str:
     # check if image exists
     try:
         client.images.get(tag)
-        print(f"Image already exists: {tag}")
+        logger.info(f"Image already exists: {tag}")
     except docker.errors.ImageNotFound:
-        print(f"Pulling image: {tag}")
+        logger.info(f"Pulling image: {tag}")
         try:
             client.images.pull(tag)
         except docker.errors.APIError as e:
@@ -129,12 +132,10 @@ def fix_containers(image_name: str):
         container.stop()
         container.remove()
 
-
-
 # image must be existing
 # this function assumes that image_name has
 # the version number in it as it's tag
-def start_container(image_name: str):
+def start_container(image_name: str, commands: List[str] = []):
     # check if image exists
     try:
         client.images.get(image_name)
@@ -161,7 +162,8 @@ def start_container(image_name: str):
                 "bind": "/root/.ethereum", 
                 "mode": "rw"
             }
-        }
+        },
+        command=" ".join(commands)
     )
 
     return container

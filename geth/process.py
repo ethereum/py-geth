@@ -6,7 +6,7 @@ import subprocess
 import time
 import warnings
 
-from geth.utils.docker import verify_and_get_tag
+from geth.utils.docker import start_container, verify_and_get_tag
 
 try:
     from urllib.request import (
@@ -67,7 +67,7 @@ class BaseGethProcess(object):
         client_version_for_docker=None,
     ):
         self.geth_kwargs = geth_kwargs
-        self.command = construct_popen_command(**geth_kwargs)
+        self.command = construct_popen_command(**geth_kwargs, docker=docker)
         self.stdin = stdin
         self.stdout = stdout
         self.stderr = stderr
@@ -83,13 +83,15 @@ class BaseGethProcess(object):
     def start(self):
         if self.is_running:
             raise ValueError("Already running")
-        
+
         if self.docker:
             self.start_docker()
 
         self.is_running = True
 
         logger.info("Launching geth: %s", " ".join(self.command))
+
+        # i will let self.proc be empty if docker is True
         self.proc = subprocess.Popen(
             self.command,
             stdin=self.stdin,
@@ -101,12 +103,17 @@ class BaseGethProcess(object):
         if self.client_version_for_docker is None:
             # default to latest
             self.client_version_for_docker = "latest"
-        
+
         # check if image exists
         image_name = verify_and_get_tag(self.client_version_for_docker)
 
         if self.client_version_for_docker == "latest":
             self.client_version_for_docker = image_name.split(":")[1]
+
+        start_container(
+            image_name,
+            commands=self.command,
+        )
         
     def __enter__(self):
         self.start()
