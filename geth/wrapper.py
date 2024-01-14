@@ -155,11 +155,10 @@ def construct_popen_command(
     if docker:
         geth_executable = " "
 
-    if not is_executable_available(geth_executable):
+    if not is_executable_available(geth_executable) and not docker:
         raise ValueError(
             "No geth executable found.  Please ensure geth is installed and "
             "available on your PATH or use the GETH_BINARY environment variable"
-            "Or else, use the docker flag to run geth in a docker container"
         )
 
     if ipc_api is not None:
