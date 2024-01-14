@@ -1,6 +1,6 @@
 import logging
 import os
-import docker
+import docker as dockerlib
 import socket
 import subprocess
 import time
@@ -72,11 +72,11 @@ class BaseGethProcess(object):
         self.stdout = stdout
         self.stderr = stderr
         self.docker = docker
-        self.client: docker.DockerClient = None
+        self.client: dockerlib.DockerClient = None
         self.client_version_for_docker = client_version_for_docker
-        if self.docker:
-            # exposing for easier testing
-            self.client = docker.from_env()
+        # if self.docker:
+        #     # exposing for easier testing
+        #     self.client = dockerlib.from_env()
 
     is_running = False
 
