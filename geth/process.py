@@ -93,12 +93,13 @@ class BaseGethProcess(object):
         logger.info("Launching geth: %s", " ".join(self.command))
 
         # i will let self.proc be empty if docker is True
-        self.proc = subprocess.Popen(
-            self.command,
-            stdin=self.stdin,
-            stdout=self.stdout,
-            stderr=self.stderr,
-        )
+        if not self.docker:
+            self.proc = subprocess.Popen(
+                self.command,
+                stdin=self.stdin,
+                stdout=self.stdout,
+                stderr=self.stderr,
+            )
     
     def start_docker(self):
         if self.client_version_for_docker is None:
@@ -127,8 +128,9 @@ class BaseGethProcess(object):
         if self.docker:
             stop_container(self.container)
 
-        if self.proc.poll() is None and not self.docker:
-            kill_proc(self.proc)
+        if not self.docker:
+            if self.proc.poll() is None:
+                kill_proc(self.proc)
 
         self.is_running = False
 
