@@ -78,6 +78,22 @@ def verify_and_get_tag(docker_install_version=None) -> str:
 # return image tag (useful for external use)
 # just in case, "latest" was given
 def image_fix(docker_install_version=None, docker_image_tag=None) -> str:
+    found_locally = False
+
+    # check all folders initialised in ~/.py-geth that start with "v"
+    path = os.path.join(os.path.expanduser("~"), ".py-geth")
+    if os.path.exists(path):
+        listed = os.listdir(path)
+        for folder in listed:
+            if folder.startswith("v"):
+                if docker_install_version is None:
+                    # use the first folder
+                    docker_install_version = folder
+                    architecture = map_architecture(os.uname().machine)
+                    docker_image_tag = f"ethereum/client-go:{docker_install_version}-{architecture}"
+                    # found_locally = True
+                    break
+
     tag = docker_image_tag
     if tag is None:
         # get the latest version of geth
