@@ -78,8 +78,6 @@ def verify_and_get_tag(docker_install_version=None) -> str:
 # return image tag (useful for external use)
 # just in case, "latest" was given
 def image_fix(docker_install_version=None, docker_image_tag=None) -> str:
-    found_locally = False
-
     # check all folders initialised in ~/.py-geth that start with "v"
     path = os.path.join(os.path.expanduser("~"), ".py-geth")
     if os.path.exists(path):
