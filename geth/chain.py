@@ -14,11 +14,37 @@ from .wrapper import (
 )
 
 
-def get_live_data_dir():
+def get_live_data_dir(docker=False, docker_geth_version=None):
     """
     `py-geth` needs a base directory to store it's chain data.  By default this is
     the directory that `geth` uses as it's `datadir`.
     """
+
+    if docker:
+        if docker_geth_version is None:
+            raise ValueError(
+                "Must specify `docker_geth_version` when using `docker=True`"
+            )
+        
+        if not docker_geth_version.startswith("v"):
+            docker_geth_version = f"v{docker_geth_version}"
+
+        data_dir = os.path.expanduser(
+            os.path.join(
+                "~",
+                ".py-geth",
+                docker_geth_version,
+                ".ethereum",
+            )
+        )
+
+        # check if the docker data dir exists
+        if not os.path.exists(data_dir):
+            raise ValueError(
+                "The docker data dir does not exist."
+                f" Are you sure that your volumes have been mounted at {data_dir}?"
+            )
+
     if sys.platform == "darwin":
         data_dir = os.path.expanduser(
             os.path.join(
@@ -54,7 +80,6 @@ def get_live_data_dir():
         )
     return data_dir
 
-
 def get_ropsten_data_dir():
     return os.path.abspath(
         os.path.expanduser(
@@ -70,11 +95,10 @@ def get_default_base_dir():
     return get_live_data_dir()
 
 
-def get_chain_data_dir(base_dir, name):
+def get_chain_data_dir(base_dir, name, docker=False):
     data_dir = os.path.abspath(os.path.join(base_dir, name))
     ensure_path_exists(data_dir)
     return data_dir
-
 
 def get_genesis_file_path(data_dir):
     return os.path.join(data_dir, "genesis.json")

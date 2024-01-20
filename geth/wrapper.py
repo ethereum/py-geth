@@ -327,15 +327,16 @@ def geth_wrapper(**geth_kwargs):
 
 
 def spawn_geth(
-    geth_kwargs, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    geth_kwargs, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, docker=False
 ):
-    command = construct_popen_command(**geth_kwargs)
+    command = construct_popen_command(**geth_kwargs, docker=docker)
 
-    proc = subprocess.Popen(
-        command,
-        stdin=stdin,
-        stdout=stdout,
-        stderr=stderr,
-    )
+    if not docker:
+        proc = subprocess.Popen(
+            command,
+            stdin=stdin,
+            stdout=stdout,
+            stderr=stderr,
+        )
 
     return command, proc

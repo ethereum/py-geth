@@ -64,7 +64,7 @@ class BaseGethProcess(object):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         docker=False,
-        client_version_for_docker=None,
+        geth_version_docker=None,
     ):
         self.geth_kwargs = geth_kwargs
         self.command = construct_popen_command(**geth_kwargs, docker=docker)
@@ -74,7 +74,7 @@ class BaseGethProcess(object):
         self.docker = docker
         self.client: dockerlib.DockerClient = None
         self.container: dockerlib.models.containers.Container = None
-        self.client_version_for_docker = client_version_for_docker
+        self.geth_version_docker = geth_version_docker
         if self.docker:
             # exposing for easier testing
             self.client = dockerlib.from_env()
@@ -102,15 +102,15 @@ class BaseGethProcess(object):
             )
     
     def start_docker(self):
-        if self.client_version_for_docker is None:
+        if self.geth_version_docker is None:
             # default to latest
-            self.client_version_for_docker = "latest"
+            self.geth_version_docker = "latest"
 
         # check if image exists
-        image_name = verify_and_get_tag(self.client_version_for_docker)
+        image_name = verify_and_get_tag(self.geth_version_docker)
 
-        if self.client_version_for_docker == "latest":
-            self.client_version_for_docker = image_name.split(":")[1]
+        if self.geth_version_docker == "latest":
+            self.geth_version_docker = image_name.split(":")[1]
 
         self.container = start_container(
             image_name,
@@ -252,7 +252,7 @@ class MainnetGethProcess(BaseGethProcess):
 
     @property
     def data_dir(self):
-        return get_live_data_dir()
+        return get_live_data_dir(self.docker, self.geth_version_docker)
 
 
 class LiveGethProcess(MainnetGethProcess):

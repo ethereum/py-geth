@@ -9,7 +9,7 @@ from .wrapper import (
 )
 
 
-def get_accounts(data_dir, **geth_kwargs):
+def get_accounts(data_dir, docker=False, **geth_kwargs):
     """
     Returns all geth accounts as tuple of hex encoded strings
 
@@ -17,7 +17,7 @@ def get_accounts(data_dir, **geth_kwargs):
     ... ('0x...', '0x...')
     """
     command, proc = spawn_geth(
-        dict(data_dir=data_dir, suffix_args=["account", "list"], **geth_kwargs)
+        dict(data_dir=data_dir, suffix_args=["account", "list"], **geth_kwargs, docker)
     )
     stdoutdata, stderrdata = proc.communicate()
 
