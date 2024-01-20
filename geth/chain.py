@@ -45,6 +45,8 @@ def get_live_data_dir(docker=False, docker_geth_version=None):
                 f" Are you sure that your volumes have been mounted at {data_dir}?"
             )
 
+        return data_dir
+
     if sys.platform == "darwin":
         data_dir = os.path.expanduser(
             os.path.join(
