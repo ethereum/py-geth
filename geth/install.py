@@ -381,11 +381,14 @@ INSTALL_FUNCTIONS = {
     }
 }
 
-def install_geth(identifier, platform=None, docker=False, docker_install_version=None):
+def install_geth(identifier=None, platform=None, docker=False, docker_install_version=None):
     if docker:
         # for testing purposes
         image_fix(docker_install_version=docker_install_version)
         return
+    
+    if identifier is None:
+        raise ValueError("Must specify a geth version to install if not using docker")
 
     if platform is None:
         platform = get_platform()

@@ -31,10 +31,12 @@ def map_architecture(architecture: str):
 # returns the latest version of geth
 def verify_and_get_tag(docker_install_version=None) -> str:
     # if docker_install_version="latest", return latest tag
+    print("Version specified: ", docker_install_version)
 
     # check all folders initialised in ~/.py-geth that start with "v"
     path = os.path.join(os.path.expanduser("~"), ".py-geth")
-    if os.path.exists(path) and docker_install_version is None:
+    if os.path.exists(path) and docker_install_version is None or docker_install_version == "latest":
+        print(f"Checking for geth versions in {path}")
         listed = os.listdir(path)
         for folder in listed:
             if folder.startswith("v"):
@@ -45,7 +47,10 @@ def verify_and_get_tag(docker_install_version=None) -> str:
                     with open(tag_path, "r") as f:
                         tag = f.read()
                     return tag
+                print(f"Warning: Unable to find .docker_tag in {tag_path}")
                 logger.warning(f"verify_and_get_tag - Unable to find .docker_tag in {tag_path}")
+    
+    print("Querying GitHub API for latest geth version")
 
     GITHUB_API = "https://api.github.com/repos/ethereum/go-ethereum/"
 
@@ -110,16 +115,17 @@ def image_fix(docker_install_version=None, docker_image_tag=None) -> str:
             raise ValueError(f"Unable to pull image: {tag}") from e
 
     # create folder with geth version in ~/.py-geth
-    geth_version = tag.split(":")[1]
+    geth_version = tag.split(":")[1].split("-")[0]
+
     ethereum_path = os.path.join(os.path.expanduser("~"), ".py-geth", geth_version, ".ethereum")
     tag_path = os.path.join(os.path.expanduser("~"), ".py-geth", geth_version, ".docker_tag")
 
-    if not os.path.exists(tag_path):
-        with open(tag_path, "w") as f:
-            f.write(tag)
-
     if not os.path.exists(ethereum_path):
         os.makedirs(ethereum_path)
+
+    if not os.path.exists(tag_path):
+        with open(tag_path, "w+") as f:
+            f.write(tag)
     
     return tag
 
