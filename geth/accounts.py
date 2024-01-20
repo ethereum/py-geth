@@ -17,7 +17,7 @@ def get_accounts(data_dir, docker=False, **geth_kwargs):
     ... ('0x...', '0x...')
     """
     command, proc = spawn_geth(
-        dict(data_dir=data_dir, suffix_args=["account", "list"], **geth_kwargs, docker)
+        dict(data_dir=data_dir, suffix_args=["account", "list"], **geth_kwargs), docker=docker
     )
     stdoutdata, stderrdata = proc.communicate()
 
