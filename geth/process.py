@@ -252,7 +252,7 @@ class MainnetGethProcess(BaseGethProcess):
 
     @property
     def data_dir(self):
-        return get_live_data_dir(self.docker, self.geth_version_docker)
+        return get_live_data_dir(docker=self.docker, docker_geth_version=self.geth_version_docker)
 
 
 class LiveGethProcess(MainnetGethProcess):
