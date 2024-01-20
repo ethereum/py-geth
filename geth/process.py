@@ -110,7 +110,7 @@ class BaseGethProcess(object):
         image_name = verify_and_get_tag(self.geth_version_docker)
 
         if self.geth_version_docker == "latest":
-            self.geth_version_docker = image_name.split(":")[1]
+            self.geth_version_docker = image_name.split(":")[1].split("-")[0]
 
         self.container = start_container(
             image_name,

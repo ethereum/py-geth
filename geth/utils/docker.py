@@ -35,19 +35,23 @@ def verify_and_get_tag(docker_install_version=None) -> str:
 
     # check all folders initialised in ~/.py-geth that start with "v"
     path = os.path.join(os.path.expanduser("~"), ".py-geth")
-    if os.path.exists(path) and docker_install_version is None or docker_install_version == "latest":
+    if os.path.exists(path): # and docker_install_version is None or docker_install_version == "latest":
         print(f"Checking for geth versions in {path}")
         listed = os.listdir(path)
         for folder in listed:
             if folder.startswith("v"):
-                docker_install_version = folder
-                # read folder/.docker_tag
-                tag_path = os.path.join(path, folder, ".docker_tag")
-                if os.path.exists(tag_path):
-                    with open(tag_path, "r") as f:
-                        tag = f.read()
-                    return tag
-                print(f"Warning: Unable to find .docker_tag in {tag_path}")
+                if docker_install_version == "latest" or docker_install_version is None:
+                    docker_install_version = folder
+
+                if (docker_install_version in folder or folder in docker_install_version):
+                    docker_install_version = folder
+                    # read folder/.docker_tag
+                    tag_path = os.path.join(path, folder, ".docker_tag")
+                    if os.path.exists(tag_path):
+                        with open(tag_path, "r") as f:
+                            tag = f.read()
+                        return tag
+                    print(f"Warning: Unable to find .docker_tag in {tag_path}")
                 logger.warning(f"verify_and_get_tag - Unable to find .docker_tag in {tag_path}")
     
     print("Querying GitHub API for latest geth version")
