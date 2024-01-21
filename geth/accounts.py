@@ -9,7 +9,7 @@ from .wrapper import (
 )
 
 
-def get_accounts(data_dir, docker=False, **geth_kwargs):
+def get_accounts(data_dir, docker_container=None, **geth_kwargs):
     """
     Returns all geth accounts as tuple of hex encoded strings
 
@@ -17,11 +17,32 @@ def get_accounts(data_dir, docker=False, **geth_kwargs):
     ... ('0x...', '0x...')
     """
     command, proc = spawn_geth(
-        dict(data_dir=data_dir, suffix_args=["account", "list"], **geth_kwargs), docker=docker
+        dict(data_dir=data_dir, suffix_args=["account", "list"], **geth_kwargs), docker_container=docker_container
     )
-    stdoutdata, stderrdata = proc.communicate()
 
-    if proc.returncode:
+    if docker_container is not None:
+        print("proc returned: ", proc)
+        exitcode = proc.exit_code
+
+        stderrdata, stdoutdata = "", ""
+
+        if exitcode != 0:
+            stderrdata = proc.output
+        else:
+            stdoutdata = proc.output
+
+        print("stdoutdata: ", stdoutdata)
+        print("stderrdata: ", stderrdata)
+        print("exitcode: ", exitcode)
+
+        condition = exitcode != 0
+
+    else:
+        stdoutdata, stderrdata = proc.communicate()
+        condition = proc.returncode != 0
+        exitcode = proc.returncode
+
+    if condition:
         if "no keys in store" in stderrdata.decode("utf-8"):
             return tuple()
         else:
@@ -29,7 +50,7 @@ def get_accounts(data_dir, docker=False, **geth_kwargs):
                 format_error_message(
                     "Error trying to list accounts",
                     command,
-                    proc.returncode,
+                    exitcode,
                     stdoutdata,
                     stderrdata,
                 )

@@ -147,7 +147,8 @@ class BaseGethProcess(object):
 
     @property
     def accounts(self):
-        return get_accounts(**self.geth_kwargs)
+        print("data_dir: ", self.data_dir)
+        return get_accounts(data_dir=self.data_dir, **self.geth_kwargs, docker_container=self.container)
 
     @property
     def rpc_enabled(self):

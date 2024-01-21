@@ -203,7 +203,10 @@ def construct_popen_command(
         builder.extend(("--ws.api", ws_api))
 
     if data_dir is not None:
-        builder.extend(("--datadir", data_dir))
+        if docker:
+            builder.extend(("--datadir", "/root/.ethereum"))
+        else:
+            builder.extend(("--datadir", data_dir))
 
     if max_peers is not None:
         builder.extend(("--maxpeers", max_peers))
@@ -327,11 +330,23 @@ def geth_wrapper(**geth_kwargs):
 
 
 def spawn_geth(
-    geth_kwargs, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, docker=False
+    geth_kwargs, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, docker_container=None
 ):
-    command = construct_popen_command(**geth_kwargs, docker=docker)
+    docker_opt = False
+    if docker_container is not None:
+        docker_opt = True
 
-    if not docker:
+    command = construct_popen_command(**geth_kwargs, docker=docker_opt)
+
+    if docker_opt:
+        # execute command in docker
+
+        command_str = " ".join(command)
+
+        command = "/usr/local/bin/geth" + command_str
+        print("Executing command: ", command)
+        proc = docker_container.exec_run(command, stdin=True, stdout=True, stderr=True)
+    else:
         proc = subprocess.Popen(
             command,
             stdin=stdin,
