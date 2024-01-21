@@ -1,5 +1,6 @@
 import os
 import docker
+import shutil
 import logging
 import requests
 from typing import List
@@ -164,6 +165,19 @@ def fix_containers(image_name: str):
     for container in containers:
         container.stop()
         container.remove()
+
+def cleanup_chaindata(version):
+    if version == "latest" or None:
+        raise ValueError("Cannot cleanup chaindata for latest/None version")
+
+    if not version.startswith("v"):
+        version = f"v{version}"
+    
+    path = os.path.join(os.path.expanduser("~"), ".py-geth", version, ".ethereum")
+    if os.path.exists(path):
+        logger.info(f"Cleaning up chaindata for version {version}")
+        shutil.rmtree(path)
+    
 
 # image must be existing
 # this function assumes that image_name has

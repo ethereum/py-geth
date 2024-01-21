@@ -6,7 +6,7 @@ import subprocess
 import time
 import warnings
 
-from geth.utils.docker import start_container, stop_container, verify_and_get_tag
+from geth.utils.docker import cleanup_chaindata, start_container, stop_container, verify_and_get_tag
 
 try:
     from urllib.request import (
@@ -116,6 +116,9 @@ class BaseGethProcess(object):
             image_name,
             commands=self.command,
         )
+
+    def cleanup_docker_chain_data(self):
+        cleanup_chaindata(self.geth_version_docker)
         
     def __enter__(self):
         self.start()
