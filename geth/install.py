@@ -9,6 +9,8 @@ import subprocess
 import sys
 import tarfile
 
+from geth.utils.docker import image_fix
+
 V1_11_0 = "v1.11.0"
 V1_11_1 = "v1.11.1"
 V1_11_2 = "v1.11.2"
@@ -376,11 +378,18 @@ INSTALL_FUNCTIONS = {
         V1_13_8: install_v1_13_8,
         V1_13_9: install_v1_13_9,
         V1_13_10: install_v1_13_10,
-    },
+    }
 }
 
+def install_geth(identifier=None, platform=None, docker=False, docker_install_version=None):
+    if docker:
+        # for testing purposes
+        image_fix(docker_install_version=docker_install_version)
+        return
+    
+    if identifier is None:
+        raise ValueError("Must specify a geth version to install if not using docker")
 
-def install_geth(identifier, platform=None):
     if platform is None:
         platform = get_platform()
 
@@ -402,11 +411,15 @@ def install_geth(identifier, platform=None):
 
 if __name__ == "__main__":
     try:
-        identifier = sys.argv[1]
+        identifier: str = sys.argv[1]
+        docker_option: bool = False
+        if len(sys.argv) > 2:
+            docker_option = sys.argv[2] == "docker"
+    
     except IndexError:
         print(
             "Invocation error. Should be invoked as `python -m geth.install <release-tag>`"  # noqa: E501
         )
         sys.exit(1)
 
-    install_geth(identifier)
+    install_geth(identifier, docker=docker_option)

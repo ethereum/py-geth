@@ -94,10 +94,8 @@ def construct_test_chain_kwargs(**overrides):
 
     return overrides
 
-
 def get_geth_binary_path():
     return os.environ.get("GETH_BINARY", "geth")
-
 
 class CommandBuilder:
     def __init__(self):
@@ -148,11 +146,15 @@ def construct_popen_command(
     tx_pool_price_limit=None,
     cache=None,
     gcmode=None,
+    docker=False
 ):
     if geth_executable is None:
         geth_executable = get_geth_binary_path()
 
-    if not is_executable_available(geth_executable):
+    if docker:
+        geth_executable = " "
+
+    if not is_executable_available(geth_executable) and not docker:
         raise ValueError(
             "No geth executable found.  Please ensure geth is installed and "
             "available on your PATH or use the GETH_BINARY environment variable"
@@ -165,7 +167,7 @@ def construct_popen_command(
         )
     builder = CommandBuilder()
 
-    if nice and is_nice_available():
+    if nice and is_nice_available() and not docker:
         builder.extend(("nice", "-n", "20"))
 
     builder.append(geth_executable)
@@ -201,7 +203,10 @@ def construct_popen_command(
         builder.extend(("--ws.api", ws_api))
 
     if data_dir is not None:
-        builder.extend(("--datadir", data_dir))
+        if docker:
+            builder.extend(("--datadir", "/root/.ethereum"))
+        else:
+            builder.extend(("--datadir", data_dir))
 
     if max_peers is not None:
         builder.extend(("--maxpeers", max_peers))
@@ -325,15 +330,28 @@ def geth_wrapper(**geth_kwargs):
 
 
 def spawn_geth(
-    geth_kwargs, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    geth_kwargs, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, docker_container=None
 ):
-    command = construct_popen_command(**geth_kwargs)
+    docker_opt = False
+    if docker_container is not None:
+        docker_opt = True
 
-    proc = subprocess.Popen(
-        command,
-        stdin=stdin,
-        stdout=stdout,
-        stderr=stderr,
-    )
+    command = construct_popen_command(**geth_kwargs, docker=docker_opt)
+
+    if docker_opt:
+        # execute command in docker
+
+        command_str = " ".join(command)
+
+        command = "/usr/local/bin/geth" + command_str
+        print("Executing command: ", command)
+        proc = docker_container.exec_run(command, stdin=True, stdout=True, stderr=True)
+    else:
+        proc = subprocess.Popen(
+            command,
+            stdin=stdin,
+            stdout=stdout,
+            stderr=stderr,
+        )
 
     return command, proc

@@ -49,6 +49,8 @@ setup(
     py_modules=["geth"],
     install_requires=[
         "semantic-version>=2.6.0",
+        "requests>=2.28.2",
+        "docker>=6.0.1",
     ],
     python_requires=">=3.8, <4",
     extras_require=extras_require,

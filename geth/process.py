@@ -1,9 +1,12 @@
 import logging
 import os
+import docker as dockerlib
 import socket
 import subprocess
 import time
 import warnings
+
+from geth.utils.docker import cleanup_chaindata, start_container, stop_container, verify_and_get_tag
 
 try:
     from urllib.request import (
@@ -52,6 +55,7 @@ logger = logging.getLogger(__name__)
 
 class BaseGethProcess(object):
     _proc = None
+    container = None
 
     def __init__(
         self,
@@ -59,28 +63,63 @@ class BaseGethProcess(object):
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
+        docker=False,
+        geth_version_docker=None,
     ):
         self.geth_kwargs = geth_kwargs
-        self.command = construct_popen_command(**geth_kwargs)
+        self.command = construct_popen_command(**geth_kwargs, docker=docker)
         self.stdin = stdin
         self.stdout = stdout
         self.stderr = stderr
+        self.docker = docker
+        self.client: dockerlib.DockerClient = None
+        self.container: dockerlib.models.containers.Container = None
+        self.geth_version_docker = geth_version_docker
+        if self.docker:
+            # exposing for easier testing
+            self.client = dockerlib.from_env()
 
     is_running = False
 
     def start(self):
         if self.is_running:
             raise ValueError("Already running")
+
+        if self.docker:
+            self.start_docker()
+
         self.is_running = True
 
         logger.info("Launching geth: %s", " ".join(self.command))
-        self.proc = subprocess.Popen(
-            self.command,
-            stdin=self.stdin,
-            stdout=self.stdout,
-            stderr=self.stderr,
+
+        # i will let self.proc be empty if docker is True
+        if not self.docker:
+            self.proc = subprocess.Popen(
+                self.command,
+                stdin=self.stdin,
+                stdout=self.stdout,
+                stderr=self.stderr,
+            )
+    
+    def start_docker(self):
+        if self.geth_version_docker is None:
+            # default to latest
+            self.geth_version_docker = "latest"
+
+        # check if image exists
+        image_name = verify_and_get_tag(self.geth_version_docker)
+
+        if self.geth_version_docker == "latest":
+            self.geth_version_docker = image_name.split(":")[1].split("-")[0]
+
+        self.container = start_container(
+            image_name,
+            commands=self.command,
         )
 
+    def cleanup_docker_chain_data(self):
+        cleanup_chaindata(self.geth_version_docker)
+        
     def __enter__(self):
         self.start()
         return self
@@ -88,9 +127,13 @@ class BaseGethProcess(object):
     def stop(self):
         if not self.is_running:
             raise ValueError("Not running")
+        
+        if self.docker:
+            stop_container(self.container)
 
-        if self.proc.poll() is None:
-            kill_proc(self.proc)
+        if not self.docker:
+            if self.proc.poll() is None:
+                kill_proc(self.proc)
 
         self.is_running = False
 
@@ -107,7 +150,8 @@ class BaseGethProcess(object):
 
     @property
     def accounts(self):
-        return get_accounts(**self.geth_kwargs)
+        print("data_dir: ", self.data_dir)
+        return get_accounts(data_dir=self.data_dir, **self.geth_kwargs, docker_container=self.container)
 
     @property
     def rpc_enabled(self):
@@ -201,18 +245,18 @@ class BaseGethProcess(object):
 
 
 class MainnetGethProcess(BaseGethProcess):
-    def __init__(self, geth_kwargs=None):
+    def __init__(self, geth_kwargs=None, docker=False):
         if geth_kwargs is None:
             geth_kwargs = {}
 
         if "data_dir" in geth_kwargs:
             raise ValueError("You cannot specify `data_dir` for a MainnetGethProcess")
 
-        super(MainnetGethProcess, self).__init__(geth_kwargs)
+        super(MainnetGethProcess, self).__init__(geth_kwargs, docker=docker)
 
     @property
     def data_dir(self):
-        return get_live_data_dir()
+        return get_live_data_dir(docker=self.docker, docker_geth_version=self.geth_version_docker)
 
 
 class LiveGethProcess(MainnetGethProcess):
