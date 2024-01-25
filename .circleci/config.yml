@@ -1337,6 +1337,181 @@ jobs:
         environment:
           GETH_VERSION: v1.12.1
           TOXENV: py311-install-geth-v1_12_1
+  py37-install-geth-v1_13_0:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.7
+        environment:
+          GETH_VERSION: v1.13.0
+          TOXENV: py37-install-geth-v1_13_0
+  py38-install-geth-v1_13_0:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.8
+        environment:
+          GETH_VERSION: v1.13.0
+          TOXENV: py38-install-geth-v1_13_0
+  py39-install-geth-v1_13_0:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.9
+        environment:
+          GETH_VERSION: v1.13.0
+          TOXENV: py39-install-geth-v1_13_0
+  py310-install-geth-v1_13_0:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.10
+        environment:
+          GETH_VERSION: v1.13.0
+          TOXENV: py310-install-geth-v1_13_0
+  py311-install-geth-v1_13_0:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.11
+        environment:
+          GETH_VERSION: v1.13.0
+          TOXENV: py311-install-geth-v1_13_0
+  py37-install-geth-v1_13_1:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.7
+        environment:
+          GETH_VERSION: v1.13.1
+          TOXENV: py37-install-geth-v1_13_1
+  py38-install-geth-v1_13_1:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.8
+        environment:
+          GETH_VERSION: v1.13.1
+          TOXENV: py38-install-geth-v1_13_1
+  py39-install-geth-v1_13_1:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.9
+        environment:
+          GETH_VERSION: v1.13.1
+          TOXENV: py39-install-geth-v1_13_1
+  py310-install-geth-v1_13_1:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.10
+        environment:
+          GETH_VERSION: v1.13.1
+          TOXENV: py310-install-geth-v1_13_1
+  py311-install-geth-v1_13_1:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.11
+        environment:
+          GETH_VERSION: v1.13.1
+          TOXENV: py311-install-geth-v1_13_1
+  py37-install-geth-v1_13_2:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.7
+        environment:
+          GETH_VERSION: v1.13.2
+          TOXENV: py37-install-geth-v1_13_2
+  py38-install-geth-v1_13_2:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.8
+        environment:
+          GETH_VERSION: v1.13.2
+          TOXENV: py38-install-geth-v1_13_2
+  py39-install-geth-v1_13_2:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.9
+        environment:
+          GETH_VERSION: v1.13.2
+          TOXENV: py39-install-geth-v1_13_2
+  py310-install-geth-v1_13_2:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.10
+        environment:
+          GETH_VERSION: v1.13.2
+          TOXENV: py310-install-geth-v1_13_2
+  py311-install-geth-v1_13_2:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.11
+        environment:
+          GETH_VERSION: v1.13.2
+          TOXENV: py311-install-geth-v1_13_2
+  py37-install-geth-v1_13_3:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.7
+        environment:
+          GETH_VERSION: v1.13.3
+          TOXENV: py37-install-geth-v1_13_3
+  py38-install-geth-v1_13_3:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.8
+        environment:
+          GETH_VERSION: v1.13.3
+          TOXENV: py38-install-geth-v1_13_3
+  py39-install-geth-v1_13_3:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.9
+        environment:
+          GETH_VERSION: v1.13.3
+          TOXENV: py39-install-geth-v1_13_3
+  py310-install-geth-v1_13_3:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.10
+        environment:
+          GETH_VERSION: v1.13.3
+          TOXENV: py310-install-geth-v1_13_3
+  py311-install-geth-v1_13_3:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.11
+        environment:
+          GETH_VERSION: v1.13.3
+          TOXENV: py311-install-geth-v1_13_3
+  py37-install-geth-v1_13_4:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.7
+        environment:
+          GETH_VERSION: v1.13.4
+          TOXENV: py37-install-geth-v1_13_4
+  py38-install-geth-v1_13_4:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.8
+        environment:
+          GETH_VERSION: v1.13.4
+          TOXENV: py38-install-geth-v1_13_4
+  py39-install-geth-v1_13_4:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.9
+        environment:
+          GETH_VERSION: v1.13.4
+          TOXENV: py39-install-geth-v1_13_4
+  py310-install-geth-v1_13_4:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.10
+        environment:
+          GETH_VERSION: v1.13.4
+          TOXENV: py310-install-geth-v1_13_4
+  py311-install-geth-v1_13_4:
+    <<: *common_go_v_1_20_1
+    docker:
+      - image: cimg/python:3.11
+        environment:
+          GETH_VERSION: v1.13.4
+          TOXENV: py311-install-geth-v1_13_4
 
   py37-lint:
     <<: *common_go_v_1_20_1
@@ -1624,6 +1799,36 @@ workflows:
       - py39-install-geth-v1_12_1
       - py310-install-geth-v1_12_1
       - py311-install-geth-v1_12_1
+
+      - py37-install-geth-v1_13_0
+      - py38-install-geth-v1_13_0
+      - py39-install-geth-v1_13_0
+      - py310-install-geth-v1_13_0
+      - py311-install-geth-v1_13_0
+
+      - py37-install-geth-v1_13_1
+      - py38-install-geth-v1_13_1
+      - py39-install-geth-v1_13_1
+      - py310-install-geth-v1_13_1
+      - py311-install-geth-v1_13_1
+
+      - py37-install-geth-v1_13_2
+      - py38-install-geth-v1_13_2
+      - py39-install-geth-v1_13_2
+      - py310-install-geth-v1_13_2
+      - py311-install-geth-v1_13_2
+
+      - py37-install-geth-v1_13_3
+      - py38-install-geth-v1_13_3
+      - py39-install-geth-v1_13_3
+      - py310-install-geth-v1_13_3
+      - py311-install-geth-v1_13_3
+
+      - py37-install-geth-v1_13_4
+      - py38-install-geth-v1_13_4
+      - py39-install-geth-v1_13_4
+      - py310-install-geth-v1_13_4
+      - py311-install-geth-v1_13_4
 
       - py37-lint
       - py38-lint
