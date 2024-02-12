@@ -1,3 +1,12 @@
+py-geth v4.3.0 (2024-02-12)
+---------------------------
+
+Features
+~~~~~~~~
+
+- Add support for geth ``v1.13.11`` (`#182 <https://github.com/ethereum/py-geth/issues/182>`__)
+
+
 py-geth v4.2.0 (2024-01-23)
 ---------------------------
 
