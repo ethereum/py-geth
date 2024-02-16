@@ -57,11 +57,11 @@ def create_new_account(data_dir, password, **geth_kwargs):
     If geth process is already running you can create new
     accounts using
     `web3.personal.newAccount()
-    <https://github.com/ethereum/go-ethereum/wiki/JavaScript-Console#personalnewaccount>_`
+    <https://geth.ethereum.org/docs/interacting-with-geth/rpc/ns-personal>_`
+
     RPC API.
 
-
-    Example py.test fixture for tests:
+    Example pytest fixture for tests:
 
     .. code-block:: python
 

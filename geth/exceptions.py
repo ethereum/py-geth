@@ -29,8 +29,7 @@ class GethError(Exception):
 
     def __str__(self):
         return textwrap.dedent(
-            (
-                f"""
+            f"""
         {self.message}
         > command: `{" ".join(self.command)}`
         > return code: `{self.return_code}`
@@ -39,5 +38,4 @@ class GethError(Exception):
         > stdout:
         {self.stderr_data}
         """
-            )
         ).strip()

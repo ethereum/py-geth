@@ -22,15 +22,12 @@ common_go_v1_21_3: &common_go_v1_21_3
         when: on_fail
     - restore_cache:
         keys:
-          - cache-v6-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
-    - restore_cache:
-        keys:
-          - cache-v5-{{ arch }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
+          - cache-v1-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
     - run:
         name: install dependencies
         command: |
+          python -m pip install --upgrade pip
           python -m pip install tox
-          python -m pip install checksumdir
     - run:
         name: install golang-1.21.3
         command: ./.circleci/install_golang.sh 1.21.3
@@ -93,16 +90,6 @@ windows-wheel-steps:
       paths:
         - .tox
       key: cache-v1-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "setup.py" }}-{{ checksum "tox.ini" }}
-
-docs: &docs
-  docker:
-    - image: common
-  steps:
-    - run:
-        name: install latexpdf dependencies
-        command: |
-          sudo apt-get update
-          sudo apt-get install latexmk tex-gyre texlive-fonts-extra
 
 jobs:
   py38-install-geth-v1_11_0:
@@ -1105,6 +1092,7 @@ workflows:
       - py310-lint
       - py311-lint
       - py312-lint
+
       - py38-wheel
       - py39-wheel
       - py310-wheel

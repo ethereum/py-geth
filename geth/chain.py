@@ -47,10 +47,8 @@ def get_live_data_dir():
 
     else:
         raise ValueError(
-            (
-                f"Unsupported platform: '{sys.platform}'.  Only darwin/linux2/win32 are"
-                " supported.  You must specify the geth datadir manually"
-            )
+            f"Unsupported platform: '{sys.platform}'.  Only darwin/linux2/win32 are"
+            " supported.  You must specify the geth datadir manually"
         )
     return data_dir
 
@@ -129,7 +127,7 @@ def write_genesis_file(
             "daoForSupport": True,
             # Using the Ethash consensus algorithm is deprecated
             # Instead, use the Clique consensus algorithm
-            # https://geth.ethereum.org/docs/interface/private-network
+            # https://geth.ethereum.org/docs/fundamentals/private-network
             "clique": {"period": clique_period, "epoch": clique_epoch},
         }
 

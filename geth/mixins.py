@@ -1,7 +1,3 @@
-from __future__ import (
-    absolute_import,
-)
-
 import datetime
 import logging
 import os
@@ -72,7 +68,7 @@ class JoinableQueue(queue.Queue):
                 _timeout.check()
 
 
-class InterceptedStreamsMixin(object):
+class InterceptedStreamsMixin:
     """
     Mixin class for GethProcess instances that feeds all of the stdout and
     stderr lines into some set of provided callback functions.
@@ -82,7 +78,7 @@ class InterceptedStreamsMixin(object):
     stderr_callbacks = None
 
     def __init__(self, *args, **kwargs):
-        super(InterceptedStreamsMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.stdout_callbacks = []
         self.stdout_queue = JoinableQueue()
 
@@ -120,7 +116,7 @@ class InterceptedStreamsMixin(object):
             time.sleep(0)
 
     def start(self):
-        super(InterceptedStreamsMixin, self).start()
+        super().start()
 
         spawn(self.produce_stdout_queue)
         spawn(self.produce_stderr_queue)
@@ -129,7 +125,7 @@ class InterceptedStreamsMixin(object):
         spawn(self.consume_stderr_queue)
 
     def stop(self):
-        super(InterceptedStreamsMixin, self).stop()
+        super().stop()
 
         try:
             self.stdout_queue.put(StopIteration)
@@ -155,7 +151,7 @@ class LoggingMixin(InterceptedStreamsMixin):
             construct_logger_file_path("geth", "stderr"),
         )
 
-        super(LoggingMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         stdout_logger = _get_file_logger("geth-stdout", stdout_logfile_path)
         stderr_logger = _get_file_logger("geth-stderr", stderr_logfile_path)

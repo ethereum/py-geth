@@ -11,7 +11,7 @@ def is_port_open(port):
     sock = socket.socket()
     try:
         sock.bind(("127.0.0.1", port))
-    except socket.error:
+    except OSError:
         return False
     else:
         return True

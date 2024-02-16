@@ -1,6 +1,5 @@
 import logging
 import os
-import socket
 import subprocess
 import time
 import warnings
@@ -50,7 +49,7 @@ from geth.wrapper import (
 logger = logging.getLogger(__name__)
 
 
-class BaseGethProcess(object):
+class BaseGethProcess:
     _proc = None
 
     def __init__(
@@ -164,7 +163,7 @@ class BaseGethProcess(object):
         try:
             with get_ipc_socket(self.ipc_path):
                 pass
-        except socket.error:
+        except OSError:
             return False
         else:
             return True
@@ -208,7 +207,7 @@ class MainnetGethProcess(BaseGethProcess):
         if "data_dir" in geth_kwargs:
             raise ValueError("You cannot specify `data_dir` for a MainnetGethProcess")
 
-        super(MainnetGethProcess, self).__init__(geth_kwargs)
+        super().__init__(geth_kwargs)
 
     @property
     def data_dir(self):
@@ -224,7 +223,7 @@ class LiveGethProcess(MainnetGethProcess):
             ),
             stacklevel=2,
         )
-        super(LiveGethProcess, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class RopstenGethProcess(BaseGethProcess):
@@ -244,7 +243,7 @@ class RopstenGethProcess(BaseGethProcess):
         geth_kwargs["network_id"] = "3"
         geth_kwargs["data_dir"] = get_ropsten_data_dir()
 
-        super(RopstenGethProcess, self).__init__(geth_kwargs)
+        super().__init__(geth_kwargs)
 
     @property
     def data_dir(self):
@@ -308,4 +307,4 @@ class DevGethProcess(BaseGethProcess):
             )
             initialize_chain(genesis_data, **geth_kwargs)
 
-        super(DevGethProcess, self).__init__(geth_kwargs)
+        super().__init__(geth_kwargs)
