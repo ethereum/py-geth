@@ -50,11 +50,11 @@ notes: check-bump
 	towncrier build --yes --version $(UPCOMING_VERSION)
 	# Before we bump the version, make sure that the towncrier-generated docs will build
 	make docs
-	git commit -m "Compile release notes"
+	git commit -m "Compile release notes for v$(UPCOMING_VERSION)"
 
 release: check-bump clean
 	# require that upstream is configured for ethereum/py-geth
-	git remote -v | grep "upstream\tgit@github.com:ethereum/py-geth.git (push)\|upstream\thttps://github.com/ethereum/py-geth (push)"
+	@git remote -v | grep -E "upstream\tgit@github.com:ethereum/py-geth.git \(push\)|upstream\thttps://(www.)?github.com/ethereum/py-geth \(push\)"
 	# verify that docs build correctly
 	./newsfragments/validate_files.py is-empty
 	make docs
