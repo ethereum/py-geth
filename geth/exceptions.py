@@ -3,6 +3,11 @@ from __future__ import (
 )
 
 import textwrap
+from typing import (
+    List,
+    Optional,
+    Union,
+)
 
 from .utils.encoding import (
     force_text,

@@ -3,9 +3,13 @@ from typing import (
     Any,
 )
 
-from .chains import (
+from geth.models import (
+    GethKwargs,
+)
+
+from .chain import (
     is_live_chain,
-    is_testnet_chain,
+    is_ropsten_chain,
 )
 from .utils.filesystem import (
     remove_dir_if_exists,
@@ -15,36 +19,36 @@ from .wrapper import (
     spawn_geth,
 )
 
+# TODO is this file still relevant? Not referenced or used or tested anywhere
+
 
 def soft_reset_chain(
-    allow_live: bool = False, allow_testnet: bool = False, **geth_kwargs: Any
+    geth_kwargs: GethKwargs, allow_live: bool = False, allow_testnet: bool = False
 ) -> None:
-    data_dir = geth_kwargs.get("data_dir")
+    data_dir = getattr(geth_kwargs, "data_dir", None)
 
     if data_dir is None or (not allow_live and is_live_chain(data_dir)):
         raise ValueError(
             "To reset the live chain you must call this function with `allow_live=True`"
         )
 
-    if not allow_testnet and is_testnet_chain(data_dir):
+    if not allow_testnet and is_ropsten_chain(data_dir):
         raise ValueError(
             "To reset the testnet chain you must call this function with `allow_testnet=True`"  # noqa: E501
         )
 
-    suffix_args = geth_kwargs.pop("suffix_args", [])
+    suffix_args = getattr(geth_kwargs, "suffix_args", [])
     suffix_args.extend(("removedb",))
+    geth_kwargs.suffix_args = suffix_args
 
-    geth_kwargs["suffix_args"] = suffix_args
+    _, proc = spawn_geth(geth_kwargs)
 
-    # type ignored TODO rethink GethKwargs in a separate PR
-    _, proc = spawn_geth(**geth_kwargs)  # type: ignore[no-untyped-call]
+    stdoutdata, stderrdata = proc.communicate(b"y")
 
-    stdoutdata, stderrdata = proc.communicate("y")
-
-    if "Removing chaindata" not in stdoutdata:
+    if "Removing chaindata" not in stdoutdata.decode("utf-8"):
         raise ValueError(
-            f"An error occurred while removing the chain:\n\nError:\n{stderrdata}\n\n"
-            f"Output:\n{stdoutdata}"
+            "An error occurred while removing the chain:\n\nError:\n"
+            f"{stderrdata.decode('utf-8')}\n\nOutput:\n{stdoutdata.decode('utf-8')}"
         )
 
 
@@ -56,7 +60,7 @@ def hard_reset_chain(
             "To reset the live chain you must call this function with `allow_live=True`"
         )
 
-    if not allow_testnet and is_testnet_chain(data_dir):
+    if not allow_testnet and is_ropsten_chain(data_dir):
         raise ValueError(
             "To reset the testnet chain you must call this function with `allow_testnet=True`"  # noqa: E501
         )

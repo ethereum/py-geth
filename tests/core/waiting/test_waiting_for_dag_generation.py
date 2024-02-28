@@ -3,6 +3,9 @@ import time
 
 import pytest
 
+from geth.models import (
+    GethKwargs,
+)
 from geth.utils.dag import (
     is_dag_generated,
 )
@@ -22,10 +25,7 @@ def test_waiting_for_dag_generation(base_dir):
     assert not is_dag_generated(base_dir=base_dir)
 
     command, proc = spawn_geth(
-        dict(
-            data_dir=base_dir,
-            suffix_args=["makedag", "0", base_dir],
-        )
+        GethKwargs(data_dir=base_dir, suffix_args=["makedag", "0", base_dir])
     )
 
     assert not is_dag_generated(base_dir=base_dir)

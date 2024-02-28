@@ -10,6 +10,7 @@ import time
 from typing import (
     Any,
     Callable,
+    Generator,
 )
 
 from geth.utils.filesystem import (
@@ -50,8 +51,9 @@ def _get_file_logger(name: str, filename: str) -> logging.Logger:
     return logger
 
 
-class JoinableQueue(queue.Queue):
-    def __iter__(self):
+# class JoinableQueue(queue.Queue[Union[bytes, type[StopIteration]]]):
+class JoinableQueue(queue.Queue):  # type: ignore
+    def __iter__(self) -> Generator[bytes, None, None]:
         while True:
             item = self.get()
 
@@ -67,7 +69,7 @@ class JoinableQueue(queue.Queue):
             elif isinstance(item, type) and issubclass(item, Exception):
                 raise item
 
-            yield item
+            yield item  # type: ignore
 
     def join(self, timeout: int | None = None) -> None:
         with Timeout(timeout) as _timeout:
@@ -130,7 +132,8 @@ class InterceptedStreamsMixin:
             time.sleep(0)
 
     def start(self) -> None:
-        super().start()
+        # TODO: type ignored bc doesn't know it's always part of BaseGethProcess
+        super().start()  # type: ignore
 
         spawn(self.produce_stdout_queue)
         spawn(self.produce_stderr_queue)
@@ -139,7 +142,8 @@ class InterceptedStreamsMixin:
         spawn(self.consume_stderr_queue)
 
     def stop(self) -> None:
-        super().stop()
+        # TODO: type ignored bc doesn't know it's always part of BaseGethProcess
+        super().stop()  # type: ignore
 
         try:
             self.stdout_queue.put(StopIteration)

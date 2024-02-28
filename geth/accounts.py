@@ -1,5 +1,14 @@
 import os
 import re
+from typing import (
+    Optional,
+    Tuple,
+    Union,
+)
+
+from geth.models import (
+    GethKwargs,
+)
 
 from .utils.proc import (
     format_error_message,
@@ -9,16 +18,21 @@ from .wrapper import (
 )
 
 
-def get_accounts(data_dir, **geth_kwargs):
+def get_accounts(
+    data_dir: str, geth_kwargs: Optional[GethKwargs] = None
+) -> Tuple[bytes, ...]:
     """
     Returns all geth accounts as tuple of hex encoded strings
 
     >>> geth_accounts()
-    ... ('0x...', '0x...')
+    ... (b'0x00...', b'0x00...')
     """
-    command, proc = spawn_geth(
-        dict(data_dir=data_dir, suffix_args=["account", "list"], **geth_kwargs)
-    )
+    if geth_kwargs is None:
+        geth_kwargs = GethKwargs()
+
+    geth_kwargs.data_dir = data_dir
+    geth_kwargs.suffix_args = ["account", "list"]
+    command, proc = spawn_geth(geth_kwargs)
     stdoutdata, stderrdata = proc.communicate()
 
     if proc.returncode:
@@ -30,18 +44,21 @@ def get_accounts(data_dir, **geth_kwargs):
                     "Error trying to list accounts",
                     command,
                     proc.returncode,
-                    stdoutdata,
-                    stderrdata,
+                    stdoutdata.decode("utf-8"),
+                    stderrdata.decode("utf-8"),
                 )
             )
     accounts = parse_geth_accounts(stdoutdata)
+
     return accounts
 
 
 account_regex = re.compile(b"([a-f0-9]{40})")
 
 
-def create_new_account(data_dir, password, **geth_kwargs):
+def create_new_account(
+    data_dir: str, password: Union[bytes, str], geth_kwargs: Optional[GethKwargs] = None
+) -> bytes:
     """
     Creates a new Ethereum account on geth.
 
@@ -93,21 +110,28 @@ def create_new_account(data_dir, password, **geth_kwargs):
             return account
 
     :param data_dir: Geth data fir path - where to keep "keystore" folder
-    :param password: Path to a file containing the password
-        for newly created account
+    :param password: Either a str path to a file containing the password for newly
+        created account or a bytes object with the password
     :param geth_kwargs: Extra command line arguments password to geth
     :return: Account as 0x prefixed hex string
     """
-    if os.path.exists(password):
-        geth_kwargs["password"] = password
+    if geth_kwargs is None:
+        geth_kwargs = GethKwargs()
 
-    command, proc = spawn_geth(
-        dict(data_dir=data_dir, suffix_args=["account", "new"], **geth_kwargs)
-    )
+    if isinstance(password, str):
+        if os.path.exists(password):
+            geth_kwargs.password = password
+        else:
+            raise ValueError(f"Password file not found at path: {password}")
 
-    if os.path.exists(password):
-        stdoutdata, stderrdata = proc.communicate()
-    else:
+    geth_kwargs.data_dir = data_dir
+    geth_kwargs.suffix_args = ["account", "new"]
+    command, proc = spawn_geth(geth_kwargs)
+
+    if isinstance(password, str):
+        if os.path.exists(password):
+            stdoutdata, stderrdata = proc.communicate()
+    elif isinstance(password, bytes):
         stdoutdata, stderrdata = proc.communicate(b"\n".join((password, password)))
 
     if proc.returncode:
@@ -116,8 +140,8 @@ def create_new_account(data_dir, password, **geth_kwargs):
                 "Error trying to create a new account",
                 command,
                 proc.returncode,
-                stdoutdata,
-                stderrdata,
+                stdoutdata.decode("utf-8"),
+                stderrdata.decode("utf-8"),
             )
         )
 
@@ -128,23 +152,26 @@ def create_new_account(data_dir, password, **geth_kwargs):
                 "Did not find an address in process output",
                 command,
                 proc.returncode,
-                stdoutdata,
-                stderrdata,
+                stdoutdata.decode("utf-8"),
+                stderrdata.decode("utf-8"),
             )
         )
-
     return b"0x" + match.groups()[0]
 
 
-def ensure_account_exists(data_dir, **geth_kwargs):
-    accounts = get_accounts(data_dir, **geth_kwargs)
+def ensure_account_exists(data_dir: str, geth_kwargs: GethKwargs) -> bytes:
+    accounts = get_accounts(data_dir, geth_kwargs)
     if not accounts:
-        account = create_new_account(data_dir, **geth_kwargs)
+        if not geth_kwargs.password:
+            raise ValueError(
+                "No accounts found and no password supplied to create a new account"
+            )
+        account = create_new_account(data_dir, geth_kwargs.password, geth_kwargs)
     else:
         account = accounts[0]
     return account
 
 
-def parse_geth_accounts(raw_accounts_output):
+def parse_geth_accounts(raw_accounts_output: bytes) -> Tuple[bytes, ...]:
     accounts = account_regex.findall(raw_accounts_output)
     return tuple(b"0x" + account for account in accounts)
