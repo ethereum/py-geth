@@ -2,6 +2,7 @@ import codecs
 from typing import (
     Any,
     Union,
+    cast,
 )
 
 binary_types = (bytes, bytearray)
@@ -25,9 +26,11 @@ def force_bytes(
     value: Union[str, bytes, bytearray], encoding: str = "iso-8859-1"
 ) -> bytes:
     if is_binary(value):
-        return bytes(value)
+        binary_value = cast(Union[bytes, bytearray], value)
+        return bytes(binary_value)
     elif is_text(value):
-        encoded = codecs.encode(value, encoding)
+        text_value = cast(str, value)
+        encoded = codecs.encode(text_value, encoding)
         if is_binary(encoded):
             return encoded
         else:
@@ -42,9 +45,11 @@ def force_text(
     value: Union[str, bytes, bytearray], encoding: str = "iso-8859-1"
 ) -> str:
     if is_text(value):
-        return value
+        text_value = cast(str, value)
+        return text_value
     elif is_binary(value):
-        return codecs.decode(value, encoding)
+        binary_value = cast(Union[bytes, bytearray], value)
+        return codecs.decode(binary_value, encoding)
     else:
         raise TypeError(f"Unsupported type: {type(value)}")
 
