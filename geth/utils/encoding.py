@@ -21,7 +21,9 @@ def is_string(value: Any) -> bool:
     return isinstance(value, string_types)
 
 
-def force_bytes(value: Any, encoding: str = "iso-8859-1") -> Union[bytes, bytearray]:
+def force_bytes(
+    value: Union[str, bytes, bytearray], encoding: str = "iso-8859-1"
+) -> bytes:
     if is_binary(value):
         return bytes(value)
     elif is_text(value):
@@ -36,7 +38,9 @@ def force_bytes(value: Any, encoding: str = "iso-8859-1") -> Union[bytes, bytear
         raise TypeError(f"Unsupported type: {type(value)}")
 
 
-def force_text(value: Any, encoding: str = "iso-8859-1") -> str:
+def force_text(
+    value: Union[str, bytes, bytearray], encoding: str = "iso-8859-1"
+) -> str:
     if is_text(value):
         return value
     elif is_binary(value):
