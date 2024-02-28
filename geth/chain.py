@@ -1,6 +1,12 @@
 import json
 import os
 import sys
+from typing import (
+    Any,
+    Dict,
+    Optional,
+    Union,
+)
 
 from .utils.encoding import (
     force_obj_to_text,
@@ -14,7 +20,7 @@ from .wrapper import (
 )
 
 
-def get_live_data_dir():
+def get_live_data_dir() -> str:
     """
     `py-geth` needs a base directory to store it's chain data.  By default this is
     the directory that `geth` uses as it's `datadir`.
@@ -53,7 +59,7 @@ def get_live_data_dir():
     return data_dir
 
 
-def get_ropsten_data_dir():
+def get_ropsten_data_dir() -> str:
     return os.path.abspath(
         os.path.expanduser(
             os.path.join(
@@ -64,44 +70,44 @@ def get_ropsten_data_dir():
     )
 
 
-def get_default_base_dir():
+def get_default_base_dir() -> str:
     return get_live_data_dir()
 
 
-def get_chain_data_dir(base_dir, name):
+def get_chain_data_dir(base_dir: str, name) -> str:
     data_dir = os.path.abspath(os.path.join(base_dir, name))
     ensure_path_exists(data_dir)
     return data_dir
 
 
-def get_genesis_file_path(data_dir):
+def get_genesis_file_path(data_dir: str) -> str:
     return os.path.join(data_dir, "genesis.json")
 
 
-def is_live_chain(data_dir):
+def is_live_chain(data_dir: str) -> bool:
     return is_same_path(data_dir, get_live_data_dir())
 
 
-def is_ropsten_chain(data_dir):
+def is_ropsten_chain(data_dir: str) -> bool:
     return is_same_path(data_dir, get_ropsten_data_dir())
 
 
 def write_genesis_file(
-    genesis_file_path,
-    overwrite=False,
-    nonce="0xdeadbeefdeadbeef",
-    timestamp="0x0",
-    parentHash="0x0000000000000000000000000000000000000000000000000000000000000000",
-    extraData=None,
-    gasLimit="0x47d5cc",
-    difficulty="0x01",
-    mixhash="0x0000000000000000000000000000000000000000000000000000000000000000",
-    coinbase="0x3333333333333333333333333333333333333333",
-    alloc=None,
-    config=None,
+    genesis_file_path: str,
+    overwrite: bool = False,
+    nonce: str = "0xdeadbeefdeadbeef",
+    timestamp: str = "0x0",
+    parentHash: str = "0x0000000000000000000000000000000000000000000000000000000000000000",  # noqa: E501
+    extraData: Optional[Any] = None,
+    gasLimit: str = "0x47d5cc",
+    difficulty: str = "0x01",
+    mixhash: str = "0x0000000000000000000000000000000000000000000000000000000000000000",
+    coinbase: str = "0x3333333333333333333333333333333333333333",
+    alloc: Optional[Any] = None,
+    config: Optional[Any] = None,
     clique_period: int = 5,
     clique_epoch: int = 30000,
-):
+) -> None:
     if os.path.exists(genesis_file_path) and not overwrite:
         raise ValueError(
             "Genesis file already present.  call with `overwrite=True` to overwrite this file"  # noqa: E501
@@ -155,7 +161,9 @@ def write_genesis_file(
         genesis_file.write(json.dumps(force_obj_to_text(genesis_data)))
 
 
-def initialize_chain(genesis_data, data_dir, **geth_kwargs):
+def initialize_chain(
+    genesis_data: Dict[str, Optional[Union[str, int]]], data_dir: str, **geth_kwargs
+) -> None:
     genesis_file_path = get_genesis_file_path(data_dir)
     write_genesis_file(genesis_file_path, **genesis_data)
     command, proc = spawn_geth(

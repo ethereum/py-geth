@@ -2,18 +2,19 @@ import logging
 import os
 import subprocess
 import time
+from typing import (
+    Any,
+    Dict,
+    Optional,
+    Union,
+)
+from urllib.error import (
+    URLError,
+)
+from urllib.request import (
+    urlopen,
+)
 import warnings
-
-try:
-    from urllib.request import (
-        URLError,
-        urlopen,
-    )
-except ImportError:
-    from urllib2 import (
-        urlopen,
-        URLError,
-    )
 
 from geth.accounts import (
     ensure_account_exists,
@@ -54,10 +55,10 @@ class BaseGethProcess:
 
     def __init__(
         self,
-        geth_kwargs,
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        geth_kwargs: Any,
+        stdin: int = subprocess.PIPE,
+        stdout: int = subprocess.PIPE,
+        stderr: int = subprocess.PIPE,
     ):
         self.geth_kwargs = geth_kwargs
         self.command = construct_popen_command(**geth_kwargs)
@@ -67,7 +68,7 @@ class BaseGethProcess:
 
     is_running = False
 
-    def start(self):
+    def start(self) -> None:
         if self.is_running:
             raise ValueError("Already running")
         self.is_running = True
@@ -261,7 +262,13 @@ class DevGethProcess(BaseGethProcess):
     A local private chain for development.
     """
 
-    def __init__(self, chain_name, base_dir=None, overrides=None, genesis_data=None):
+    def __init__(
+        self,
+        chain_name: str,
+        base_dir: Optional[str] = None,
+        overrides: Optional[Any] = None,
+        genesis_data: Optional[Dict[str, Optional[Union[str, int]]]] = None,
+    ):
         if overrides is None:
             overrides = {}
 

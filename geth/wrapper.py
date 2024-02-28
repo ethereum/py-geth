@@ -1,3 +1,7 @@
+from ast import (
+    List,
+    Tuple,
+)
 import functools
 import logging
 import os
@@ -31,7 +35,7 @@ DEFAULT_PASSWORD_PATH = os.path.join(PYGETH_DIR, "default_blockchain_password")
 ALL_APIS = "admin,clique,debug,eth,miner,net,personal,shh,txpool,web3,ws"
 
 
-def get_max_socket_path_length():
+def get_max_socket_path_length() -> int:
     if "UNIX_PATH_MAX" in os.environ:
         return int(os.environ["UNIX_PATH_MAX"])
     if sys.platform.startswith("darwin"):
@@ -95,18 +99,18 @@ def construct_test_chain_kwargs(**overrides):
     return overrides
 
 
-def get_geth_binary_path():
+def get_geth_binary_path() -> str:
     return os.environ.get("GETH_BINARY", "geth")
 
 
 class CommandBuilder:
     def __init__(self):
-        self.command = []
+        self.command: List[str] = []
 
-    def append(self, value):
+    def append(self, value: str):
         self.command.append(str(value))
 
-    def extend(self, value_list):
+    def extend(self, value_list: Tuple[str, ...]):
         self.command.extend([str(v) for v in value_list])
 
 
@@ -148,7 +152,7 @@ def construct_popen_command(
     tx_pool_price_limit=None,
     cache=None,
     gcmode=None,
-):
+) -> List[str]:
     if geth_executable is None:
         geth_executable = get_geth_binary_path()
 
