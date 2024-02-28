@@ -7,6 +7,7 @@ from typing import (
     Dict,
     Optional,
     Union,
+    cast,
 )
 from urllib.error import (
     URLError,
@@ -55,7 +56,7 @@ class BaseGethProcess:
 
     def __init__(
         self,
-        geth_kwargs: Any,
+        geth_kwargs: Dict[str, Union[str, int, bool]],
         stdin: int = subprocess.PIPE,
         stdout: int = subprocess.PIPE,
         stderr: int = subprocess.PIPE,
@@ -110,19 +111,19 @@ class BaseGethProcess:
         return get_accounts(**self.geth_kwargs)
 
     @property
-    def rpc_enabled(self):
+    def rpc_enabled(self) -> bool:
         return self.geth_kwargs.get("rpc_enabled", False)
 
     @property
-    def rpc_host(self):
+    def rpc_host(self) -> str:
         return self.geth_kwargs.get("rpc_host", "127.0.0.1")
 
     @property
-    def rpc_port(self):
+    def rpc_port(self) -> str:
         return self.geth_kwargs.get("rpc_port", "8545")
 
     @property
-    def is_rpc_ready(self):
+    def is_rpc_ready(self) -> bool:
         try:
             urlopen(f"http://{self.rpc_host}:{self.rpc_port}")
         except URLError:
@@ -142,11 +143,11 @@ class BaseGethProcess:
                 _timeout.check()
 
     @property
-    def ipc_enabled(self):
+    def ipc_enabled(self) -> bool:
         return not self.geth_kwargs.get("ipc_disable", None)
 
     @property
-    def ipc_path(self):
+    def ipc_path(self) -> str:
         return self.geth_kwargs.get(
             "ipc_path",
             os.path.abspath(
@@ -160,7 +161,7 @@ class BaseGethProcess:
         )
 
     @property
-    def is_ipc_ready(self):
+    def is_ipc_ready(self) -> bool:
         try:
             with get_ipc_socket(self.ipc_path):
                 pass
@@ -169,7 +170,7 @@ class BaseGethProcess:
         else:
             return True
 
-    def wait_for_ipc(self, timeout=0):
+    def wait_for_ipc(self, timeout: int = 0) -> None:
         if not self.ipc_enabled:
             raise ValueError("IPC interface is not enabled")
 
@@ -181,14 +182,15 @@ class BaseGethProcess:
                 _timeout.check()
 
     @property
-    def is_dag_generated(self):
+    def is_dag_generated(self) -> bool:
         return is_dag_generated()
 
     @property
-    def is_mining(self):
-        return self.geth_kwargs.get("mine", False)
+    def is_mining(self) -> bool:
+        mine_bool = cast(bool, self.geth_kwargs.get("mine", False))
+        return mine_bool
 
-    def wait_for_dag(self, timeout=0):
+    def wait_for_dag(self, timeout: int = 0) -> None:
         if not self.is_mining and not self.geth_kwargs.get("autodag", False):
             raise ValueError("Geth not configured to generate DAG")
 
@@ -201,7 +203,7 @@ class BaseGethProcess:
 
 
 class MainnetGethProcess(BaseGethProcess):
-    def __init__(self, geth_kwargs=None):
+    def __init__(self, geth_kwargs: Optional[Dict[str, Any]] = None):
         if geth_kwargs is None:
             geth_kwargs = {}
 
@@ -211,12 +213,12 @@ class MainnetGethProcess(BaseGethProcess):
         super().__init__(geth_kwargs)
 
     @property
-    def data_dir(self):
+    def data_dir(self) -> str:
         return get_live_data_dir()
 
 
 class LiveGethProcess(MainnetGethProcess):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any):
         warnings.warn(
             DeprecationWarning(
                 "The `LiveGethProcess` has been renamed to `MainnetGethProcess`. "
@@ -228,7 +230,7 @@ class LiveGethProcess(MainnetGethProcess):
 
 
 class RopstenGethProcess(BaseGethProcess):
-    def __init__(self, geth_kwargs=None):
+    def __init__(self, geth_kwargs: Optional[Dict[str, Any]] = None):
         if geth_kwargs is None:
             geth_kwargs = {}
 
@@ -247,7 +249,7 @@ class RopstenGethProcess(BaseGethProcess):
         super().__init__(geth_kwargs)
 
     @property
-    def data_dir(self):
+    def data_dir(self) -> str:
         return get_ropsten_data_dir()
 
 

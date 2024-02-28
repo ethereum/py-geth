@@ -47,5 +47,5 @@ repos:
     rev: v1.5.1
     hooks:
     -   id: mypy
-        # args: [--follow-imports=silent, --disable-error-code=no-untyped-call]
+        args: [--follow-imports=silent, --disable-error-code=no-untyped-call]
         exclude: 'conftest.py|tests/'
