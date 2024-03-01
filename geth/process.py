@@ -3,8 +3,8 @@ import os
 import subprocess
 import time
 from typing import (
+    IO,
     Any,
-    Dict,
     Optional,
     Union,
     cast,
@@ -31,6 +31,10 @@ from geth.chain import (
     is_live_chain,
     is_ropsten_chain,
 )
+from geth.models import (
+    GenesisData,
+    GethKwargs,
+)
 from geth.utils.dag import (
     is_dag_generated,
 )
@@ -50,16 +54,18 @@ from geth.wrapper import (
 
 logger = logging.getLogger(__name__)
 
+IO_Any = Union[IO[Any], int, None]
+
 
 class BaseGethProcess:
     _proc = None
 
     def __init__(
         self,
-        geth_kwargs: Dict[str, Union[str, int, bool]],
-        stdin: int = subprocess.PIPE,
-        stdout: int = subprocess.PIPE,
-        stderr: int = subprocess.PIPE,
+        geth_kwargs: GethKwargs,
+        stdin: IO_Any = subprocess.PIPE,
+        stdout: IO_Any = subprocess.PIPE,
+        stderr: IO_Any = subprocess.PIPE,
     ):
         self.geth_kwargs = geth_kwargs
         self.command = construct_popen_command(**geth_kwargs)
@@ -131,7 +137,7 @@ class BaseGethProcess:
         else:
             return True
 
-    def wait_for_rpc(self, timeout=0):
+    def wait_for_rpc(self, timeout: int = 0):
         if not self.rpc_enabled:
             raise ValueError("RPC interface is not enabled")
 
@@ -203,7 +209,7 @@ class BaseGethProcess:
 
 
 class MainnetGethProcess(BaseGethProcess):
-    def __init__(self, geth_kwargs: Optional[Dict[str, Any]] = None):
+    def __init__(self, geth_kwargs: Optional[GethKwargs] = None):
         if geth_kwargs is None:
             geth_kwargs = {}
 
@@ -230,7 +236,7 @@ class LiveGethProcess(MainnetGethProcess):
 
 
 class RopstenGethProcess(BaseGethProcess):
-    def __init__(self, geth_kwargs: Optional[Dict[str, Any]] = None):
+    def __init__(self, geth_kwargs: Optional[GethKwargs] = None):
         if geth_kwargs is None:
             geth_kwargs = {}
 
@@ -269,7 +275,7 @@ class DevGethProcess(BaseGethProcess):
         chain_name: str,
         base_dir: Optional[str] = None,
         overrides: Optional[Any] = None,
-        genesis_data: Optional[Dict[str, Optional[Union[str, int]]]] = None,
+        genesis_data: Optional[GenesisData] = None,
     ):
         if overrides is None:
             overrides = {}
@@ -284,7 +290,9 @@ class DevGethProcess(BaseGethProcess):
             base_dir = get_default_base_dir()
 
         self.data_dir = get_chain_data_dir(base_dir, chain_name)
-        geth_kwargs = construct_test_chain_kwargs(data_dir=self.data_dir, **overrides)
+        geth_kwargs: GethKwargs = construct_test_chain_kwargs(
+            data_dir=self.data_dir, **overrides
+        )
 
         # ensure that an account is present
         coinbase = ensure_account_exists(**geth_kwargs)

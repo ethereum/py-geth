@@ -48,6 +48,7 @@ setup(
     py_modules=["geth"],
     install_requires=[
         "semantic-version>=2.6.0",
+        "pydantic>=2.6.0",
     ],
     python_requires=">=3.8, <4",
     extras_require=extras_require,

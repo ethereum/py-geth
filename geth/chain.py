@@ -3,9 +3,11 @@ import os
 import sys
 from typing import (
     Any,
-    Dict,
     Optional,
-    Union,
+)
+
+from models import (
+    GenesisData,
 )
 
 from .utils.encoding import (
@@ -144,7 +146,7 @@ def write_genesis_file(
         else extraData
     )
 
-    genesis_data = {
+    genesis_data: GenesisData = {
         "nonce": nonce,
         "timestamp": timestamp,
         "parentHash": parentHash,
@@ -161,9 +163,7 @@ def write_genesis_file(
         genesis_file.write(json.dumps(force_obj_to_text(genesis_data)))
 
 
-def initialize_chain(
-    genesis_data: Dict[str, Optional[Union[str, int]]], data_dir: str, **geth_kwargs
-) -> None:
+def initialize_chain(genesis_data: GenesisData, data_dir: str, **geth_kwargs) -> None:
     genesis_file_path = get_genesis_file_path(data_dir)
     write_genesis_file(genesis_file_path, **genesis_data)
     command, proc = spawn_geth(

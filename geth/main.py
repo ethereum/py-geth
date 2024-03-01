@@ -1,5 +1,8 @@
 import re
 
+from models import (
+    GethKwargs,
+)
 import semantic_version
 
 from .utils.encoding import (
@@ -10,7 +13,7 @@ from .wrapper import (
 )
 
 
-def get_geth_version_info_string(**geth_kwargs):
+def get_geth_version_info_string(**geth_kwargs: GethKwargs):
     if "suffix_args" in geth_kwargs:
         raise TypeError(
             "The `get_geth_version` function cannot be called with the "
@@ -24,7 +27,7 @@ def get_geth_version_info_string(**geth_kwargs):
 VERSION_REGEX = r"Version: (.*)\n"
 
 
-def get_geth_version(**geth_kwargs):
+def get_geth_version(**geth_kwargs: GethKwargs):
     version_info_string = get_geth_version_info_string(**geth_kwargs)
     version_match = re.search(VERSION_REGEX, force_text(version_info_string, "utf8"))
     if not version_match:
