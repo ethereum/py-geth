@@ -2,10 +2,14 @@ import logging
 import os
 import subprocess
 import time
+from types import (
+    TracebackType,
+)
 from typing import (
     IO,
     Any,
     Optional,
+    Type,
     Union,
     cast,
 )
@@ -88,11 +92,11 @@ class BaseGethProcess:
             stderr=self.stderr,
         )
 
-    def __enter__(self):
+    def __enter__(self) -> "BaseGethProcess":
         self.start()
         return self
 
-    def stop(self):
+    def stop(self) -> None:
         if not self.is_running:
             raise ValueError("Not running")
 
@@ -101,19 +105,24 @@ class BaseGethProcess:
 
         self.is_running = False
 
-    def __exit__(self, *exc_info):
+    def __exit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_value: Optional[BaseException],
+        tb: Optional[TracebackType],
+    ) -> None:
         self.stop()
 
     @property
-    def is_alive(self):
+    def is_alive(self) -> bool:
         return self.is_running and self.proc.poll() is None
 
     @property
-    def is_stopped(self):
+    def is_stopped(self) -> bool:
         return self.proc is not None and self.proc.poll() is not None
 
     @property
-    def accounts(self):
+    def accounts(self) -> tuple[str, ...]:
         return get_accounts(**self.geth_kwargs)
 
     @property

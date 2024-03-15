@@ -1,6 +1,10 @@
 import os
 import re
 
+from geth.models import (
+    GethKwargs,
+)
+
 from .utils.proc import (
     format_error_message,
 )
@@ -9,7 +13,7 @@ from .wrapper import (
 )
 
 
-def get_accounts(data_dir, **geth_kwargs):
+def get_accounts(data_dir, **geth_kwargs: GethKwargs) -> tuple[str, ...]:
     """
     Returns all geth accounts as tuple of hex encoded strings
 

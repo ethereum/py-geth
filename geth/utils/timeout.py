@@ -1,4 +1,11 @@
 import time
+from types import (
+    TracebackType,
+)
+from typing import (
+    Optional,
+    Type,
+)
 
 
 class Timeout(Exception):
@@ -19,7 +26,12 @@ class Timeout(Exception):
         self.start()
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_value: Optional[BaseException],
+        tb: Optional[TracebackType],
+    ) -> bool:
         return False
 
     def __str__(self):
