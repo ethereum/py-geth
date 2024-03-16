@@ -1,13 +1,13 @@
-from ast import (
-    List,
-    Tuple,
-)
 import functools
 import logging
 import os
 import subprocess
 import sys
 import tempfile
+from typing import (
+    List,
+    Tuple,
+)
 
 from geth.exceptions import (
     GethError,
@@ -50,7 +50,7 @@ def construct_test_chain_kwargs(**overrides):
     overrides.setdefault("unlock", "0")
     overrides.setdefault("password", DEFAULT_PASSWORD_PATH)
     overrides.setdefault("mine", True)
-    overrides.setdefault("no_discover", True)
+    overrides.setdefault("nodiscover", True)
     overrides.setdefault("max_peers", "0")
     overrides.setdefault("network_id", "1234")
 
@@ -119,7 +119,7 @@ def construct_popen_command(
     geth_executable=None,
     max_peers=None,
     network_id=None,
-    no_discover=None,
+    nodiscover=None,
     mine=False,
     autodag=False,
     miner_threads=None,  # deprecated
@@ -249,7 +249,7 @@ def construct_popen_command(
     if preload is not None:
         builder.extend(("--preload", preload))
 
-    if no_discover:
+    if nodiscover:
         builder.append("--nodiscover")
 
     if mine:

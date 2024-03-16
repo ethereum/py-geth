@@ -1,5 +1,8 @@
 import os
 import re
+from typing import (
+    Tuple,
+)
 
 from geth.models import (
     GethKwargs,
@@ -13,7 +16,7 @@ from .wrapper import (
 )
 
 
-def get_accounts(data_dir, **geth_kwargs: GethKwargs) -> tuple[str, ...]:
+def get_accounts(data_dir, **geth_kwargs: GethKwargs) -> Tuple[str, ...]:
     """
     Returns all geth accounts as tuple of hex encoded strings
 
@@ -103,7 +106,7 @@ def create_new_account(data_dir, password, **geth_kwargs):
     :return: Account as 0x prefixed hex string
     """
     if os.path.exists(password):
-        geth_kwargs["password"] = password
+        geth_kwargs.password = password
 
     command, proc = spawn_geth(
         dict(data_dir=data_dir, suffix_args=["account", "new"], **geth_kwargs)

@@ -1,9 +1,10 @@
 import re
 
-from models import (
+import semantic_version
+
+from geth.models import (
     GethKwargs,
 )
-import semantic_version
 
 from .utils.encoding import (
     force_text,
@@ -19,7 +20,7 @@ def get_geth_version_info_string(**geth_kwargs: GethKwargs):
             "The `get_geth_version` function cannot be called with the "
             "`suffix_args` parameter"
         )
-    geth_kwargs["suffix_args"] = ["version"]
+    geth_kwargs.suffix_args = ["version"]
     stdoutdata, stderrdata, command, proc = geth_wrapper(**geth_kwargs)
     return stdoutdata
 

@@ -29,7 +29,7 @@ def soft_reset_chain(allow_live=False, allow_testnet=False, **geth_kwargs):
     suffix_args = geth_kwargs.pop("suffix_args", [])
     suffix_args.extend(("removedb",))
 
-    geth_kwargs["suffix_args"] = suffix_args
+    geth_kwargs.suffix_args = suffix_args
 
     _, proc = spawn_geth_subprocess(**geth_kwargs)
 

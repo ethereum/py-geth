@@ -6,7 +6,7 @@ from typing import (
     Optional,
 )
 
-from models import (
+from geth.models import (
     GenesisData,
 )
 

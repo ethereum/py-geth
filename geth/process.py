@@ -9,6 +9,7 @@ from typing import (
     IO,
     Any,
     Optional,
+    Tuple,
     Type,
     Union,
     cast,
@@ -71,8 +72,9 @@ class BaseGethProcess:
         stdout: IO_Any = subprocess.PIPE,
         stderr: IO_Any = subprocess.PIPE,
     ):
+        # breakpoint()
         self.geth_kwargs = geth_kwargs
-        self.command = construct_popen_command(**geth_kwargs)
+        self.command = construct_popen_command(**geth_kwargs.model_dump())
         self.stdin = stdin
         self.stdout = stdout
         self.stderr = stderr
@@ -122,7 +124,7 @@ class BaseGethProcess:
         return self.proc is not None and self.proc.poll() is not None
 
     @property
-    def accounts(self) -> tuple[str, ...]:
+    def accounts(self) -> Tuple[str, ...]:
         return get_accounts(**self.geth_kwargs)
 
     @property
@@ -135,7 +137,7 @@ class BaseGethProcess:
 
     @property
     def rpc_port(self) -> str:
-        return self.geth_kwargs.get("rpc_port", "8545")
+        return getattr(self.geth_kwargs, "rpc_port", "8545")
 
     @property
     def is_rpc_ready(self) -> bool:
@@ -146,7 +148,7 @@ class BaseGethProcess:
         else:
             return True
 
-    def wait_for_rpc(self, timeout: int = 0):
+    def wait_for_rpc(self, timeout: int = 0) -> None:
         if not self.rpc_enabled:
             raise ValueError("RPC interface is not enabled")
 
@@ -220,9 +222,9 @@ class BaseGethProcess:
 class MainnetGethProcess(BaseGethProcess):
     def __init__(self, geth_kwargs: Optional[GethKwargs] = None):
         if geth_kwargs is None:
-            geth_kwargs = {}
+            geth_kwargs = GethKwargs()
 
-        if "data_dir" in geth_kwargs:
+        if geth_kwargs.data_dir:
             raise ValueError("You cannot specify `data_dir` for a MainnetGethProcess")
 
         super().__init__(geth_kwargs)
@@ -247,7 +249,7 @@ class LiveGethProcess(MainnetGethProcess):
 class RopstenGethProcess(BaseGethProcess):
     def __init__(self, geth_kwargs: Optional[GethKwargs] = None):
         if geth_kwargs is None:
-            geth_kwargs = {}
+            geth_kwargs = GethKwargs()
 
         if "data_dir" in geth_kwargs:
             raise ValueError(
@@ -258,8 +260,8 @@ class RopstenGethProcess(BaseGethProcess):
                 f"You cannot specify `network_id` for a {type(self).__name__}"
             )
 
-        geth_kwargs["network_id"] = "3"
-        geth_kwargs["data_dir"] = get_ropsten_data_dir()
+        geth_kwargs.network_id = "3"
+        geth_kwargs.datadir = get_ropsten_data_dir()
 
         super().__init__(geth_kwargs)
 
@@ -290,7 +292,7 @@ class DevGethProcess(BaseGethProcess):
             overrides = {}
 
         if genesis_data is None:
-            genesis_data = {}
+            genesis_data = GenesisData()
 
         if "data_dir" in overrides:
             raise ValueError("You cannot specify `data_dir` for a DevGethProcess")
