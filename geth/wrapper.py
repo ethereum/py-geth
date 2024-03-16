@@ -223,28 +223,13 @@ def construct_popen_command(
         builder.extend(("--ipcpath", ipc_path))
 
     if verbosity is not None:
-        builder.extend(
-            (
-                "--verbosity",
-                verbosity,
-            )
-        )
+        builder.extend(("--verbosity", verbosity))
 
     if unlock is not None:
-        builder.extend(
-            (
-                "--unlock",
-                unlock,
-            )
-        )
+        builder.extend(("--unlock", unlock))
 
     if password is not None:
-        builder.extend(
-            (
-                "--password",
-                password,
-            )
-        )
+        builder.extend(("--password", password))
 
     if preload is not None:
         builder.extend(("--preload", preload))

@@ -86,7 +86,7 @@ class BaseGethProcess:
             raise ValueError("Already running")
         self.is_running = True
 
-        logger.info("Launching geth: %s", " ".join(self.command))
+        logger.info(f"Launching geth: {' '.join(self.command)}")
         self.proc = subprocess.Popen(
             self.command,
             stdin=self.stdin,
@@ -129,11 +129,11 @@ class BaseGethProcess:
 
     @property
     def rpc_enabled(self) -> bool:
-        return self.geth_kwargs.get("rpc_enabled", False)
+        return getattr(self.geth_kwargs, "rpc_enabled", False)
 
     @property
     def rpc_host(self) -> str:
-        return self.geth_kwargs.get("rpc_host", "127.0.0.1")
+        return getattr(self.geth_kwargs, "rpc_host", "127.0.0.1")
 
     @property
     def rpc_port(self) -> str:
@@ -170,7 +170,7 @@ class BaseGethProcess:
             os.path.abspath(
                 os.path.expanduser(
                     os.path.join(
-                        self.data_dir,
+                        self.geth_kwargs.data_dir,
                         "geth.ipc",
                     )
                 )

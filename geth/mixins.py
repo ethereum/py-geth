@@ -15,13 +15,13 @@ from geth.utils.timeout import (
 )
 
 
-def construct_logger_file_path(prefix, suffix):
+def construct_logger_file_path(prefix: str, suffix: str) -> str:
     ensure_path_exists("./logs")
     timestamp = datetime.datetime.now().strftime(f"{prefix}-%Y%m%d-%H%M%S-{suffix}.log")
     return os.path.join("logs", timestamp)
 
 
-def _get_file_logger(name, filename):
+def _get_file_logger(name: str, filename: str) -> logging.Logger:
     # create logger with 'spam_application'
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
@@ -85,37 +85,37 @@ class InterceptedStreamsMixin:
         self.stderr_callbacks = []
         self.stderr_queue = JoinableQueue()
 
-    def register_stdout_callback(self, callback_fn):
+    def register_stdout_callback(self, callback_fn) -> None:
         self.stdout_callbacks.append(callback_fn)
 
-    def register_stderr_callback(self, callback_fn):
+    def register_stderr_callback(self, callback_fn) -> None:
         self.stderr_callbacks.append(callback_fn)
 
-    def produce_stdout_queue(self):
+    def produce_stdout_queue(self) -> None:
         for line in iter(self.proc.stdout.readline, b""):
             self.stdout_queue.put(line)
             time.sleep(0)
 
-    def produce_stderr_queue(self):
+    def produce_stderr_queue(self) -> None:
         for line in iter(self.proc.stderr.readline, b""):
             self.stderr_queue.put(line)
             time.sleep(0)
 
-    def consume_stdout_queue(self):
+    def consume_stdout_queue(self) -> None:
         for line in self.stdout_queue:
             for fn in self.stdout_callbacks:
                 fn(line.strip())
             self.stdout_queue.task_done()
             time.sleep(0)
 
-    def consume_stderr_queue(self):
+    def consume_stderr_queue(self) -> None:
         for line in self.stderr_queue:
             for fn in self.stderr_callbacks:
                 fn(line.strip())
             self.stderr_queue.task_done()
             time.sleep(0)
 
-    def start(self):
+    def start(self) -> None:
         super().start()
 
         spawn(self.produce_stdout_queue)
@@ -124,7 +124,7 @@ class InterceptedStreamsMixin:
         spawn(self.consume_stdout_queue)
         spawn(self.consume_stderr_queue)
 
-    def stop(self):
+    def stop(self) -> None:
         super().stop()
 
         try:

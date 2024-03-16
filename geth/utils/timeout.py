@@ -3,6 +3,7 @@ from types import (
     TracebackType,
 )
 from typing import (
+    Any,
     Optional,
     Type,
 )
@@ -18,7 +19,13 @@ class Timeout(Exception):
     begun_at = None
     is_running = None
 
-    def __init__(self, seconds=None, exception=None, *args, **kwargs):
+    def __init__(
+        self,
+        seconds: Optional[int] = None,
+        exception: Optional[Any] = None,
+        *args,
+        **kwargs,
+    ):
         self.seconds = seconds
         self.exception = exception
 

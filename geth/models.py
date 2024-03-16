@@ -1,4 +1,8 @@
 from typing import (
+    Any,
+    Dict,
+    List,
+    Literal,
     Optional,
 )
 
@@ -47,37 +51,50 @@ class GethKwargs(BaseModel):
 
     """
 
-    # allowinsecure: Optional[bool] = None
-    autodag: Optional[bool] = (False,)
+    allow_insecure_unlock: Optional[bool] = None
+    autodag: Optional[bool] = False
+    cache: Optional[int] = None
     data_dir: Optional[str] = None
     etherbase: Optional[str] = None
     extradata: Optional[str] = None
     gasprice: Optional[int] = None
+    gcmode: Optional[Literal["full", "archive"]] = None
     genesis: Optional[str] = None
-    geth_executable: Optional[str] = None
-    ipcdisable: Optional[bool] = None
+    ipc_disable: Optional[bool] = None
     max_peers: Optional[str] = None
     metrics: Optional[bool] = None
     mine: Optional[bool] = False
     miner_threads: Optional[int] = None
+    miner_etherbase: Optional[int] = None
     network_id: Optional[str] = None
     nodiscover: Optional[bool] = None
     password: Optional[str] = None
+    preload: Optional[str] = None
     port: Optional[str] = None
     pprof: Optional[bool] = None
-    rpc: Optional[bool] = None
-    rpcaddr: Optional[str] = None
+    rpc_enabled: Optional[bool] = None
+    rpc_addr: Optional[str] = None
     rpc_port: Optional[str] = None
-    rpcapi: Optional[str] = None
+    rpc_api: Optional[str] = None
+    rpc_cors_domain: Optional[str] = None
+    shh: Optional[bool] = None
     targetgaslimit: Optional[int] = None
+    tx_pool_global_slots: Optional[int] = None
+    tx_pool_price_limit: Optional[int] = None
     unlock: Optional[str] = None
     verbosity: Optional[int] = None
     vmodule: Optional[str] = None
     ws_enabled: Optional[bool] = None
     ws_addr: Optional[str] = None
     ws_api: Optional[str] = None
-    wsport: Optional[int] = None
+    ws_origins: Optional[str] = None
+    ws_port: Optional[int] = None
     model_config = ConfigDict(extra="forbid")
+
+    geth_executable: Optional[str] = None
+    nice: Optional[bool] = True
+    suffix_args: Optional[List[str]] = None
+    suffix_kwargs: Optional[Dict[str, Any]] = None
 
 
 class GenesisData(BaseModel):
