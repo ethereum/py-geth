@@ -8,6 +8,11 @@ import stat
 import subprocess
 import sys
 import tarfile
+from typing import (
+    Generator,
+    List,
+    Optional,
+)
 
 V1_11_0 = "v1.11.0"
 V1_11_1 = "v1.11.1"
@@ -45,7 +50,7 @@ WINDOWS = "win32"
 # System utilities.
 #
 @contextlib.contextmanager
-def chdir(path):
+def chdir(path: str) -> Generator[None, None, None]:
     original_path = os.getcwd()
     try:
         os.chdir(path)
@@ -54,7 +59,7 @@ def chdir(path):
         os.chdir(original_path)
 
 
-def get_platform():
+def get_platform() -> str:
     if sys.platform.startswith("linux"):
         return LINUX
     elif sys.platform == OSX:
@@ -65,8 +70,8 @@ def get_platform():
         raise KeyError(f"Unknown platform: {sys.platform}")
 
 
-def is_executable_available(program):
-    def is_exe(fpath):
+def is_executable_available(program: str) -> bool:
+    def is_exe(fpath: str) -> bool:
         return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
 
     fpath = os.path.dirname(program)
@@ -83,7 +88,7 @@ def is_executable_available(program):
     return False
 
 
-def ensure_path_exists(dir_path):
+def ensure_path_exists(dir_path: str) -> bool:
     """
     Make sure that a path exists
     """
@@ -93,12 +98,15 @@ def ensure_path_exists(dir_path):
     return False
 
 
-def ensure_parent_dir_exists(path):
+def ensure_parent_dir_exists(path: str) -> None:
     ensure_path_exists(os.path.dirname(path))
 
 
 def check_subprocess_call(
-    command, message=None, stderr=subprocess.STDOUT, **proc_kwargs
+    command: List[str],
+    message: Optional[str] = None,
+    stderr=subprocess.STDOUT,
+    **proc_kwargs,
 ):
     if message:
         print(message)
@@ -108,7 +116,10 @@ def check_subprocess_call(
 
 
 def check_subprocess_output(
-    command, message=None, stderr=subprocess.STDOUT, **proc_kwargs
+    command: List[str],
+    message: Optional[str] = None,
+    stderr=subprocess.STDOUT,
+    **proc_kwargs,
 ):
     if message:
         print(message)
@@ -117,23 +128,23 @@ def check_subprocess_output(
     return subprocess.check_output(command, stderr=stderr, **proc_kwargs)
 
 
-def chmod_plus_x(executable_path):
+def chmod_plus_x(executable_path: str) -> None:
     current_st = os.stat(executable_path)
     os.chmod(executable_path, current_st.st_mode | stat.S_IEXEC)
 
 
-def get_go_executable_path():
+def get_go_executable_path() -> str:
     return os.environ.get("GO_BINARY", "go")
 
 
-def is_go_available():
+def is_go_available() -> bool:
     return is_executable_available(get_go_executable_path())
 
 
 #
 #  Installation filesystem path utilities
 #
-def get_base_install_path(identifier):
+def get_base_install_path(identifier: str) -> str:
     if "GETH_BASE_INSTALL_PATH" in os.environ:
         return os.path.join(
             os.environ["GETH_BASE_INSTALL_PATH"],

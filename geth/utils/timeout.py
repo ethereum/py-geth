@@ -4,6 +4,7 @@ from types import (
 )
 from typing import (
     Any,
+    Literal,
     Optional,
     Type,
 )
@@ -23,13 +24,13 @@ class Timeout(Exception):
         self,
         seconds: Optional[int] = None,
         exception: Optional[Any] = None,
-        *args,
-        **kwargs,
+        *args: Any,
+        **kwargs: Any,
     ):
         self.seconds = seconds
         self.exception = exception
 
-    def __enter__(self):
+    def __enter__(self) -> "Timeout":
         self.start()
         return self
 
@@ -38,16 +39,16 @@ class Timeout(Exception):
         exc_type: Optional[Type[BaseException]],
         exc_value: Optional[BaseException],
         tb: Optional[TracebackType],
-    ) -> bool:
+    ) -> Literal[False]:
         return False
 
-    def __str__(self):
+    def __str__(self) -> str:
         if self.seconds is None:
             return ""
         return f"{self.seconds} seconds"
 
     @property
-    def expire_at(self):
+    def expire_at(self) -> float:
         if self.seconds is None:
             raise ValueError(
                 "Timeouts with `seconds == None` do not have an expiration time"
@@ -56,13 +57,13 @@ class Timeout(Exception):
             raise ValueError("Timeout has not been started")
         return self.begun_at + self.seconds
 
-    def start(self):
+    def start(self) -> None:
         if self.is_running is not None:
             raise ValueError("Timeout has already been started")
         self.begun_at = time.time()
         self.is_running = True
 
-    def check(self):
+    def check(self) -> None:
         if self.is_running is None:
             raise ValueError("Timeout has not been started")
         elif self.is_running is False:
@@ -78,5 +79,5 @@ class Timeout(Exception):
             else:
                 raise self
 
-    def cancel(self):
+    def cancel(self) -> None:
         self.is_running = False
