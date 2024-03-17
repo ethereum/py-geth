@@ -208,7 +208,7 @@ class BaseGethProcess:
         return mine_bool
 
     def wait_for_dag(self, timeout: int = 0) -> None:
-        if not self.is_mining and not self.geth_kwargs.get("autodag", False):
+        if not self.is_mining and not self.geth_kwargs.autodag:
             raise ValueError("Geth not configured to generate DAG")
 
         with Timeout(timeout) as _timeout:
