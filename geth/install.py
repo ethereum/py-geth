@@ -15,7 +15,7 @@ from typing import (
     Optional,
 )
 
-from geth.typing import (
+from geth.types import (
     IO_Any,
 )
 

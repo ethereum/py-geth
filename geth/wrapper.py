@@ -17,7 +17,7 @@ from geth.exceptions import (
 from geth.models import (
     GethKwargs,
 )
-from geth.typing import (
+from geth.types import (
     IO_Any,
 )
 from geth.utils.encoding import (
