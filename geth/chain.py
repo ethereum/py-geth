@@ -77,7 +77,7 @@ def get_default_base_dir() -> str:
     return get_live_data_dir()
 
 
-def get_chain_data_dir(base_dir: str, name) -> str:
+def get_chain_data_dir(base_dir: str, name: str) -> str:
     data_dir = os.path.abspath(os.path.join(base_dir, name))
     ensure_path_exists(data_dir)
     return data_dir
@@ -168,7 +168,7 @@ def initialize_chain(
     genesis_data: GenesisData, data_dir: str, geth_kwargs: GethKwargs
 ) -> None:
     genesis_file_path = get_genesis_file_path(data_dir)
-    write_genesis_file(genesis_file_path, **genesis_data)
+    write_genesis_file(genesis_file_path, **genesis_data.model_dump())
     geth_kwargs.data_dir = data_dir
     geth_kwargs.suffix_args = ["init", genesis_file_path]
     command, proc = spawn_geth(geth_kwargs)

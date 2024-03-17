@@ -7,7 +7,6 @@ from types import (
 )
 from typing import (
     Any,
-    Dict,
     Optional,
     Tuple,
     Type,
@@ -39,7 +38,7 @@ from geth.models import (
     GenesisData,
     GethKwargs,
 )
-from geth.typing import (
+from geth.types import (
     IO_Any,
 )
 from geth.utils.dag import (
@@ -290,7 +289,7 @@ class DevGethProcess(BaseGethProcess):
         self,
         chain_name: str,
         base_dir: Optional[str] = None,
-        overrides: Optional[Dict[str, Any]] = None,
+        overrides: Optional[GethKwargs] = None,
         genesis_data: Optional[GenesisData] = None,
     ):
         if overrides is None:
@@ -336,6 +335,6 @@ class DevGethProcess(BaseGethProcess):
                     ]
                 )
 
-                initialize_chain(genesis_data, geth_kwargs)
+                initialize_chain(genesis_data, self.data_dir, geth_kwargs)
 
         super().__init__(geth_kwargs)
