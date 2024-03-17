@@ -26,7 +26,7 @@ from .wrapper import (
 def get_live_data_dir() -> str:
     """
     `py-geth` needs a base directory to store it's chain data.  By default this is
-    the directory that `geth` uses as it's `datadir`.
+    the directory that `geth` uses as it's `data_dir`.
     """
     if sys.platform == "darwin":
         data_dir = os.path.expanduser(
@@ -57,7 +57,7 @@ def get_live_data_dir() -> str:
     else:
         raise ValueError(
             f"Unsupported platform: '{sys.platform}'.  Only darwin/linux2/win32 are"
-            " supported.  You must specify the geth datadir manually"
+            " supported.  You must specify the geth data_dir manually"
         )
     return data_dir
 

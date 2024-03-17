@@ -265,7 +265,7 @@ class RopstenGethProcess(BaseGethProcess):
             )
 
         geth_kwargs.network_id = "3"
-        geth_kwargs.datadir = get_ropsten_data_dir()
+        geth_kwargs.data_dir = get_ropsten_data_dir()
 
         super().__init__(geth_kwargs)
 

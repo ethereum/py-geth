@@ -4,6 +4,9 @@ from geth import (
 from geth.mixins import (
     LoggingMixin,
 )
+from geth.models import (
+    GethKwargs,
+)
 from geth.utils.networking import (
     get_open_port,
 )
@@ -14,7 +17,7 @@ class LoggedMainnetGethProcess(LoggingMixin, MainnetGethProcess):
 
 
 def test_live_chain_with_no_overrides():
-    geth = LoggedMainnetGethProcess(geth_kwargs={"port": get_open_port()})
+    geth = LoggedMainnetGethProcess(geth_kwargs=GethKwargs(port=get_open_port()))
 
     geth.start()
 

@@ -117,6 +117,7 @@ def create_new_account(
     if geth_kwargs is None:
         geth_kwargs = GethKwargs()
 
+    # breakpoint()
     if os.path.exists(password):
         geth_kwargs.password = password
 
@@ -158,7 +159,7 @@ def create_new_account(
 def ensure_account_exists(data_dir: str, geth_kwargs: GethKwargs) -> bytes:
     accounts = get_accounts(data_dir, geth_kwargs)
     if not accounts:
-        account = create_new_account(data_dir, geth_kwargs)
+        account = create_new_account(data_dir, geth_kwargs.password, geth_kwargs)
     else:
         account = accounts[0]
     return account
