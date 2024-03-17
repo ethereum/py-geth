@@ -204,7 +204,7 @@ class BaseGethProcess:
 
     @property
     def is_mining(self) -> bool:
-        mine_bool = cast(bool, self.geth_kwargs.get("mine", False))
+        mine_bool = cast(bool, self.geth_kwargs.mine)
         return mine_bool
 
     def wait_for_dag(self, timeout: int = 0) -> None:
