@@ -290,8 +290,8 @@ def construct_popen_command(
 
 
 def geth_wrapper(geth_kwargs: GethKwargs):
-    stdin = geth_kwargs.stdin = None
-    command = construct_popen_command(**geth_kwargs.model_dump())
+    stdin = getattr(geth_kwargs, "stdin", None)
+    command = construct_popen_command(geth_kwargs)
 
     proc = subprocess.Popen(
         command,

@@ -73,7 +73,7 @@ class BaseGethProcess:
     ):
         # breakpoint()
         self.geth_kwargs = geth_kwargs
-        self.command = construct_popen_command(**geth_kwargs.model_dump())
+        self.command = construct_popen_command(geth_kwargs)
         self.stdin = stdin
         self.stdout = stdout
         self.stderr = stderr
@@ -336,6 +336,6 @@ class DevGethProcess(BaseGethProcess):
                     ]
                 )
 
-                initialize_chain(genesis_data, **geth_kwargs.model_dump())
+                initialize_chain(genesis_data, geth_kwargs)
 
         super().__init__(geth_kwargs)

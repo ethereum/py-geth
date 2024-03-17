@@ -62,6 +62,7 @@ class GethKwargs(BaseModel):
     genesis: Optional[str] = None
     ipc_api: Optional[str] = None  # deprecated
     ipc_disable: Optional[bool] = None
+    ipc_path: Optional[str] = None
     max_peers: Optional[str] = None
     metrics: Optional[bool] = None
     mine: Optional[bool] = False
@@ -96,6 +97,7 @@ class GethKwargs(BaseModel):
     nice: Optional[bool] = True
     suffix_args: Optional[List[str]] = None
     suffix_kwargs: Optional[Dict[str, Any]] = None
+    stdin: Optional[str] = None
 
 
 class GenesisData(BaseModel):

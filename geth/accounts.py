@@ -29,6 +29,7 @@ def get_accounts(
     if geth_kwargs is None:
         geth_kwargs = GethKwargs()
 
+    # breakpoint()
     geth_kwargs.data_dir = data_dir
     geth_kwargs.suffix_args = ["account", "list"]
     command, proc = spawn_geth(geth_kwargs)
@@ -54,7 +55,9 @@ def get_accounts(
 account_regex = re.compile(b"([a-f0-9]{40})")
 
 
-def create_new_account(data_dir: str, password: str, geth_kwargs: GethKwargs) -> bytes:
+def create_new_account(
+    data_dir: str, password: str, geth_kwargs: Optional[GethKwargs] = None
+) -> bytes:
     """
     Creates a new Ethereum account on geth.
 
@@ -111,6 +114,9 @@ def create_new_account(data_dir: str, password: str, geth_kwargs: GethKwargs) ->
     :param geth_kwargs: Extra command line arguments password to geth
     :return: Account as 0x prefixed hex string
     """
+    if geth_kwargs is None:
+        geth_kwargs = GethKwargs()
+
     if os.path.exists(password):
         geth_kwargs.password = password
 

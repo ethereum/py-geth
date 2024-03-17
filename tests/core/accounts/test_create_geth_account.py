@@ -11,8 +11,8 @@ def test_create_new_account_with_text_password(tmpdir):
 
     assert not get_accounts(data_dir)
 
-    account_0 = create_new_account(data_dir, b"some-text-password")
     account_1 = create_new_account(data_dir, b"some-text-password")
+    account_0 = create_new_account(data_dir, b"some-text-password")
 
     accounts = get_accounts(data_dir)
     assert sorted((account_0, account_1)) == sorted(tuple(set(accounts)))
