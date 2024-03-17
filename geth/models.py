@@ -117,14 +117,14 @@ class GenesisData(BaseModel):
 
     """
 
-    alloc: Optional[dict]
-    clique: Optional[dict]
-    coinbase: Optional[str]
-    config: Optional[dict]
-    difficulty: Optional[int]
-    extraData: Optional[str]
-    gasLimit: Optional[int]
-    mixhash: Optional[str]
-    nonce: Optional[str]
-    parentHash: Optional[str]
-    timestamp: Optional[str]
+    alloc: Optional[dict] = None
+    clique: Optional[dict] = None
+    coinbase: Optional[str] = None
+    config: Optional[dict] = None
+    difficulty: Optional[int] = None
+    extraData: Optional[str] = None
+    gasLimit: Optional[int] = None
+    mixhash: Optional[str] = None
+    nonce: Optional[str] = None
+    parentHash: Optional[str] = None
+    timestamp: Optional[str] = None

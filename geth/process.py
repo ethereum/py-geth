@@ -125,7 +125,9 @@ class BaseGethProcess:
 
     @property
     def accounts(self) -> Tuple[str, ...]:
-        return get_accounts(**self.geth_kwargs)
+        if not self.geth_kwargs.data_dir:
+            raise ValueError("Cannot determine accounts without a `data_dir`")
+        return get_accounts(self.geth_kwargs.data_dir, self.geth_kwargs)
 
     @property
     def rpc_enabled(self) -> bool:
@@ -161,11 +163,14 @@ class BaseGethProcess:
 
     @property
     def ipc_enabled(self) -> bool:
-        return not self.geth_kwargs.get("ipc_disable", None)
+        return not getattr(self.geth_kwargs, "ipc_disable", None)
 
     @property
     def ipc_path(self) -> str:
-        return self.geth_kwargs.get(
+        if not self.geth_kwargs.data_dir:
+            raise ValueError("Cannot determine IPC path without a `data_dir`")
+        return getattr(
+            self.geth_kwargs,
             "ipc_path",
             os.path.abspath(
                 os.path.expanduser(
@@ -251,11 +256,11 @@ class RopstenGethProcess(BaseGethProcess):
         if geth_kwargs is None:
             geth_kwargs = GethKwargs()
 
-        if "data_dir" in geth_kwargs:
+        if geth_kwargs.data_dir:
             raise ValueError(
                 f"You cannot specify `data_dir` for a {type(self).__name__}"
             )
-        if "network_id" in geth_kwargs:
+        if geth_kwargs.network_id:
             raise ValueError(
                 f"You cannot specify `network_id` for a {type(self).__name__}"
             )
@@ -306,7 +311,7 @@ class DevGethProcess(BaseGethProcess):
         )
 
         # ensure that an account is present
-        coinbase = ensure_account_exists(**geth_kwargs)
+        coinbase = ensure_account_exists(self.data_dir, geth_kwargs)
 
         # ensure that the chain is initialized
         genesis_file_path = get_genesis_file_path(self.data_dir)
@@ -320,9 +325,8 @@ class DevGethProcess(BaseGethProcess):
         )
 
         if needs_init:
-            genesis_data.setdefault(
-                "alloc",
-                dict(
+            if not genesis_data.alloc:
+                genesis_data.alloc = dict(
                     [
                         (
                             coinbase,
@@ -331,8 +335,8 @@ class DevGethProcess(BaseGethProcess):
                             },
                         ),
                     ]
-                ),
-            )
-            initialize_chain(genesis_data, **geth_kwargs)
+                )
+
+                initialize_chain(genesis_data, **geth_kwargs.model_dump())
 
         super().__init__(geth_kwargs)

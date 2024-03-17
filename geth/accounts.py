@@ -16,7 +16,7 @@ from .wrapper import (
 )
 
 
-def get_accounts(data_dir, **geth_kwargs: GethKwargs) -> Tuple[str, ...]:
+def get_accounts(data_dir: str, geth_kwargs: GethKwargs) -> Tuple[str, ...]:
     """
     Returns all geth accounts as tuple of hex encoded strings
 
@@ -24,7 +24,11 @@ def get_accounts(data_dir, **geth_kwargs: GethKwargs) -> Tuple[str, ...]:
     ... ('0x...', '0x...')
     """
     command, proc = spawn_geth(
-        dict(data_dir=data_dir, suffix_args=["account", "list"], **geth_kwargs)
+        dict(
+            data_dir=data_dir,
+            suffix_args=["account", "list"],
+            **geth_kwargs.model_dump()
+        )
     )
     stdoutdata, stderrdata = proc.communicate()
 
@@ -48,7 +52,7 @@ def get_accounts(data_dir, **geth_kwargs: GethKwargs) -> Tuple[str, ...]:
 account_regex = re.compile(b"([a-f0-9]{40})")
 
 
-def create_new_account(data_dir, password, **geth_kwargs):
+def create_new_account(data_dir: str, password: str, geth_kwargs: GethKwargs) -> str:
     """
     Creates a new Ethereum account on geth.
 
@@ -109,7 +113,11 @@ def create_new_account(data_dir, password, **geth_kwargs):
         geth_kwargs.password = password
 
     command, proc = spawn_geth(
-        dict(data_dir=data_dir, suffix_args=["account", "new"], **geth_kwargs)
+        dict(
+            data_dir=data_dir,
+            suffix_args=["account", "new"],
+            **geth_kwargs.model_dump()
+        )
     )
 
     if os.path.exists(password):
@@ -143,15 +151,15 @@ def create_new_account(data_dir, password, **geth_kwargs):
     return b"0x" + match.groups()[0]
 
 
-def ensure_account_exists(data_dir, **geth_kwargs):
-    accounts = get_accounts(data_dir, **geth_kwargs)
+def ensure_account_exists(data_dir: str, geth_kwargs: GethKwargs) -> str:
+    accounts = get_accounts(data_dir, **geth_kwargs.model_dump())
     if not accounts:
-        account = create_new_account(data_dir, **geth_kwargs)
+        account = create_new_account(data_dir, **geth_kwargs.model_dump())
     else:
         account = accounts[0]
     return account
 
 
-def parse_geth_accounts(raw_accounts_output):
+def parse_geth_accounts(raw_accounts_output: bytes) -> Tuple[str, ...]:
     accounts = account_regex.findall(raw_accounts_output)
     return tuple(b"0x" + account for account in accounts)

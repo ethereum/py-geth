@@ -8,6 +8,7 @@ from typing import (
 
 from geth.models import (
     GenesisData,
+    GethKwargs,
 )
 
 from .utils.encoding import (
@@ -163,11 +164,17 @@ def write_genesis_file(
         genesis_file.write(json.dumps(force_obj_to_text(genesis_data)))
 
 
-def initialize_chain(genesis_data: GenesisData, data_dir: str, **geth_kwargs) -> None:
+def initialize_chain(
+    genesis_data: GenesisData, data_dir: str, geth_kwargs: GethKwargs
+) -> None:
     genesis_file_path = get_genesis_file_path(data_dir)
     write_genesis_file(genesis_file_path, **genesis_data)
     command, proc = spawn_geth(
-        dict(data_dir=data_dir, suffix_args=["init", genesis_file_path], **geth_kwargs)
+        dict(
+            data_dir=data_dir,
+            suffix_args=["init", genesis_file_path],
+            **geth_kwargs.model_dump(),
+        )
     )
     stdoutdata, stderrdata = proc.communicate()
 
