@@ -17,7 +17,7 @@ from .wrapper import (
 )
 
 
-def get_geth_version_info_string(geth_kwargs: GethKwargs):
+def get_geth_version_info_string(geth_kwargs: GethKwargs) -> str:
     if getattr(geth_kwargs, "suffix_args", None):
         raise TypeError(
             "The `get_geth_version` function cannot be called with the "
@@ -31,7 +31,9 @@ def get_geth_version_info_string(geth_kwargs: GethKwargs):
 VERSION_REGEX = r"Version: (.*)\n"
 
 
-def get_geth_version(geth_kwargs: Optional[GethKwargs] = None):
+def get_geth_version(
+    geth_kwargs: Optional[GethKwargs] = None,
+) -> semantic_version.Version:
     if geth_kwargs is None:
         geth_kwargs = GethKwargs()
     version_info_string = get_geth_version_info_string(geth_kwargs)

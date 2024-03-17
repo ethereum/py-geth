@@ -5,6 +5,8 @@ import subprocess
 import sys
 import tempfile
 from typing import (
+    Any,
+    Iterable,
     List,
     Tuple,
 )
@@ -14,6 +16,9 @@ from geth.exceptions import (
 )
 from geth.models import (
     GethKwargs,
+)
+from geth.typing import (
+    IO_Any,
 )
 from geth.utils.encoding import (
     force_bytes,
@@ -49,55 +54,57 @@ def get_max_socket_path_length() -> int:
         return 260
 
 
-def construct_test_chain_kwargs(**overrides):
-    overrides.setdefault("unlock", "0")
-    overrides.setdefault("password", DEFAULT_PASSWORD_PATH)
-    overrides.setdefault("mine", True)
-    overrides.setdefault("nodiscover", True)
-    overrides.setdefault("max_peers", "0")
-    overrides.setdefault("network_id", "1234")
+def construct_test_chain_kwargs(overrides: GethKwargs) -> GethKwargs:
+    overrides.set_field_if_none("unlock", "0")
+    overrides.set_field_if_none("password", DEFAULT_PASSWORD_PATH)
+    overrides.set_field_if_none("mine", True)
+    overrides.set_field_if_none("nodiscover", True)
+    overrides.set_field_if_none("max_peers", "0")
+    overrides.set_field_if_none("network_id", "1234")
 
     if is_port_open(30303):
-        overrides.setdefault("port", "30303")
+        overrides.set_field_if_none("port", "30303")
     else:
-        overrides.setdefault("port", get_open_port())
+        overrides.set_field_if_none("port", get_open_port())
 
-    overrides.setdefault("ws_enabled", True)
-    overrides.setdefault("ws_addr", "127.0.0.1")
-    overrides.setdefault("ws_api", ALL_APIS)
+    overrides.set_field_if_none("ws_enabled", True)
+    overrides.set_field_if_none("ws_addr", "127.0.0.1")
+    overrides.set_field_if_none("ws_api", ALL_APIS)
 
     if is_port_open(8546):
-        overrides.setdefault("ws_port", "8546")
+        overrides.set_field_if_none("ws_port", "8546")
     else:
-        overrides.setdefault("ws_port", get_open_port())
+        overrides.set_field_if_none("ws_port", get_open_port())
 
-    overrides.setdefault("rpc_enabled", True)
-    overrides.setdefault("rpc_addr", "127.0.0.1")
-    overrides.setdefault("rpc_api", ALL_APIS)
+    overrides.set_field_if_none("rpc_enabled", True)
+    overrides.set_field_if_none("rpc_addr", "127.0.0.1")
+    overrides.set_field_if_none("rpc_api", ALL_APIS)
     if is_port_open(8545):
-        overrides.setdefault("rpc_port", "8545")
+        overrides.set_field_if_none("rpc_port", "8545")
     else:
-        overrides.setdefault("rpc_port", get_open_port())
+        overrides.set_field_if_none("rpc_port", get_open_port())
 
-    if "ipc_path" not in overrides:
+    if not getattr(overrides, "ipc_path", None):
         # try to use a `geth.ipc` within the provided data_dir if the path is
         # short enough.
-        if "data_dir" in overrides:
+        if getattr(overrides, "data_dir", None) is not None:
+            if overrides.data_dir is None:
+                raise AssertionError("data_dir is None")
             max_path_length = get_max_socket_path_length()
             geth_ipc_path = os.path.abspath(
-                os.path.join(overrides["data_dir"], "geth.ipc")
+                os.path.join(overrides.data_dir, "geth.ipc")
             )
             if len(geth_ipc_path) <= max_path_length:
-                overrides.setdefault("ipc_path", geth_ipc_path)
+                overrides.set_field_if_none("ipc_path", geth_ipc_path)
 
         # Otherwise default to a tempfile based ipc path.
-        overrides.setdefault(
+        overrides.set_field_if_none(
             "ipc_path",
             os.path.join(tempfile.mkdtemp(), "geth.ipc"),
         )
 
-    overrides.setdefault("verbosity", "5")
-    overrides.setdefault("allow_insecure_unlock", True)
+    overrides.set_field_if_none("verbosity", "5")
+    overrides.set_field_if_none("allow_insecure_unlock", True)
 
     return overrides
 
@@ -107,13 +114,13 @@ def get_geth_binary_path() -> str:
 
 
 class CommandBuilder:
-    def __init__(self):
+    def __init__(self) -> None:
         self.command: List[str] = []
 
-    def append(self, value: str):
+    def append(self, value: str) -> None:
         self.command.append(str(value))
 
-    def extend(self, value_list: Tuple[str, ...]):
+    def extend(self, value_list: Iterable[Any]) -> None:
         self.command.extend([str(v) for v in value_list])
 
 
@@ -289,7 +296,9 @@ def construct_popen_command(
     return builder.command
 
 
-def geth_wrapper(geth_kwargs: GethKwargs):
+def geth_wrapper(
+    geth_kwargs: GethKwargs,
+) -> Tuple[bytes, bytes, List[str], subprocess.Popen[bytes]]:
     stdin = getattr(geth_kwargs, "stdin", None)
     command = construct_popen_command(geth_kwargs)
 
@@ -319,10 +328,10 @@ def geth_wrapper(geth_kwargs: GethKwargs):
 
 def spawn_geth(
     geth_kwargs: GethKwargs,
-    stdin=subprocess.PIPE,
-    stdout=subprocess.PIPE,
-    stderr=subprocess.PIPE,
-):
+    stdin: IO_Any = subprocess.PIPE,
+    stdout: IO_Any = subprocess.PIPE,
+    stderr: IO_Any = subprocess.PIPE,
+) -> Tuple[List[str], subprocess.Popen[bytes]]:
     command = construct_popen_command(geth_kwargs)
 
     proc = subprocess.Popen(

@@ -7,6 +7,7 @@ from types import (
 )
 from typing import (
     Any,
+    Dict,
     Optional,
     Tuple,
     Type,
@@ -289,25 +290,24 @@ class DevGethProcess(BaseGethProcess):
         self,
         chain_name: str,
         base_dir: Optional[str] = None,
-        overrides: Optional[Any] = None,
+        overrides: Optional[Dict[str, Any]] = None,
         genesis_data: Optional[GenesisData] = None,
     ):
         if overrides is None:
-            overrides = {}
+            overrides = GethKwargs()
 
         if genesis_data is None:
             genesis_data = GenesisData()
 
-        if "data_dir" in overrides:
+        if getattr(overrides, "data_dir", None):
             raise ValueError("You cannot specify `data_dir` for a DevGethProcess")
 
         if base_dir is None:
             base_dir = get_default_base_dir()
 
         self.data_dir = get_chain_data_dir(base_dir, chain_name)
-        geth_kwargs: GethKwargs = construct_test_chain_kwargs(
-            data_dir=self.data_dir, **overrides
-        )
+        overrides.data_dir = self.data_dir
+        geth_kwargs: GethKwargs = construct_test_chain_kwargs(overrides)
 
         # ensure that an account is present
         coinbase = ensure_account_exists(self.data_dir, geth_kwargs)

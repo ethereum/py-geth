@@ -99,6 +99,10 @@ class GethKwargs(BaseModel):
     suffix_kwargs: Optional[Dict[str, Any]] = None
     stdin: Optional[str] = None
 
+    def set_field_if_none(self, field_name: str, value: Any) -> None:
+        if getattr(self, field_name, None) is None:
+            setattr(self, field_name, value)
+
 
 class GenesisData(BaseModel):
     """
@@ -120,10 +124,10 @@ class GenesisData(BaseModel):
 
     """
 
-    alloc: Optional[dict] = None
-    clique: Optional[dict] = None
+    alloc: Optional[Dict[str, Any]] = None
+    clique: Optional[Dict[str, int]] = None
     coinbase: Optional[str] = None
-    config: Optional[dict] = None
+    config: Optional[Dict[str, Any]] = None
     difficulty: Optional[int] = None
     extraData: Optional[str] = None
     gasLimit: Optional[int] = None
