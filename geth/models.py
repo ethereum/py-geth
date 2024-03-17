@@ -60,11 +60,12 @@ class GethKwargs(BaseModel):
     gasprice: Optional[int] = None
     gcmode: Optional[Literal["full", "archive"]] = None
     genesis: Optional[str] = None
+    ipc_api: Optional[str] = None  # deprecated
     ipc_disable: Optional[bool] = None
     max_peers: Optional[str] = None
     metrics: Optional[bool] = None
     mine: Optional[bool] = False
-    miner_threads: Optional[int] = None
+    miner_threads: Optional[int] = None  # deprecated
     miner_etherbase: Optional[int] = None
     network_id: Optional[str] = None
     nodiscover: Optional[bool] = None

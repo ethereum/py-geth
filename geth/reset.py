@@ -1,6 +1,10 @@
 import os
 
-from .chains import (
+from geth.models import (
+    GethKwargs,
+)
+
+from .chain import (
     is_live_chain,
     is_testnet_chain,
 )
@@ -9,12 +13,16 @@ from .utils.filesystem import (
     remove_file_if_exists,
 )
 from .wrapper import (
-    spawn_geth_subprocess,
+    spawn_geth,
 )
 
+# TODO is this file still relevant? Not referenced or used or tested anywhere
 
-def soft_reset_chain(allow_live=False, allow_testnet=False, **geth_kwargs):
-    data_dir = geth_kwargs.get("data_dir")
+
+def soft_reset_chain(
+    geth_kwargs: GethKwargs, allow_live: bool = False, allow_testnet: bool = False
+):
+    data_dir = getattr(geth_kwargs, "data_dir", None)
 
     if data_dir is None or (not allow_live and is_live_chain(data_dir)):
         raise ValueError(
@@ -26,12 +34,11 @@ def soft_reset_chain(allow_live=False, allow_testnet=False, **geth_kwargs):
             "To reset the testnet chain you must call this function with `allow_testnet=True`"  # noqa: E501
         )
 
-    suffix_args = geth_kwargs.pop("suffix_args", [])
+    suffix_args = getattr(geth_kwargs, "suffix_args", [])
     suffix_args.extend(("removedb",))
-
     geth_kwargs.suffix_args = suffix_args
 
-    _, proc = spawn_geth_subprocess(**geth_kwargs)
+    _, proc = spawn_geth(geth_kwargs)
 
     stdoutdata, stderrdata = proc.communicate("y")
 
@@ -42,7 +49,9 @@ def soft_reset_chain(allow_live=False, allow_testnet=False, **geth_kwargs):
         )
 
 
-def hard_reset_chain(data_dir, allow_live=False, allow_testnet=False):
+def hard_reset_chain(
+    data_dir: str, allow_live: bool = False, allow_testnet: bool = False
+):
     if not allow_live and is_live_chain(data_dir):
         raise ValueError(
             "To reset the live chain you must call this function with `allow_live=True`"

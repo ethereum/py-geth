@@ -169,13 +169,9 @@ def initialize_chain(
 ) -> None:
     genesis_file_path = get_genesis_file_path(data_dir)
     write_genesis_file(genesis_file_path, **genesis_data)
-    command, proc = spawn_geth(
-        dict(
-            data_dir=data_dir,
-            suffix_args=["init", genesis_file_path],
-            **geth_kwargs.model_dump(),
-        )
-    )
+    geth_kwargs.data_dir = data_dir
+    geth_kwargs.suffix_args = ["init", genesis_file_path]
+    command, proc = spawn_geth(geth_kwargs)
     stdoutdata, stderrdata = proc.communicate()
 
     if proc.returncode:

@@ -1,6 +1,7 @@
 import os
 import re
 from typing import (
+    Optional,
     Tuple,
 )
 
@@ -16,20 +17,21 @@ from .wrapper import (
 )
 
 
-def get_accounts(data_dir: str, geth_kwargs: GethKwargs) -> Tuple[str, ...]:
+def get_accounts(
+    data_dir: str, geth_kwargs: Optional[GethKwargs] = None
+) -> Tuple[str, ...]:
     """
     Returns all geth accounts as tuple of hex encoded strings
 
     >>> geth_accounts()
     ... ('0x...', '0x...')
     """
-    command, proc = spawn_geth(
-        dict(
-            data_dir=data_dir,
-            suffix_args=["account", "list"],
-            **geth_kwargs.model_dump()
-        )
-    )
+    if geth_kwargs is None:
+        geth_kwargs = GethKwargs()
+
+    geth_kwargs.data_dir = data_dir
+    geth_kwargs.suffix_args = ["account", "list"]
+    command, proc = spawn_geth(geth_kwargs)
     stdoutdata, stderrdata = proc.communicate()
 
     if proc.returncode:
@@ -52,7 +54,7 @@ def get_accounts(data_dir: str, geth_kwargs: GethKwargs) -> Tuple[str, ...]:
 account_regex = re.compile(b"([a-f0-9]{40})")
 
 
-def create_new_account(data_dir: str, password: str, geth_kwargs: GethKwargs) -> str:
+def create_new_account(data_dir: str, password: str, geth_kwargs: GethKwargs) -> bytes:
     """
     Creates a new Ethereum account on geth.
 
@@ -112,13 +114,9 @@ def create_new_account(data_dir: str, password: str, geth_kwargs: GethKwargs) ->
     if os.path.exists(password):
         geth_kwargs.password = password
 
-    command, proc = spawn_geth(
-        dict(
-            data_dir=data_dir,
-            suffix_args=["account", "new"],
-            **geth_kwargs.model_dump()
-        )
-    )
+    geth_kwargs.data_dir = data_dir
+    geth_kwargs.suffix_args = ["account", "new"]
+    command, proc = spawn_geth(geth_kwargs)
 
     if os.path.exists(password):
         stdoutdata, stderrdata = proc.communicate()
@@ -151,10 +149,10 @@ def create_new_account(data_dir: str, password: str, geth_kwargs: GethKwargs) ->
     return b"0x" + match.groups()[0]
 
 
-def ensure_account_exists(data_dir: str, geth_kwargs: GethKwargs) -> str:
-    accounts = get_accounts(data_dir, **geth_kwargs.model_dump())
+def ensure_account_exists(data_dir: str, geth_kwargs: GethKwargs) -> bytes:
+    accounts = get_accounts(data_dir, geth_kwargs)
     if not accounts:
-        account = create_new_account(data_dir, **geth_kwargs.model_dump())
+        account = create_new_account(data_dir, geth_kwargs)
     else:
         account = accounts[0]
     return account
