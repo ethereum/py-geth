@@ -38,7 +38,7 @@ def remove_dir_if_exists(path: str) -> bool:
 
 
 def is_executable_available(program: str) -> bool:
-    def is_exe(fpath):
+    def is_exe(fpath: str) -> bool:
         return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
 
     fpath = os.path.dirname(program)

@@ -6,12 +6,10 @@ from types import (
     TracebackType,
 )
 from typing import (
-    IO,
     Any,
     Optional,
     Tuple,
     Type,
-    Union,
     cast,
 )
 from urllib.error import (
@@ -40,6 +38,9 @@ from geth.models import (
     GenesisData,
     GethKwargs,
 )
+from geth.typing import (
+    IO_Any,
+)
 from geth.utils.dag import (
     is_dag_generated,
 )
@@ -58,8 +59,6 @@ from geth.wrapper import (
 )
 
 logger = logging.getLogger(__name__)
-
-IO_Any = Union[IO[Any], int, None]
 
 
 class BaseGethProcess:

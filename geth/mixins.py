@@ -3,6 +3,9 @@ import logging
 import os
 import queue
 import time
+from typing import (
+    Optional,
+)
 
 from geth.utils.filesystem import (
     ensure_path_exists,
@@ -61,7 +64,7 @@ class JoinableQueue(queue.Queue):
 
             yield item
 
-    def join(self, timeout=None):
+    def join(self, timeout: Optional[int] = None):
         with Timeout(timeout) as _timeout:
             while not self.empty():
                 time.sleep(0)

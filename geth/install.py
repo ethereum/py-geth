@@ -9,9 +9,14 @@ import subprocess
 import sys
 import tarfile
 from typing import (
+    Any,
     Generator,
     List,
     Optional,
+)
+
+from geth.typing import (
+    IO_Any,
 )
 
 V1_11_0 = "v1.11.0"
@@ -105,9 +110,9 @@ def ensure_parent_dir_exists(path: str) -> None:
 def check_subprocess_call(
     command: List[str],
     message: Optional[str] = None,
-    stderr=subprocess.STDOUT,
-    **proc_kwargs,
-):
+    stderr: IO_Any = subprocess.STDOUT,
+    **proc_kwargs: Any,
+) -> int:
     if message:
         print(message)
     print(f"Executing: {' '.join(command)}")
@@ -115,12 +120,13 @@ def check_subprocess_call(
     return subprocess.check_call(command, stderr=stderr, **proc_kwargs)
 
 
-def check_subprocess_output(
+# type ignored, not sure how to type for subprocess.check_output
+def check_subprocess_output(  # type: ignore
     command: List[str],
     message: Optional[str] = None,
-    stderr=subprocess.STDOUT,
+    stderr: IO_Any = subprocess.STDOUT,
     **proc_kwargs,
-):
+) -> Any:
     if message:
         print(message)
     print(f"Executing: {' '.join(command)}")
@@ -160,21 +166,21 @@ def get_base_install_path(identifier: str) -> str:
         )
 
 
-def get_source_code_archive_path(identifier):
+def get_source_code_archive_path(identifier: str) -> str:
     return os.path.join(
         get_base_install_path(identifier),
         "release.tar.gz",
     )
 
 
-def get_source_code_extract_path(identifier):
+def get_source_code_extract_path(identifier: str) -> str:
     return os.path.join(
         get_base_install_path(identifier),
         "source",
     )
 
 
-def get_source_code_path(identifier):
+def get_source_code_path(identifier: str) -> str:
     return os.path.join(
         get_base_install_path(identifier),
         "source",
@@ -182,7 +188,7 @@ def get_source_code_path(identifier):
     )
 
 
-def get_build_path(identifier):
+def get_build_path(identifier: str) -> str:
     source_code_path = get_source_code_path(identifier)
     return os.path.join(
         source_code_path,
@@ -190,7 +196,7 @@ def get_build_path(identifier):
     )
 
 
-def get_built_executable_path(identifier):
+def get_built_executable_path(identifier: str) -> str:
     build_path = get_build_path(identifier)
     return os.path.join(
         build_path,
@@ -199,7 +205,7 @@ def get_built_executable_path(identifier):
     )
 
 
-def get_executable_path(identifier):
+def get_executable_path(identifier: str) -> str:
     base_install_path = get_base_install_path(identifier)
     return os.path.join(
         base_install_path,
@@ -216,7 +222,7 @@ DOWNLOAD_SOURCE_CODE_URI_TEMPLATE = (
 )
 
 
-def download_source_code_release(identifier):
+def download_source_code_release(identifier: str) -> int:
     download_uri = DOWNLOAD_SOURCE_CODE_URI_TEMPLATE.format(identifier)
     source_code_archive_path = get_source_code_archive_path(identifier)
 
@@ -236,7 +242,7 @@ def download_source_code_release(identifier):
     )
 
 
-def extract_source_code_release(identifier):
+def extract_source_code_release(identifier: str) -> None:
     source_code_archive_path = get_source_code_archive_path(identifier)
 
     source_code_extract_path = get_source_code_extract_path(identifier)
@@ -248,7 +254,7 @@ def extract_source_code_release(identifier):
 
     with tarfile.open(source_code_archive_path, "r:gz") as archive_file:
 
-        def is_within_directory(directory, target):
+        def is_within_directory(directory: str, target: str) -> bool:
             abs_directory = os.path.abspath(directory)
             abs_target = os.path.abspath(target)
 
@@ -256,7 +262,7 @@ def extract_source_code_release(identifier):
 
             return prefix == abs_directory
 
-        def safe_extract(tar, path="."):
+        def safe_extract(tar: tarfile.TarFile, path: str = ".") -> None:
             for member in tar.getmembers():
                 member_path = os.path.join(path, member.name)
                 if not is_within_directory(path, member_path):
@@ -267,7 +273,7 @@ def extract_source_code_release(identifier):
         safe_extract(archive_file, source_code_extract_path)
 
 
-def build_from_source_code(identifier):
+def build_from_source_code(identifier: str) -> None:
     if not is_go_available():
         raise OSError(
             "The `go` runtime was not found but is required to build geth.  If "
@@ -304,7 +310,7 @@ def build_from_source_code(identifier):
     chmod_plus_x(executable_path)
 
 
-def install_from_source_code_release(identifier):
+def install_from_source_code_release(identifier: str) -> None:
     download_source_code_release(identifier)
     extract_source_code_release(identifier)
     build_from_source_code(identifier)
@@ -407,7 +413,7 @@ INSTALL_FUNCTIONS = {
 }
 
 
-def install_geth(identifier, platform=None):
+def install_geth(identifier: str, platform: Optional[str] = None) -> None:
     if platform is None:
         platform = get_platform()
 

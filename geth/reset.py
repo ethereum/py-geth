@@ -6,7 +6,7 @@ from geth.models import (
 
 from .chain import (
     is_live_chain,
-    is_testnet_chain,
+    is_ropsten_chain,
 )
 from .utils.filesystem import (
     remove_dir_if_exists,
@@ -21,7 +21,7 @@ from .wrapper import (
 
 def soft_reset_chain(
     geth_kwargs: GethKwargs, allow_live: bool = False, allow_testnet: bool = False
-):
+) -> None:
     data_dir = getattr(geth_kwargs, "data_dir", None)
 
     if data_dir is None or (not allow_live and is_live_chain(data_dir)):
@@ -29,7 +29,7 @@ def soft_reset_chain(
             "To reset the live chain you must call this function with `allow_live=True`"
         )
 
-    if not allow_testnet and is_testnet_chain(data_dir):
+    if not allow_testnet and is_ropsten_chain(data_dir):
         raise ValueError(
             "To reset the testnet chain you must call this function with `allow_testnet=True`"  # noqa: E501
         )
@@ -51,13 +51,13 @@ def soft_reset_chain(
 
 def hard_reset_chain(
     data_dir: str, allow_live: bool = False, allow_testnet: bool = False
-):
+) -> None:
     if not allow_live and is_live_chain(data_dir):
         raise ValueError(
             "To reset the live chain you must call this function with `allow_live=True`"
         )
 
-    if not allow_testnet and is_testnet_chain(data_dir):
+    if not allow_testnet and is_ropsten_chain(data_dir):
         raise ValueError(
             "To reset the testnet chain you must call this function with `allow_testnet=True`"  # noqa: E501
         )
