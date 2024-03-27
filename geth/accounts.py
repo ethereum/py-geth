@@ -1,5 +1,17 @@
 import os
 import re
+from typing import (
+    Optional,
+    Tuple,
+)
+
+from eth_utils import (
+    to_bytes,
+)
+
+from geth.models import (
+    GethKwargs,
+)
 
 from .utils.proc import (
     format_error_message,
@@ -9,16 +21,22 @@ from .wrapper import (
 )
 
 
-def get_accounts(data_dir, **geth_kwargs):
+def get_accounts(
+    data_dir: str, geth_kwargs: Optional[GethKwargs] = None
+) -> Tuple[str, ...]:
     """
     Returns all geth accounts as tuple of hex encoded strings
 
     >>> geth_accounts()
     ... ('0x...', '0x...')
     """
-    command, proc = spawn_geth(
-        dict(data_dir=data_dir, suffix_args=["account", "list"], **geth_kwargs)
-    )
+    if geth_kwargs is None:
+        geth_kwargs = GethKwargs()
+
+    # breakpoint()
+    geth_kwargs.data_dir = data_dir
+    geth_kwargs.suffix_args = ["account", "list"]
+    command, proc = spawn_geth(geth_kwargs)
     stdoutdata, stderrdata = proc.communicate()
 
     if proc.returncode:
@@ -30,8 +48,8 @@ def get_accounts(data_dir, **geth_kwargs):
                     "Error trying to list accounts",
                     command,
                     proc.returncode,
-                    stdoutdata,
-                    stderrdata,
+                    stdoutdata.decode("utf-8"),
+                    stderrdata.decode("utf-8"),
                 )
             )
     accounts = parse_geth_accounts(stdoutdata)
@@ -41,7 +59,9 @@ def get_accounts(data_dir, **geth_kwargs):
 account_regex = re.compile(b"([a-f0-9]{40})")
 
 
-def create_new_account(data_dir, password, **geth_kwargs):
+def create_new_account(
+    data_dir: str, password: str, geth_kwargs: Optional[GethKwargs] = None
+) -> bytes:
     """
     Creates a new Ethereum account on geth.
 
@@ -98,12 +118,16 @@ def create_new_account(data_dir, password, **geth_kwargs):
     :param geth_kwargs: Extra command line arguments password to geth
     :return: Account as 0x prefixed hex string
     """
-    if os.path.exists(password):
-        geth_kwargs["password"] = password
+    if geth_kwargs is None:
+        geth_kwargs = GethKwargs()
 
-    command, proc = spawn_geth(
-        dict(data_dir=data_dir, suffix_args=["account", "new"], **geth_kwargs)
-    )
+    # breakpoint()
+    if os.path.exists(password):
+        geth_kwargs.password = password
+
+    geth_kwargs.data_dir = data_dir
+    geth_kwargs.suffix_args = ["account", "new"]
+    command, proc = spawn_geth(geth_kwargs)
 
     if os.path.exists(password):
         stdoutdata, stderrdata = proc.communicate()
@@ -116,8 +140,8 @@ def create_new_account(data_dir, password, **geth_kwargs):
                 "Error trying to create a new account",
                 command,
                 proc.returncode,
-                stdoutdata,
-                stderrdata,
+                stdoutdata.decode("utf-8"),
+                stderrdata.decode("utf-8"),
             )
         )
 
@@ -128,23 +152,23 @@ def create_new_account(data_dir, password, **geth_kwargs):
                 "Did not find an address in process output",
                 command,
                 proc.returncode,
-                stdoutdata,
-                stderrdata,
+                stdoutdata.decode("utf-8"),
+                stderrdata.decode("utf-8"),
             )
         )
 
     return b"0x" + match.groups()[0]
 
 
-def ensure_account_exists(data_dir, **geth_kwargs):
-    accounts = get_accounts(data_dir, **geth_kwargs)
+def ensure_account_exists(data_dir: str, geth_kwargs: GethKwargs) -> bytes:
+    accounts = get_accounts(data_dir, geth_kwargs)
     if not accounts:
-        account = create_new_account(data_dir, **geth_kwargs)
+        account = create_new_account(data_dir, geth_kwargs.password, geth_kwargs)
     else:
-        account = accounts[0]
+        account = to_bytes(hexstr=accounts[0])
     return account
 
 
-def parse_geth_accounts(raw_accounts_output):
+def parse_geth_accounts(raw_accounts_output: bytes) -> Tuple[str, ...]:
     accounts = account_regex.findall(raw_accounts_output)
     return tuple(b"0x" + account for account in accounts)

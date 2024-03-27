@@ -1,13 +1,16 @@
 import contextlib
 import socket
 import time
+from typing import (
+    Generator,
+)
 
 from .timeout import (
     Timeout,
 )
 
 
-def is_port_open(port):
+def is_port_open(port: int) -> bool:
     sock = socket.socket()
     try:
         sock.bind(("127.0.0.1", port))
@@ -19,7 +22,7 @@ def is_port_open(port):
         sock.close()
 
 
-def get_open_port():
+def get_open_port() -> str:
     sock = socket.socket()
     sock.bind(("127.0.0.1", 0))
     port = sock.getsockname()[1]
@@ -28,7 +31,9 @@ def get_open_port():
 
 
 @contextlib.contextmanager
-def get_ipc_socket(ipc_path, timeout=0.1):
+def get_ipc_socket(
+    ipc_path: str, timeout: float = 0.1
+) -> Generator[socket.socket, None, None]:
     sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     sock.connect(ipc_path)
     sock.settimeout(timeout)
@@ -38,7 +43,7 @@ def get_ipc_socket(ipc_path, timeout=0.1):
     sock.close()
 
 
-def wait_for_http_connection(port, timeout=5):
+def wait_for_http_connection(port: int, timeout: int = 5) -> None:
     with Timeout(timeout) as _timeout:
         while True:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

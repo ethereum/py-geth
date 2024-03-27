@@ -47,4 +47,7 @@ repos:
     rev: v1.5.1
     hooks:
     -   id: mypy
-        exclude: 'conftest.py|tests/|geth/'
+        additional_dependencies:
+        -   pydantic
+        args: [--follow-imports=silent, --disable-error-code=no-untyped-call]
+        exclude: 'conftest.py|tests/'

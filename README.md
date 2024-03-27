@@ -39,7 +39,7 @@ Or a private local chain for testing.  These require you to give them a name.
 >>> geth.start()
 ```
 
-By default the `DevGethProcess` sets up test chains in the default `datadir`
+By default the `DevGethProcess` sets up test chains in the default `data_dir`
 used by `geth`.  If you would like to change the location for these test
 chains, you can specify an alternative `base_dir`.
 
