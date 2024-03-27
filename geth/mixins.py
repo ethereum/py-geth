@@ -4,7 +4,12 @@ import os
 import queue
 import time
 from typing import (
+    Any,
+    Callable,
+    Generator,
+    List,
     Optional,
+    Union,
 )
 
 from geth.utils.filesystem import (
@@ -45,8 +50,8 @@ def _get_file_logger(name: str, filename: str) -> logging.Logger:
     return logger
 
 
-class JoinableQueue(queue.Queue):
-    def __iter__(self):
+class JoinableQueue(queue.Queue[Union[bytes, type[StopIteration]]]):
+    def __iter__(self) -> Generator[bytes, None, None]:
         while True:
             item = self.get()
 
@@ -64,7 +69,7 @@ class JoinableQueue(queue.Queue):
 
             yield item
 
-    def join(self, timeout: Optional[int] = None):
+    def join(self, timeout: Optional[int] = None) -> None:
         with Timeout(timeout) as _timeout:
             while not self.empty():
                 time.sleep(0)
@@ -77,10 +82,10 @@ class InterceptedStreamsMixin:
     stderr lines into some set of provided callback functions.
     """
 
-    stdout_callbacks = None
-    stderr_callbacks = None
+    stdout_callbacks: List[Callable[..., Any]]
+    stderr_callbacks: List[Callable[..., Any]]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
         self.stdout_callbacks = []
         self.stdout_queue = JoinableQueue()
@@ -88,21 +93,27 @@ class InterceptedStreamsMixin:
         self.stderr_callbacks = []
         self.stderr_queue = JoinableQueue()
 
-    def register_stdout_callback(self, callback_fn) -> None:
+    def register_stdout_callback(self, callback_fn: Callable[..., Any]) -> None:
         self.stdout_callbacks.append(callback_fn)
 
-    def register_stderr_callback(self, callback_fn) -> None:
+    def register_stderr_callback(self, callback_fn: Callable[..., Any]) -> None:
         self.stderr_callbacks.append(callback_fn)
 
     def produce_stdout_queue(self) -> None:
-        for line in iter(self.proc.stdout.readline, b""):
-            self.stdout_queue.put(line)
-            time.sleep(0)
+        if hasattr(self, "proc"):
+            for line in iter(self.proc.stdout.readline, b""):
+                self.stdout_queue.put(line)
+                time.sleep(0)
+        else:
+            raise AttributeError("No `proc` attribute found")
 
     def produce_stderr_queue(self) -> None:
-        for line in iter(self.proc.stderr.readline, b""):
-            self.stderr_queue.put(line)
-            time.sleep(0)
+        if hasattr(self, "proc"):
+            for line in iter(self.proc.stderr.readline, b""):
+                self.stderr_queue.put(line)
+                time.sleep(0)
+        else:
+            raise AttributeError("No `proc` attribute found")
 
     def consume_stdout_queue(self) -> None:
         for line in self.stdout_queue:
@@ -119,7 +130,8 @@ class InterceptedStreamsMixin:
             time.sleep(0)
 
     def start(self) -> None:
-        super().start()
+        # TODO: type ignored bc doesn't know it's always part of BaseGethProcess
+        super().start()  # type: ignore
 
         spawn(self.produce_stdout_queue)
         spawn(self.produce_stderr_queue)
@@ -128,7 +140,8 @@ class InterceptedStreamsMixin:
         spawn(self.consume_stderr_queue)
 
     def stop(self) -> None:
-        super().stop()
+        # TODO: type ignored bc doesn't know it's always part of BaseGethProcess
+        super().stop()  # type: ignore
 
         try:
             self.stdout_queue.put(StopIteration)
@@ -144,7 +157,7 @@ class InterceptedStreamsMixin:
 
 
 class LoggingMixin(InterceptedStreamsMixin):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any):
         stdout_logfile_path = kwargs.pop(
             "stdout_logfile_path",
             construct_logger_file_path("geth", "stdout"),

@@ -25,7 +25,7 @@ def get_geth_version_info_string(geth_kwargs: GethKwargs) -> str:
         )
     geth_kwargs.suffix_args = ["version"]
     stdoutdata, stderrdata, command, proc = geth_wrapper(geth_kwargs)
-    return stdoutdata
+    return str(stdoutdata)
 
 
 VERSION_REGEX = r"Version: (.*)\n"
