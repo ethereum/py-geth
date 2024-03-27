@@ -126,12 +126,13 @@ class GenesisData(BaseModel):
 
     alloc: Optional[Dict[str, Any]] = None
     clique: Optional[Dict[str, int]] = None
-    coinbase: Optional[str] = None
+    coinbase: str = "0x3333333333333333333333333333333333333333"
     config: Optional[Dict[str, Any]] = None
-    difficulty: Optional[int] = None
+    difficulty: str = "0x01"
     extraData: Optional[str] = None
-    gasLimit: Optional[int] = None
-    mixhash: Optional[str] = None
-    nonce: Optional[str] = None
-    parentHash: Optional[str] = None
-    timestamp: Optional[str] = None
+    gasLimit: str = "0x47d5cc"
+    mixhash: str = "0x0000000000000000000000000000000000000000000000000000000000000000"
+    nonce: str = "0xdeadbeefdeadbeef"
+    overwrite: bool = False
+    parentHash: str = "0x0000000000000000000000000000000000000000000000000000000000000000"  # noqa: E501
+    timestamp: str = "0x0"

@@ -42,10 +42,10 @@ def soft_reset_chain(
 
     stdoutdata, stderrdata = proc.communicate("y")
 
-    if "Removing chaindata" not in stdoutdata:
+    if "Removing chaindata" not in stdoutdata.decode("utf-8"):
         raise ValueError(
-            f"An error occurred while removing the chain:\n\nError:\n{stderrdata}\n\n"
-            f"Output:\n{stdoutdata}"
+            "An error occurred while removing the chain:\n\nError:\n"
+            f"{stderrdata.decode('utf-8')}\n\nOutput:\n{stdoutdata.decode('utf-8')}"
         )
 
 

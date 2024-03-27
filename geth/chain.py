@@ -3,6 +3,7 @@ import os
 import sys
 from typing import (
     Any,
+    Dict,
     Optional,
 )
 
@@ -10,10 +11,10 @@ from geth.models import (
     GenesisData,
     GethKwargs,
 )
-
-from .utils.encoding import (
+from geth.utils.encoding import (
     force_obj_to_text,
 )
+
 from .utils.filesystem import (
     ensure_path_exists,
     is_same_path,
@@ -97,19 +98,18 @@ def is_ropsten_chain(data_dir: str) -> bool:
 
 def write_genesis_file(
     genesis_file_path: str,
-    overwrite: bool = False,
-    nonce: str = "0xdeadbeefdeadbeef",
-    timestamp: str = "0x0",
-    parentHash: str = "0x0000000000000000000000000000000000000000000000000000000000000000",  # noqa: E501
-    extraData: Optional[Any] = None,
-    gasLimit: str = "0x47d5cc",
-    difficulty: str = "0x01",
-    mixhash: str = "0x0000000000000000000000000000000000000000000000000000000000000000",
-    coinbase: str = "0x3333333333333333333333333333333333333333",
+    coinbase: str,
+    difficulty: str,
+    gasLimit: str,
+    mixhash: str,
+    nonce: str,
+    overwrite: bool,
+    parentHash: str,
+    timestamp: str,
     alloc: Optional[Any] = None,
+    clique: Optional[Dict[str, int]] = None,
     config: Optional[Any] = None,
-    clique_period: int = 5,
-    clique_epoch: int = 30000,
+    extraData: Optional[Any] = None,
 ) -> None:
     if os.path.exists(genesis_file_path) and not overwrite:
         raise ValueError(
@@ -118,6 +118,8 @@ def write_genesis_file(
 
     if alloc is None:
         alloc = {}
+    if clique is None:
+        clique = {"period": 5, "epoch": 3000}
 
     if config is None:
         config = {
@@ -137,31 +139,28 @@ def write_genesis_file(
             # Using the Ethash consensus algorithm is deprecated
             # Instead, use the Clique consensus algorithm
             # https://geth.ethereum.org/docs/fundamentals/private-network
-            "clique": {"period": clique_period, "epoch": clique_epoch},
+            "clique": {"period": clique.get("period"), "epoch": clique.get("epoch")},
         }
 
     # Assign a signer (coinbase) to the genesis block for Clique
     extraData = (
-        bytes("0x" + "0" * 64 + coinbase[2:] + "0" * 130, "ascii")
-        if extraData is None
-        else extraData
+        ("0x" + "0" * 64 + coinbase[2:] + "0" * 130) if extraData is None else extraData
     )
 
-    genesis_data: GenesisData = {
-        "nonce": nonce,
-        "timestamp": timestamp,
-        "parentHash": parentHash,
-        "extraData": extraData,
-        "gasLimit": gasLimit,
-        "difficulty": difficulty,
-        "mixhash": mixhash,
-        "coinbase": coinbase,
-        "alloc": alloc,
-        "config": config,
-    }
-
+    genesis_data = GenesisData(
+        nonce=nonce,
+        timestamp=timestamp,
+        parentHash=parentHash,
+        extraData=extraData,
+        gasLimit=gasLimit,
+        difficulty=difficulty,
+        mixhash=mixhash,
+        coinbase=coinbase,
+        alloc=alloc,
+        config=config,
+    )
     with open(genesis_file_path, "w") as genesis_file:
-        genesis_file.write(json.dumps(force_obj_to_text(genesis_data)))
+        genesis_file.write(json.dumps(force_obj_to_text(genesis_data.model_dump())))
 
 
 def initialize_chain(
@@ -175,4 +174,6 @@ def initialize_chain(
     stdoutdata, stderrdata = proc.communicate()
 
     if proc.returncode:
-        raise ValueError(f"Error: {stdoutdata + stderrdata}")
+        raise ValueError(
+            f"Error: {stdoutdata.decode('utf-8') + stderrdata.decode('utf-8')}"
+        )

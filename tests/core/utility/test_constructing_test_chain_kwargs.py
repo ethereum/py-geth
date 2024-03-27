@@ -28,7 +28,7 @@ def test_short_data_directory_paths_use_local_geth_ipc_socket():
         assert len(expected_path) < get_max_socket_path_length()
         chain_kwargs = construct_test_chain_kwargs(GethKwargs(data_dir=data_dir))
 
-        assert chain_kwargs["ipc_path"] == expected_path
+        assert chain_kwargs.ipc_path == expected_path
 
 
 def test_long_data_directory_paths_use_tempfile_geth_ipc_socket():
@@ -46,4 +46,4 @@ def test_long_data_directory_paths_use_tempfile_geth_ipc_socket():
 
         chain_kwargs = construct_test_chain_kwargs(GethKwargs(data_dir=data_dir))
 
-        assert chain_kwargs["ipc_path"] != data_dir_ipc_path
+        assert chain_kwargs.ipc_path != data_dir_ipc_path

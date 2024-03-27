@@ -5,6 +5,10 @@ from typing import (
     Tuple,
 )
 
+from eth_utils import (
+    to_bytes,
+)
+
 from geth.models import (
     GethKwargs,
 )
@@ -44,8 +48,8 @@ def get_accounts(
                     "Error trying to list accounts",
                     command,
                     proc.returncode,
-                    stdoutdata,
-                    stderrdata,
+                    stdoutdata.decode("utf-8"),
+                    stderrdata.decode("utf-8"),
                 )
             )
     accounts = parse_geth_accounts(stdoutdata)
@@ -136,8 +140,8 @@ def create_new_account(
                 "Error trying to create a new account",
                 command,
                 proc.returncode,
-                stdoutdata,
-                stderrdata,
+                stdoutdata.decode("utf-8"),
+                stderrdata.decode("utf-8"),
             )
         )
 
@@ -148,8 +152,8 @@ def create_new_account(
                 "Did not find an address in process output",
                 command,
                 proc.returncode,
-                stdoutdata,
-                stderrdata,
+                stdoutdata.decode("utf-8"),
+                stderrdata.decode("utf-8"),
             )
         )
 
@@ -161,7 +165,7 @@ def ensure_account_exists(data_dir: str, geth_kwargs: GethKwargs) -> bytes:
     if not accounts:
         account = create_new_account(data_dir, geth_kwargs.password, geth_kwargs)
     else:
-        account = accounts[0]
+        account = to_bytes(hexstr=accounts[0])
     return account
 
 
