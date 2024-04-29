@@ -1,4 +1,7 @@
 import os
+from typing import (
+    Any,
+)
 
 from .chains import (
     is_live_chain,
@@ -9,11 +12,13 @@ from .utils.filesystem import (
     remove_file_if_exists,
 )
 from .wrapper import (
-    spawn_geth_subprocess,
+    spawn_geth,
 )
 
 
-def soft_reset_chain(allow_live=False, allow_testnet=False, **geth_kwargs):
+def soft_reset_chain(
+    allow_live: bool = False, allow_testnet: bool = False, **geth_kwargs: Any
+) -> None:
     data_dir = geth_kwargs.get("data_dir")
 
     if data_dir is None or (not allow_live and is_live_chain(data_dir)):
@@ -31,7 +36,8 @@ def soft_reset_chain(allow_live=False, allow_testnet=False, **geth_kwargs):
 
     geth_kwargs["suffix_args"] = suffix_args
 
-    _, proc = spawn_geth_subprocess(**geth_kwargs)
+    # type ignored TODO rethink GethKwargs in a separate PR
+    _, proc = spawn_geth(**geth_kwargs)  # type: ignore[no-untyped-call]
 
     stdoutdata, stderrdata = proc.communicate("y")
 
@@ -42,7 +48,9 @@ def soft_reset_chain(allow_live=False, allow_testnet=False, **geth_kwargs):
         )
 
 
-def hard_reset_chain(data_dir, allow_live=False, allow_testnet=False):
+def hard_reset_chain(
+    data_dir: str, allow_live: bool = False, allow_testnet: bool = False
+) -> None:
     if not allow_live and is_live_chain(data_dir):
         raise ValueError(
             "To reset the live chain you must call this function with `allow_live=True`"

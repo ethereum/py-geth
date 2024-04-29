@@ -47,4 +47,5 @@ repos:
     rev: v1.5.1
     hooks:
     -   id: mypy
-        exclude: 'conftest.py|tests/|geth/'
+        args: [--follow-imports=silent]
+        exclude: 'conftest.py|tests/|geth/accounts.py|geth/process.py|geth/main.py|geth/mixins.py'
