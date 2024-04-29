@@ -1,10 +1,17 @@
 import os
 import sys
+from typing import (
+    Optional,
+)
 
 MAGIC_PREFIX = b"\xfe\xca\xdd\xba\xad\xde\xe1\xfe"  # 0xfee1deadbaddcafe
 
 
-def get_dag_file_path(revision=23, seedhash="0000000000000000", base_dir=None):
+def get_dag_file_path(
+    revision: int = 23,
+    seedhash: str = "0000000000000000",
+    base_dir: Optional[str] = None,
+) -> str:
     if seedhash != "0000000000000000":
         raise NotImplementedError("Non-zero seedhashes are not supported")
 
@@ -29,12 +36,16 @@ def get_dag_file_path(revision=23, seedhash="0000000000000000", base_dir=None):
     return dag_file_path
 
 
-def get_magic_bytes(dag_file_path):
+def get_magic_bytes(dag_file_path: str) -> bytes:
     with open(dag_file_path, "rb") as dag_file:
         return dag_file.read(8)
 
 
-def is_dag_generated(revision=23, seedhash="0000000000000000", base_dir=None):
+def is_dag_generated(
+    revision: int = 23,
+    seedhash: str = "0000000000000000",
+    base_dir: Optional[str] = None,
+) -> bool:
     dag_file_path = get_dag_file_path(revision, seedhash, base_dir)
 
     if not os.path.exists(dag_file_path):

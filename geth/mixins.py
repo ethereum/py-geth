@@ -1,8 +1,16 @@
+from __future__ import (
+    annotations,
+)
+
 import datetime
 import logging
 import os
 import queue
 import time
+from typing import (
+    Any,
+    Callable,
+)
 
 from geth.utils.filesystem import (
     ensure_path_exists,
@@ -15,13 +23,13 @@ from geth.utils.timeout import (
 )
 
 
-def construct_logger_file_path(prefix, suffix):
+def construct_logger_file_path(prefix: str, suffix: str) -> str:
     ensure_path_exists("./logs")
     timestamp = datetime.datetime.now().strftime(f"{prefix}-%Y%m%d-%H%M%S-{suffix}.log")
     return os.path.join("logs", timestamp)
 
 
-def _get_file_logger(name, filename):
+def _get_file_logger(name: str, filename: str) -> logging.Logger:
     # create logger with 'spam_application'
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
@@ -61,7 +69,7 @@ class JoinableQueue(queue.Queue):
 
             yield item
 
-    def join(self, timeout=None):
+    def join(self, timeout: int | None = None) -> None:
         with Timeout(timeout) as _timeout:
             while not self.empty():
                 time.sleep(0)
@@ -74,10 +82,10 @@ class InterceptedStreamsMixin:
     stderr lines into some set of provided callback functions.
     """
 
-    stdout_callbacks = None
-    stderr_callbacks = None
+    stdout_callbacks: list[Callable[..., Any]]
+    stderr_callbacks: list[Callable[..., Any]]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
         self.stdout_callbacks = []
         self.stdout_queue = JoinableQueue()
@@ -85,37 +93,43 @@ class InterceptedStreamsMixin:
         self.stderr_callbacks = []
         self.stderr_queue = JoinableQueue()
 
-    def register_stdout_callback(self, callback_fn):
+    def register_stdout_callback(self, callback_fn: Callable[..., Any]) -> None:
         self.stdout_callbacks.append(callback_fn)
 
-    def register_stderr_callback(self, callback_fn):
+    def register_stderr_callback(self, callback_fn: Callable[..., Any]) -> None:
         self.stderr_callbacks.append(callback_fn)
 
-    def produce_stdout_queue(self):
-        for line in iter(self.proc.stdout.readline, b""):
-            self.stdout_queue.put(line)
-            time.sleep(0)
+    def produce_stdout_queue(self) -> None:
+        if hasattr(self, "proc"):
+            for line in iter(self.proc.stdout.readline, b""):
+                self.stdout_queue.put(line)
+                time.sleep(0)
+        else:
+            raise AttributeError("No `proc` attribute found")
 
-    def produce_stderr_queue(self):
-        for line in iter(self.proc.stderr.readline, b""):
-            self.stderr_queue.put(line)
-            time.sleep(0)
+    def produce_stderr_queue(self) -> None:
+        if hasattr(self, "proc"):
+            for line in iter(self.proc.stderr.readline, b""):
+                self.stderr_queue.put(line)
+                time.sleep(0)
+        else:
+            raise AttributeError("No `proc` attribute found")
 
-    def consume_stdout_queue(self):
+    def consume_stdout_queue(self) -> None:
         for line in self.stdout_queue:
             for fn in self.stdout_callbacks:
                 fn(line.strip())
             self.stdout_queue.task_done()
             time.sleep(0)
 
-    def consume_stderr_queue(self):
+    def consume_stderr_queue(self) -> None:
         for line in self.stderr_queue:
             for fn in self.stderr_callbacks:
                 fn(line.strip())
             self.stderr_queue.task_done()
             time.sleep(0)
 
-    def start(self):
+    def start(self) -> None:
         super().start()
 
         spawn(self.produce_stdout_queue)
@@ -124,7 +138,7 @@ class InterceptedStreamsMixin:
         spawn(self.consume_stdout_queue)
         spawn(self.consume_stderr_queue)
 
-    def stop(self):
+    def stop(self) -> None:
         super().stop()
 
         try:
@@ -141,7 +155,7 @@ class InterceptedStreamsMixin:
 
 
 class LoggingMixin(InterceptedStreamsMixin):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any):
         stdout_logfile_path = kwargs.pop(
             "stdout_logfile_path",
             construct_logger_file_path("geth", "stdout"),
