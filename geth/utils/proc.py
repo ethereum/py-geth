@@ -1,12 +1,20 @@
+from __future__ import (
+    annotations,
+)
+
 import signal
+import subprocess
 import time
+from typing import (
+    AnyStr,
+)
 
 from .timeout import (
     Timeout,
 )
 
 
-def wait_for_popen(proc, timeout=30):
+def wait_for_popen(proc: subprocess.Popen[AnyStr], timeout: int = 30) -> None:
     try:
         with Timeout(timeout) as _timeout:
             while proc.poll() is None:
@@ -16,7 +24,7 @@ def wait_for_popen(proc, timeout=30):
         pass
 
 
-def kill_proc(proc):
+def kill_proc(proc: subprocess.Popen[AnyStr]) -> None:
     try:
         if proc.poll() is None:
             try:
@@ -43,7 +51,9 @@ def kill_proc(proc):
         proc.kill()
 
 
-def format_error_message(prefix, command, return_code, stdoutdata, stderrdata):
+def format_error_message(
+    prefix: str, command: list[str], return_code: int, stdoutdata: str, stderrdata: str
+) -> str:
     lines = [prefix]
 
     lines.append(f"Command    : {' '.join(command)}")

@@ -1,9 +1,17 @@
+from __future__ import (
+    annotations,
+)
+
 import functools
 import logging
 import os
 import subprocess
 import sys
 import tempfile
+from typing import (
+    Any,
+    Iterable,
+)
 
 from geth.exceptions import (
     GethError,
@@ -31,7 +39,7 @@ DEFAULT_PASSWORD_PATH = os.path.join(PYGETH_DIR, "default_blockchain_password")
 ALL_APIS = "admin,clique,debug,eth,miner,net,personal,shh,txpool,web3,ws"
 
 
-def get_max_socket_path_length():
+def get_max_socket_path_length() -> int:
     if "UNIX_PATH_MAX" in os.environ:
         return int(os.environ["UNIX_PATH_MAX"])
     if sys.platform.startswith("darwin"):
@@ -42,7 +50,7 @@ def get_max_socket_path_length():
         return 260
 
 
-def construct_test_chain_kwargs(**overrides):
+def construct_test_chain_kwargs(**overrides: Any) -> dict[str, Any]:
     overrides.setdefault("unlock", "0")
     overrides.setdefault("password", DEFAULT_PASSWORD_PATH)
     overrides.setdefault("mine", True)
@@ -95,22 +103,23 @@ def construct_test_chain_kwargs(**overrides):
     return overrides
 
 
-def get_geth_binary_path():
+def get_geth_binary_path() -> str:
     return os.environ.get("GETH_BINARY", "geth")
 
 
 class CommandBuilder:
-    def __init__(self):
-        self.command = []
+    def __init__(self) -> None:
+        self.command: list[str] = []
 
-    def append(self, value):
+    def append(self, value: Any) -> None:
         self.command.append(str(value))
 
-    def extend(self, value_list):
+    def extend(self, value_list: Iterable[Any]) -> None:
         self.command.extend([str(v) for v in value_list])
 
 
-def construct_popen_command(
+# type ignored TODO rethink GethKwargs in a separate PR
+def construct_popen_command(  # type: ignore
     data_dir=None,
     geth_executable=None,
     max_peers=None,
@@ -296,9 +305,10 @@ def construct_popen_command(
     return builder.command
 
 
-def geth_wrapper(**geth_kwargs):
+# type ignored TODO rethink GethKwargs in a separate PR
+def geth_wrapper(**geth_kwargs):  # type: ignore[no-untyped-def]
     stdin = geth_kwargs.pop("stdin", None)
-    command = construct_popen_command(**geth_kwargs)
+    command = construct_popen_command(**geth_kwargs)  # type: ignore[no-untyped-call]
 
     proc = subprocess.Popen(
         command,
@@ -324,10 +334,11 @@ def geth_wrapper(**geth_kwargs):
     return stdoutdata, stderrdata, command, proc
 
 
-def spawn_geth(
+# type ignored TODO rethink GethKwargs in a separate PR
+def spawn_geth(  # type: ignore[no-untyped-def]
     geth_kwargs, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE
 ):
-    command = construct_popen_command(**geth_kwargs)
+    command = construct_popen_command(**geth_kwargs)  # type: ignore[no-untyped-call]
 
     proc = subprocess.Popen(
         command,
