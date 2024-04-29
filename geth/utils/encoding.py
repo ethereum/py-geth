@@ -1,41 +1,44 @@
+from __future__ import (
+    annotations,
+)
+
 import codecs
-
-binary_types = (bytes, bytearray)
-text_types = (str,)
-string_types = (bytes, str, bytearray)
-
-
-def is_binary(value):
-    return isinstance(value, binary_types)
+from typing import (
+    Any,
+)
 
 
-def is_text(value):
-    return isinstance(value, text_types)
+def is_string(value: Any) -> bool:
+    return isinstance(value, (bytes, bytearray, str))
 
 
-def is_string(value):
-    return isinstance(value, string_types)
-
-
-def force_bytes(value, encoding="iso-8859-1"):
-    if is_binary(value):
-        return bytes(value)
-    elif is_text(value):
-        return codecs.encode(value, encoding)
-    else:
-        raise TypeError(f"Unsupported type: {type(value)}")
-
-
-def force_text(value, encoding="iso-8859-1"):
-    if is_text(value):
+def force_bytes(value: bytes | bytearray | str, encoding: str = "iso-8859-1") -> bytes:
+    if isinstance(value, bytes):
         return value
-    elif is_binary(value):
-        return codecs.decode(value, encoding)
+    elif isinstance(value, bytearray):
+        return bytes(value)
+    elif isinstance(value, str):
+        encoded = codecs.encode(value, encoding)
+        if isinstance(encoded, (bytes, bytearray)):
+            return encoded
+        else:
+            raise TypeError(
+                f"Encoding {encoding!r} produced non-binary result: {encoded!r}"
+            )
     else:
         raise TypeError(f"Unsupported type: {type(value)}")
 
 
-def force_obj_to_text(obj):
+def force_text(value: bytes | bytearray | str, encoding: str = "iso-8859-1") -> str:
+    if isinstance(value, (bytes, bytearray)):
+        return codecs.decode(value, encoding)
+    elif isinstance(value, str):
+        return value
+    else:
+        raise TypeError(f"Unsupported type: {type(value)}")
+
+
+def force_obj_to_text(obj: Any) -> Any:
     if is_string(obj):
         return force_text(obj)
     elif isinstance(obj, dict):

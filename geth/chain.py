@@ -15,7 +15,7 @@ from .wrapper import (
 )
 
 
-def get_live_data_dir():
+def get_live_data_dir() -> str:
     """
     `py-geth` needs a base directory to store it's chain data.  By default this is
     the directory that `geth` uses as it's `datadir`.
@@ -54,7 +54,7 @@ def get_live_data_dir():
     return data_dir
 
 
-def get_ropsten_data_dir():
+def get_ropsten_data_dir() -> str:
     return os.path.abspath(
         os.path.expanduser(
             os.path.join(
@@ -65,29 +65,30 @@ def get_ropsten_data_dir():
     )
 
 
-def get_default_base_dir():
+def get_default_base_dir() -> str:
     return get_live_data_dir()
 
 
-def get_chain_data_dir(base_dir, name):
+def get_chain_data_dir(base_dir: str, name: str) -> str:
     data_dir = os.path.abspath(os.path.join(base_dir, name))
     ensure_path_exists(data_dir)
     return data_dir
 
 
-def get_genesis_file_path(data_dir):
+def get_genesis_file_path(data_dir: str) -> str:
     return os.path.join(data_dir, "genesis.json")
 
 
-def is_live_chain(data_dir):
+def is_live_chain(data_dir: str) -> bool:
     return is_same_path(data_dir, get_live_data_dir())
 
 
-def is_ropsten_chain(data_dir):
+def is_ropsten_chain(data_dir: str) -> bool:
     return is_same_path(data_dir, get_ropsten_data_dir())
 
 
-def write_genesis_file(
+# type ignored TODO rethink genesis file in a separate PR
+def write_genesis_file(  # type: ignore[no-untyped-def]
     genesis_file_path,
     overwrite=False,
     nonce="0x0",
@@ -151,10 +152,10 @@ def write_genesis_file(
         genesis_file.write(json.dumps(force_obj_to_text(genesis_data)))
 
 
-def initialize_chain(genesis_data, data_dir):
+def initialize_chain(genesis_data, data_dir):  # type: ignore[no-untyped-def]
     # init with genesis.json
     genesis_file_path = get_genesis_file_path(data_dir)
-    write_genesis_file(genesis_file_path, **genesis_data)
+    write_genesis_file(genesis_file_path, **genesis_data)  # type: ignore[no-untyped-call]  # noqa: E501
     init_proc = subprocess.Popen(
         (
             get_geth_binary_path(),
@@ -172,6 +173,6 @@ def initialize_chain(genesis_data, data_dir):
     if init_proc.returncode:
         raise ValueError(
             "Error initializing genesis.json: \n"
-            f"    stdout={stdoutdata}\n"
-            f"    stderr={stderrdata}"
+            f"    stdout={stdoutdata.decode()}\n"
+            f"    stderr={stderrdata.decode()}"
         )
