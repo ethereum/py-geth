@@ -1,7 +1,4 @@
 import os
-from typing import (
-    Any,
-)
 
 from geth.models import (
     GethKwargs,

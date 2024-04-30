@@ -1,9 +1,10 @@
+from __future__ import (
+    annotations,
+)
+
 from typing import (
     Any,
-    Dict,
-    List,
     Literal,
-    Optional,
 )
 
 from pydantic import (
@@ -51,53 +52,53 @@ class GethKwargs(BaseModel):
 
     """
 
-    allow_insecure_unlock: Optional[bool] = None
-    autodag: Optional[bool] = False
-    cache: Optional[int] = None
-    data_dir: Optional[str] = None
-    etherbase: Optional[str] = None
-    extradata: Optional[str] = None
-    gasprice: Optional[int] = None
-    gcmode: Optional[Literal["full", "archive"]] = None
-    genesis: Optional[str] = None
-    ipc_api: Optional[str] = None  # deprecated
-    ipc_disable: Optional[bool] = None
-    ipc_path: Optional[str] = None
-    max_peers: Optional[str] = None
-    metrics: Optional[bool] = None
-    mine: Optional[bool] = False
-    miner_threads: Optional[int] = None  # deprecated
-    miner_etherbase: Optional[int] = None
-    network_id: Optional[str] = None
-    nodiscover: Optional[bool] = None
-    password: Optional[str] = None
-    preload: Optional[str] = None
-    port: Optional[str] = None
-    pprof: Optional[bool] = None
-    rpc_enabled: Optional[bool] = None
-    rpc_addr: Optional[str] = None
-    rpc_port: Optional[str] = None
-    rpc_api: Optional[str] = None
-    rpc_cors_domain: Optional[str] = None
-    shh: Optional[bool] = None
-    targetgaslimit: Optional[int] = None
-    tx_pool_global_slots: Optional[int] = None
-    tx_pool_price_limit: Optional[int] = None
-    unlock: Optional[str] = None
-    verbosity: Optional[int] = None
-    vmodule: Optional[str] = None
-    ws_enabled: Optional[bool] = None
-    ws_addr: Optional[str] = None
-    ws_api: Optional[str] = None
-    ws_origins: Optional[str] = None
-    ws_port: Optional[int] = None
+    allow_insecure_unlock: bool | None = None
+    autodag: bool | None = False
+    cache: int | None = None
+    data_dir: str | None = None
+    etherbase: str | None = None
+    extradata: str | None = None
+    gasprice: int | None = None
+    gcmode: Literal["full", "archive"] | None = None
+    genesis: str | None = None
+    ipc_api: str | None = None  # deprecated
+    ipc_disable: bool | None = None
+    ipc_path: str | None = None
+    max_peers: str | None = None
+    metrics: bool | None = None
+    mine: bool | None = False
+    miner_threads: int | None = None  # deprecated
+    miner_etherbase: int | None = None
+    network_id: str | None = None
+    nodiscover: bool | None = None
+    password: str | None = None
+    preload: str | None = None
+    port: str | None = None
+    pprof: bool | None = None
+    rpc_enabled: bool | None = None
+    rpc_addr: str | None = None
+    rpc_port: str | None = None
+    rpc_api: str | None = None
+    rpc_cors_domain: str | None = None
+    shh: bool | None = None
+    targetgaslimit: int | None = None
+    tx_pool_global_slots: int | None = None
+    tx_pool_price_limit: int | None = None
+    unlock: str | None = None
+    verbosity: int | None = None
+    vmodule: str | None = None
+    ws_enabled: bool | None = None
+    ws_addr: str | None = None
+    ws_api: str | None = None
+    ws_origins: str | None = None
+    ws_port: int | None = None
     model_config = ConfigDict(extra="forbid")
 
-    geth_executable: Optional[str] = None
-    nice: Optional[bool] = True
-    suffix_args: Optional[List[str]] = None
-    suffix_kwargs: Optional[Dict[str, Any]] = None
-    stdin: Optional[str] = None
+    geth_executable: str | None = None
+    nice: bool | None = True
+    suffix_args: list[str] | None = None
+    suffix_kwargs: dict[str, Any] | None = None
+    stdin: str | None = None
 
     def set_field_if_none(self, field_name: str, value: Any) -> None:
         if getattr(self, field_name, None) is None:
@@ -124,12 +125,12 @@ class GenesisData(BaseModel):
 
     """
 
-    alloc: Optional[Dict[bytes, Dict[str, Any]]] = None
-    clique: Optional[Dict[str, int]] = None
+    alloc: dict[bytes, dict[str, Any]] | None = None
+    clique: dict[str, int] | None = None
     coinbase: bytes = b"0x3333333333333333333333333333333333333333"
-    config: Optional[Dict[str, Any]] = None
+    config: dict[str, Any] | None = None
     difficulty: str = "0x01"
-    extraData: Optional[str] = None
+    extraData: str | None = None
     gasLimit: str = "0x47d5cc"
     mixhash: str = "0x0000000000000000000000000000000000000000000000000000000000000000"
     nonce: str = "0xdeadbeefdeadbeef"

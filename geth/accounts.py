@@ -1,10 +1,9 @@
+from __future__ import (
+    annotations,
+)
+
 import os
 import re
-from typing import (
-    Optional,
-    Tuple,
-    Union,
-)
 
 from geth.models import (
     GethKwargs,
@@ -19,8 +18,8 @@ from .wrapper import (
 
 
 def get_accounts(
-    data_dir: str, geth_kwargs: Optional[GethKwargs] = None
-) -> Tuple[bytes, ...]:
+    data_dir: str, geth_kwargs: GethKwargs | None = None
+) -> tuple[bytes, ...]:
     """
     Returns all geth accounts as tuple of hex encoded strings
 
@@ -57,7 +56,7 @@ account_regex = re.compile(b"([a-f0-9]{40})")
 
 
 def create_new_account(
-    data_dir: str, password: Union[bytes, str], geth_kwargs: Optional[GethKwargs] = None
+    data_dir: str, password: bytes | str, geth_kwargs: GethKwargs | None = None
 ) -> bytes:
     """
     Creates a new Ethereum account on geth.
@@ -172,6 +171,6 @@ def ensure_account_exists(data_dir: str, geth_kwargs: GethKwargs) -> bytes:
     return account
 
 
-def parse_geth_accounts(raw_accounts_output: bytes) -> Tuple[bytes, ...]:
+def parse_geth_accounts(raw_accounts_output: bytes) -> tuple[bytes, ...]:
     accounts = account_regex.findall(raw_accounts_output)
     return tuple(b"0x" + account for account in accounts)

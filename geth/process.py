@@ -1,3 +1,7 @@
+from __future__ import (
+    annotations,
+)
+
 import logging
 import os
 import subprocess
@@ -7,9 +11,6 @@ from types import (
 )
 from typing import (
     Any,
-    Optional,
-    Tuple,
-    Type,
     cast,
 )
 from urllib.error import (
@@ -93,7 +94,7 @@ class BaseGethProcess:
             stderr=self.stderr,
         )
 
-    def __enter__(self) -> "BaseGethProcess":
+    def __enter__(self) -> BaseGethProcess:
         self.start()
         return self
 
@@ -108,9 +109,9 @@ class BaseGethProcess:
 
     def __exit__(
         self,
-        exc_type: Optional[Type[BaseException]],
-        exc_value: Optional[BaseException],
-        tb: Optional[TracebackType],
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        tb: TracebackType | None,
     ) -> None:
         self.stop()
 
@@ -123,7 +124,7 @@ class BaseGethProcess:
         return self.proc is not None and self.proc.poll() is not None
 
     @property
-    def accounts(self) -> Tuple[bytes, ...]:
+    def accounts(self) -> tuple[bytes, ...]:
         if not self.geth_kwargs.data_dir:
             raise ValueError("Cannot determine accounts without a `data_dir`")
         return get_accounts(self.geth_kwargs.data_dir, self.geth_kwargs)
@@ -224,7 +225,7 @@ class BaseGethProcess:
 
 
 class MainnetGethProcess(BaseGethProcess):
-    def __init__(self, geth_kwargs: Optional[GethKwargs] = None):
+    def __init__(self, geth_kwargs: GethKwargs | None = None):
         if geth_kwargs is None:
             geth_kwargs = GethKwargs()
 
@@ -251,7 +252,7 @@ class LiveGethProcess(MainnetGethProcess):
 
 
 class RopstenGethProcess(BaseGethProcess):
-    def __init__(self, geth_kwargs: Optional[GethKwargs] = None):
+    def __init__(self, geth_kwargs: GethKwargs | None = None):
         if geth_kwargs is None:
             geth_kwargs = GethKwargs()
 
@@ -288,9 +289,9 @@ class DevGethProcess(BaseGethProcess):
     def __init__(
         self,
         chain_name: str,
-        base_dir: Optional[str] = None,
-        overrides: Optional[GethKwargs] = None,
-        genesis_data: Optional[GenesisData] = None,
+        base_dir: str | None = None,
+        overrides: GethKwargs | None = None,
+        genesis_data: GenesisData | None = None,
     ):
         if overrides is None:
             overrides = GethKwargs()

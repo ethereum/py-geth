@@ -1,10 +1,12 @@
+from __future__ import (
+    annotations,
+)
+
 import json
 import os
 import sys
 from typing import (
     Any,
-    Dict,
-    Optional,
 )
 
 from geth.models import (
@@ -106,10 +108,10 @@ def write_genesis_file(
     overwrite: bool,
     parentHash: str,
     timestamp: str,
-    alloc: Optional[Any] = None,
-    clique: Optional[Dict[str, int]] = None,
-    config: Optional[Any] = None,
-    extraData: Optional[Any] = None,
+    alloc: Any | None = None,
+    clique: dict[str, int] | None = None,
+    config: Any | None = None,
+    extraData: Any | None = None,
 ) -> None:
     if os.path.exists(genesis_file_path) and not overwrite:
         raise ValueError(

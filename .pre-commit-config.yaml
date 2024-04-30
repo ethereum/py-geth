@@ -47,5 +47,7 @@ repos:
     rev: v1.5.1
     hooks:
     -   id: mypy
+        additional_dependencies:
+        -   pydantic
         args: [--follow-imports=silent]
         exclude: 'conftest.py|tests/|geth/accounts.py|geth/process.py|geth/main.py|geth/mixins.py'
