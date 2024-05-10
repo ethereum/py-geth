@@ -28,7 +28,7 @@ PYGETH_DIR = os.path.abspath(os.path.dirname(__file__))
 DEFAULT_PASSWORD_PATH = os.path.join(PYGETH_DIR, "default_blockchain_password")
 
 
-ALL_APIS = "admin,clique,debug,eth,miner,net,personal,shh,txpool,web3,ws"
+ALL_APIS = "admin,debug,eth,net,txpool,web3"
 
 
 def get_max_socket_path_length():
@@ -43,9 +43,8 @@ def get_max_socket_path_length():
 
 
 def construct_test_chain_kwargs(**overrides):
-    overrides.setdefault("unlock", "0")
+    overrides.setdefault("dev_mode", True)
     overrides.setdefault("password", DEFAULT_PASSWORD_PATH)
-    overrides.setdefault("mine", True)
     overrides.setdefault("no_discover", True)
     overrides.setdefault("max_peers", "0")
     overrides.setdefault("network_id", "1234")
@@ -56,7 +55,6 @@ def construct_test_chain_kwargs(**overrides):
         overrides.setdefault("port", get_open_port())
 
     overrides.setdefault("ws_enabled", True)
-    overrides.setdefault("ws_addr", "127.0.0.1")
     overrides.setdefault("ws_api", ALL_APIS)
 
     if is_port_open(8546):
@@ -65,7 +63,6 @@ def construct_test_chain_kwargs(**overrides):
         overrides.setdefault("ws_port", get_open_port())
 
     overrides.setdefault("rpc_enabled", True)
-    overrides.setdefault("rpc_addr", "127.0.0.1")
     overrides.setdefault("rpc_api", ALL_APIS)
     if is_port_open(8545):
         overrides.setdefault("rpc_port", "8545")
@@ -90,7 +87,6 @@ def construct_test_chain_kwargs(**overrides):
         )
 
     overrides.setdefault("verbosity", "5")
-    overrides.setdefault("allow_insecure_unlock", True)
 
     return overrides
 
@@ -111,6 +107,7 @@ class CommandBuilder:
 
 
 def construct_popen_command(
+    dev_mode=False,
     data_dir=None,
     geth_executable=None,
     max_peers=None,
@@ -169,6 +166,9 @@ def construct_popen_command(
         builder.extend(("nice", "-n", "20"))
 
     builder.append(geth_executable)
+
+    if dev_mode:
+        builder.append("--dev")
 
     if rpc_enabled:
         builder.append("--http")

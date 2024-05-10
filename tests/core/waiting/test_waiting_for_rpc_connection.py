@@ -14,7 +14,7 @@ from geth.utils.timeout import (
 def test_waiting_for_rpc_connection(base_dir):
     with DevGethProcess("testing", base_dir=base_dir) as geth:
         assert geth.is_running
-        geth.wait_for_rpc(timeout=60)
+        geth.wait_for_rpc(timeout=15)
 
 
 @flaky(max_runs=3)
