@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import subprocess
@@ -47,6 +48,8 @@ from geth.wrapper import (
 )
 
 logger = logging.getLogger(__name__)
+with open(os.path.join(os.path.dirname(__file__), "genesis.json")) as genesis_file:
+    GENESIS_JSON = json.load(genesis_file)
 
 
 class BaseGethProcess:
@@ -258,7 +261,7 @@ class TestnetGethProcess(RopstenGethProcess):
 
 class DevGethProcess(BaseGethProcess):
     """
-    A local private chain for development.
+    Geth developer mode process for testing purposes.
     """
 
     def __init__(self, chain_name, base_dir=None, overrides=None, genesis_data=None):
@@ -266,7 +269,7 @@ class DevGethProcess(BaseGethProcess):
             overrides = {}
 
         if genesis_data is None:
-            genesis_data = {}
+            genesis_data = GENESIS_JSON.copy()
 
         if "data_dir" in overrides:
             raise ValueError("You cannot specify `data_dir` for a DevGethProcess")
@@ -292,6 +295,7 @@ class DevGethProcess(BaseGethProcess):
         )
 
         if needs_init:
+            genesis_data["coinbase"] = coinbase
             genesis_data.setdefault(
                 "alloc",
                 dict(
@@ -305,6 +309,6 @@ class DevGethProcess(BaseGethProcess):
                     ]
                 ),
             )
-            initialize_chain(genesis_data, **geth_kwargs)
+            initialize_chain(genesis_data, self.data_dir)
 
         super().__init__(geth_kwargs)

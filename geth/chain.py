@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 import sys
 
 from .utils.encoding import (
@@ -10,7 +11,7 @@ from .utils.filesystem import (
     is_same_path,
 )
 from .wrapper import (
-    spawn_geth,
+    get_geth_binary_path,
 )
 
 
@@ -89,18 +90,16 @@ def is_ropsten_chain(data_dir):
 def write_genesis_file(
     genesis_file_path,
     overwrite=False,
-    nonce="0xdeadbeefdeadbeef",
+    nonce="0x0",
     timestamp="0x0",
     parentHash="0x0000000000000000000000000000000000000000000000000000000000000000",
-    extraData=None,
+    extraData="0x0000000000000000000000000000000000000000000000000000000000000000",
     gasLimit="0x47d5cc",
-    difficulty="0x01",
+    difficulty="0x0",
     mixhash="0x0000000000000000000000000000000000000000000000000000000000000000",
     coinbase="0x3333333333333333333333333333333333333333",
     alloc=None,
     config=None,
-    clique_period: int = 5,
-    clique_epoch: int = 30000,
 ):
     if os.path.exists(genesis_file_path) and not overwrite:
         raise ValueError(
@@ -112,7 +111,10 @@ def write_genesis_file(
 
     if config is None:
         config = {
+            "ethash": {},
             "homesteadBlock": 0,
+            "daoForkBlock": 0,
+            "daoForSupport": True,
             "eip150Block": 0,
             "eip155Block": 0,
             "eip158Block": 0,
@@ -122,21 +124,15 @@ def write_genesis_file(
             "istanbulBlock": 0,
             "berlinBlock": 0,
             "londonBlock": 0,
-            "shanghaiBlock": 0,
-            "daoForkBlock": 0,
-            "daoForSupport": True,
-            # Using the Ethash consensus algorithm is deprecated
-            # Instead, use the Clique consensus algorithm
-            # https://geth.ethereum.org/docs/fundamentals/private-network
-            "clique": {"period": clique_period, "epoch": clique_epoch},
+            "arrowGlacierBlock": 0,
+            "grayGlacierBlock": 0,
+            # merge
+            "terminalTotalDifficulty": 0,
+            "terminalTotalDifficultyPassed": True,
+            # post-merge, timestamp is used for network transitions
+            "shanghaiTime": 0,
+            "cancunTime": 0,
         }
-
-    # Assign a signer (coinbase) to the genesis block for Clique
-    extraData = (
-        bytes("0x" + "0" * 64 + coinbase[2:] + "0" * 130, "ascii")
-        if extraData is None
-        else extraData
-    )
 
     genesis_data = {
         "nonce": nonce,
@@ -155,13 +151,23 @@ def write_genesis_file(
         genesis_file.write(json.dumps(force_obj_to_text(genesis_data)))
 
 
-def initialize_chain(genesis_data, data_dir, **geth_kwargs):
+def initialize_chain(genesis_data, data_dir):
+    # init with genesis.json
     genesis_file_path = get_genesis_file_path(data_dir)
     write_genesis_file(genesis_file_path, **genesis_data)
-    command, proc = spawn_geth(
-        dict(data_dir=data_dir, suffix_args=["init", genesis_file_path], **geth_kwargs)
+    init_proc = subprocess.Popen(
+        (
+            get_geth_binary_path(),
+            "--datadir",
+            data_dir,
+            "init",
+            genesis_file_path,
+        ),
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
     )
-    stdoutdata, stderrdata = proc.communicate()
-
-    if proc.returncode:
-        raise ValueError(f"Error: {stdoutdata + stderrdata}")
+    stdoutdata, stderrdata = init_proc.communicate()
+    init_proc.wait()
+    if init_proc.returncode:
+        raise ValueError(f"Error initializing genesis.json: {stdoutdata + stderrdata}")
