@@ -31,7 +31,7 @@ To run geth connected to the mainnet
 >>> geth.start()
 ```
 
-Or a private local chain for testing.  These require you to give them a name.
+Or in dev mode for testing.  These require you to give them a name.
 
 ```python
 >>> from geth import DevGethProcess
@@ -119,26 +119,26 @@ True
 
 > This feature is experimental and subject to breaking changes.
 
-Versions of `geth` dating back to v1.11.0 can be installed using `py-geth`.
+Versions of `geth` dating back to v1.13.0 can be installed using `py-geth`.
 See [install.py](https://github.com/ethereum/py-geth/blob/main/geth/install.py) for
 the current list of supported versions.
 
 Installation can be done via the command line:
 
 ```bash
-$ python -m geth.install v1.14.0
+$ python -m geth.install v1.14.3
 ```
 
 Or from python using the `install_geth` function.
 
 ```python
 >>> from geth import install_geth
->>> install_geth('v1.14.0')
+>>> install_geth('v1.14.3')
 ```
 
 The installed binary can be found in the `$HOME/.py-geth` directory, under your
-home directory.  The `v1.14.0` binary would be located at
-`$HOME/.py-geth/geth-v1.14.0/bin/geth`.
+home directory.  The `v1.14.3` binary would be located at
+`$HOME/.py-geth/geth-v1.14.3/bin/geth`.
 
 ## About `DevGethProcess`
 
