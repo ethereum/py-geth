@@ -5,6 +5,12 @@ import subprocess
 import time
 import warnings
 
+import semantic_version
+
+from geth import (
+    get_geth_version,
+)
+
 try:
     from urllib.request import (
         URLError,
@@ -285,7 +291,6 @@ class DevGethProcess(BaseGethProcess):
 
         # ensure that the chain is initialized
         genesis_file_path = get_genesis_file_path(self.data_dir)
-
         needs_init = all(
             (
                 not os.path.exists(genesis_file_path),
@@ -293,7 +298,6 @@ class DevGethProcess(BaseGethProcess):
                 not is_ropsten_chain(self.data_dir),
             )
         )
-
         if needs_init:
             genesis_data["coinbase"] = coinbase
             genesis_data.setdefault(
@@ -309,6 +313,17 @@ class DevGethProcess(BaseGethProcess):
                     ]
                 ),
             )
+            modify_genesis_based_on_geth_version(genesis_data)
             initialize_chain(genesis_data, self.data_dir)
 
         super().__init__(geth_kwargs)
+
+
+def modify_genesis_based_on_geth_version(genesis_data):
+    geth_version = get_geth_version()
+    if geth_version <= semantic_version.Version("1.14.0"):
+        # geth <= v1.14.0 needs negative `terminalTotalDifficulty` to load EVM
+        # instructions correctly: https://github.com/ethereum/go-ethereum/pull/29579
+        if "config" not in genesis_data:
+            genesis_data["config"] = {}
+        genesis_data["config"]["terminalTotalDifficulty"] = -1
