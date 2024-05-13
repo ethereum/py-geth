@@ -2,6 +2,10 @@ import re
 
 import semantic_version
 
+from geth.utils.validation import (
+    validate_geth_kwargs,
+)
+
 from .utils.encoding import (
     force_text,
 )
@@ -17,6 +21,7 @@ def get_geth_version_info_string(**geth_kwargs):
             "`suffix_args` parameter"
         )
     geth_kwargs["suffix_args"] = ["version"]
+    validate_geth_kwargs(geth_kwargs)
     stdoutdata, stderrdata, command, proc = geth_wrapper(**geth_kwargs)
     return stdoutdata
 
@@ -25,6 +30,7 @@ VERSION_REGEX = r"Version: (.*)\n"
 
 
 def get_geth_version(**geth_kwargs):
+    validate_geth_kwargs(geth_kwargs)
     version_info_string = get_geth_version_info_string(**geth_kwargs)
     version_match = re.search(VERSION_REGEX, force_text(version_info_string, "utf8"))
     if not version_match:

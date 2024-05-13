@@ -1,0 +1,1 @@
+Use a pydantic model to validate typing of ``geth_kwargs`` when passed as an argument
