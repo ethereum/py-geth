@@ -114,7 +114,7 @@ def write_genesis_file(
             "ethash": {},
             "homesteadBlock": 0,
             "daoForkBlock": 0,
-            "daoForSupport": True,
+            "daoForkSupport": True,
             "eip150Block": 0,
             "eip155Block": 0,
             "eip158Block": 0,
