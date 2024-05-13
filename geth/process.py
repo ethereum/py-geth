@@ -36,6 +36,9 @@ from geth.chain import (
     is_live_chain,
     is_ropsten_chain,
 )
+from geth.models import (
+    GethKwargs,
+)
 from geth.utils.dag import (
     is_dag_generated,
 )
@@ -115,7 +118,9 @@ class BaseGethProcess:
 
     @property
     def accounts(self):
-        return get_accounts(**self.geth_kwargs)
+        # TODO convert to GethKwargs earlier in the process
+        geth_kwargs_model = GethKwargs(**self.geth_kwargs)
+        return get_accounts(geth_kwargs_model.data_dir, geth_kwargs_model)
 
     @property
     def rpc_enabled(self):
@@ -287,7 +292,10 @@ class DevGethProcess(BaseGethProcess):
         geth_kwargs = construct_test_chain_kwargs(data_dir=self.data_dir, **overrides)
 
         # ensure that an account is present
-        coinbase = ensure_account_exists(**geth_kwargs)
+        # TODO: convert geth_kwargs earlier in the process
+        geth_kwargs_model = GethKwargs(**geth_kwargs)
+
+        coinbase = ensure_account_exists(self.data_dir, geth_kwargs_model)
 
         # ensure that the chain is initialized
         genesis_file_path = get_genesis_file_path(self.data_dir)

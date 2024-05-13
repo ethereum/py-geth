@@ -1,6 +1,11 @@
+from __future__ import (
+    annotations,
+)
+
 import os
-from typing import (
-    Any,
+
+from geth.models import (
+    GethKwargs,
 )
 
 from .chains import (
@@ -17,9 +22,14 @@ from .wrapper import (
 
 
 def soft_reset_chain(
-    allow_live: bool = False, allow_testnet: bool = False, **geth_kwargs: Any
+    allow_live: bool = False,
+    allow_testnet: bool = False,
+    geth_kwargs: GethKwargs | None = None,
 ) -> None:
-    data_dir = geth_kwargs.get("data_dir")
+    if geth_kwargs is None:
+        geth_kwargs = GethKwargs()
+
+    data_dir = geth_kwargs.data_dir
 
     if data_dir is None or (not allow_live and is_live_chain(data_dir)):
         raise ValueError(
@@ -31,20 +41,21 @@ def soft_reset_chain(
             "To reset the testnet chain you must call this function with `allow_testnet=True`"  # noqa: E501
         )
 
-    suffix_args = geth_kwargs.pop("suffix_args", [])
+    suffix_args = geth_kwargs.suffix_args or []
     suffix_args.extend(("removedb",))
 
-    geth_kwargs["suffix_args"] = suffix_args
+    geth_kwargs.suffix_args = suffix_args
 
-    # type ignored TODO rethink GethKwargs in a separate PR
-    _, proc = spawn_geth(**geth_kwargs)  # type: ignore[no-untyped-call]
+    # TODO spawn_geth still takes a dict, change to GethKwargs when typing wrapper.py
+    geth_kwargs_dict = geth_kwargs.model_dump(exclude_none=True)
+    _, proc = spawn_geth(geth_kwargs_dict)  # type: ignore[no-untyped-call]
 
-    stdoutdata, stderrdata = proc.communicate("y")
+    stdoutdata, stderrdata = proc.communicate(b"y")
 
-    if "Removing chaindata" not in stdoutdata:
+    if "Removing chaindata" not in stdoutdata.decode():
         raise ValueError(
-            f"An error occurred while removing the chain:\n\nError:\n{stderrdata}\n\n"
-            f"Output:\n{stdoutdata}"
+            "An error occurred while removing the chain:\n\nError:\n"
+            f"{stderrdata.decode()}\n\nOutput:\n{stdoutdata.decode()}"
         )
 
 

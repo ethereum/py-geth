@@ -1,28 +1,45 @@
+from __future__ import (
+    annotations,
+)
+
 import os
 import re
+
+from geth.models import (
+    GethKwargs,
+)
 
 from .utils.proc import (
     format_error_message,
 )
 from .wrapper import (
+    DEFAULT_PASSWORD_PATH,
     spawn_geth,
 )
 
 
-def get_accounts(data_dir, **geth_kwargs):
+def get_accounts(
+    data_dir: str, geth_kwargs: GethKwargs | None = None
+) -> tuple[str, ...] | tuple[()]:
     """
     Returns all geth accounts as tuple of hex encoded strings
 
-    >>> geth_accounts()
+    >>> get_accounts()
     ... ('0x...', '0x...')
     """
-    command, proc = spawn_geth(
-        dict(data_dir=data_dir, suffix_args=["account", "list"], **geth_kwargs)
-    )
+    if geth_kwargs is None:
+        geth_kwargs = GethKwargs()
+
+    geth_kwargs.data_dir = data_dir
+    geth_kwargs.suffix_args = ["account", "list"]
+
+    # TODO spawn_geth still takes a dict, change to GethKwargs when typing wrapper.py
+    geth_kwargs_dict = geth_kwargs.model_dump(exclude_none=True)
+    command, proc = spawn_geth(geth_kwargs_dict)  # type: ignore[no-untyped-call]
     stdoutdata, stderrdata = proc.communicate()
 
     if proc.returncode:
-        if "no keys in store" in stderrdata.decode("utf-8"):
+        if "no keys in store" in stderrdata.decode():
             return tuple()
         else:
             raise ValueError(
@@ -30,8 +47,8 @@ def get_accounts(data_dir, **geth_kwargs):
                     "Error trying to list accounts",
                     command,
                     proc.returncode,
-                    stdoutdata,
-                    stderrdata,
+                    stdoutdata.decode(),
+                    stderrdata.decode(),
                 )
             )
     accounts = parse_geth_accounts(stdoutdata)
@@ -41,7 +58,9 @@ def get_accounts(data_dir, **geth_kwargs):
 account_regex = re.compile(b"([a-f0-9]{40})")
 
 
-def create_new_account(data_dir, password, **geth_kwargs):
+def create_new_account(
+    data_dir: str, password: bytes | str, geth_kwargs: GethKwargs | None = None
+) -> str:
     """
     Creates a new Ethereum account on geth.
 
@@ -92,20 +111,31 @@ def create_new_account(data_dir, password, **geth_kwargs):
             account = create_new_account(data_dir, DEFAULT_PASSWORD_PATH)
             return account
 
-    :param data_dir: Geth data fir path - where to keep "keystore" folder
-    :param password: Path to a file containing the password
-        for newly created account
+    :param data_dir: Geth datadir path - where to keep "keystore" folder
+    :param password: Password to use for the new account, either the password as bytes
+        or a str path to a file containing the password
     :param geth_kwargs: Extra command line arguments password to geth
     :return: Account as 0x prefixed hex string
     """
-    if os.path.exists(password):
-        geth_kwargs["password"] = password
+    if geth_kwargs is None:
+        geth_kwargs = GethKwargs()
 
-    command, proc = spawn_geth(
-        dict(data_dir=data_dir, suffix_args=["account", "new"], **geth_kwargs)
-    )
+    geth_kwargs.data_dir = data_dir
+    geth_kwargs.suffix_args = ["account", "new"]
 
-    if os.path.exists(password):
+    if isinstance(password, str):
+        if os.path.exists(password):
+            geth_kwargs.password = password
+        else:
+            raise ValueError(f"Password file not found at path: {password}")
+    elif not isinstance(password, bytes):
+        raise ValueError("Password must be either a path to a file or bytes")
+
+    # TODO spawn_geth still takes a dict, change to GethKwargs when typing wrapper.py
+    geth_kwargs_dict = geth_kwargs.model_dump(exclude_none=True)
+    command, proc = spawn_geth(geth_kwargs_dict)  # type: ignore[no-untyped-call]
+
+    if isinstance(password, str):
         stdoutdata, stderrdata = proc.communicate()
     else:
         stdoutdata, stderrdata = proc.communicate(b"\n".join((password, password)))
@@ -116,8 +146,8 @@ def create_new_account(data_dir, password, **geth_kwargs):
                 "Error trying to create a new account",
                 command,
                 proc.returncode,
-                stdoutdata,
-                stderrdata,
+                stdoutdata.decode(),
+                stderrdata.decode(),
             )
         )
 
@@ -128,23 +158,23 @@ def create_new_account(data_dir, password, **geth_kwargs):
                 "Did not find an address in process output",
                 command,
                 proc.returncode,
-                stdoutdata,
-                stderrdata,
+                stdoutdata.decode(),
+                stderrdata.decode(),
             )
         )
 
-    return b"0x" + match.groups()[0]
+    return "0x" + match.groups()[0].decode()
 
 
-def ensure_account_exists(data_dir, **geth_kwargs):
-    accounts = get_accounts(data_dir, **geth_kwargs)
+def ensure_account_exists(data_dir: str, geth_kwargs: GethKwargs | None = None) -> str:
+    accounts = get_accounts(data_dir, geth_kwargs)
     if not accounts:
-        account = create_new_account(data_dir, **geth_kwargs)
+        account = create_new_account(data_dir, DEFAULT_PASSWORD_PATH, geth_kwargs)
     else:
         account = accounts[0]
     return account
 
 
-def parse_geth_accounts(raw_accounts_output):
+def parse_geth_accounts(raw_accounts_output: bytes) -> tuple[str, ...]:
     accounts = account_regex.findall(raw_accounts_output)
-    return tuple(b"0x" + account for account in accounts)
+    return tuple("0x" + account.decode() for account in accounts)
