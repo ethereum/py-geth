@@ -300,19 +300,10 @@ class DevGethProcess(BaseGethProcess):
         )
         if needs_init:
             genesis_data["coinbase"] = coinbase
-            genesis_data.setdefault(
-                "alloc",
-                dict(
-                    [
-                        (
-                            coinbase,
-                            {
-                                "balance": "1000000000000000000000000000000"  # 1 billion ether  # noqa: E501
-                            },
-                        ),
-                    ]
-                ),
+            genesis_data.setdefault("alloc", {}).setdefault(
+                coinbase, {"balance": "1000000000000000000000000000000"}
             )
+
             modify_genesis_based_on_geth_version(genesis_data)
             initialize_chain(genesis_data, self.data_dir)
 

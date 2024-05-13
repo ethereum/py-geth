@@ -142,36 +142,18 @@ home directory.  The `v1.14.3` binary would be located at
 
 ## About `DevGethProcess`
 
-The `DevGethProcess` is designed to facilitate testing.  In that regard, it is
-preconfigured as follows.
+The `DevGethProcess` will run geth in `--dev` mode and is designed to facilitate testing.
+In that regard, it is preconfigured as follows.
 
-- A single account is created and allocated 1 billion ether.
+- A single account is created, allocated 1 billion ether, and assigned as the coinbase.
 - All APIs are enabled on both `rpc` and `ipc` interfaces.
-- Account 0 is unlocked
 - Networking is configured to not look for or connect to any peers.
 - The `networkid` of `1234` is used.
 - Verbosity is set to `5` (DEBUG)
-- Mining is enabled with a single thread.
 - The RPC interface *tries* to bind to 8545 but will find an open port if this
   port is not available.
 - The DevP2P interface *tries* to bind to 30303 but will find an open port if this
   port is not available.
-
-## Gotchas
-
-If you are running with `mining` enabled, which is default for `DevGethProcess`,
-then you will likely need to generate the `DAG` manually.  If you do not, then
-it will auto-generate the first time you run the process and this takes a
-while.
-
-To generate it manually:
-
-```sh
-$ geth makedag 0 ~/.ethash
-```
-
-This is especially important in CI environments like Travis-CI where your
-process will likely timeout during generation.
 
 ## Development
 

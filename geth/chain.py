@@ -170,4 +170,8 @@ def initialize_chain(genesis_data, data_dir):
     stdoutdata, stderrdata = init_proc.communicate()
     init_proc.wait()
     if init_proc.returncode:
-        raise ValueError(f"Error initializing genesis.json: {stdoutdata + stderrdata}")
+        raise ValueError(
+            "Error initializing genesis.json: \n"
+            f"    stdout={stdoutdata}\n"
+            f"    stderr={stderrdata}"
+        )
