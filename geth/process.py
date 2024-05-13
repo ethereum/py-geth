@@ -48,6 +48,9 @@ from geth.utils.proc import (
 from geth.utils.timeout import (
     Timeout,
 )
+from geth.utils.validation import (
+    validate_geth_kwargs,
+)
 from geth.wrapper import (
     construct_popen_command,
     construct_test_chain_kwargs,
@@ -68,6 +71,7 @@ class BaseGethProcess:
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     ):
+        validate_geth_kwargs(geth_kwargs)
         self.geth_kwargs = geth_kwargs
         self.command = construct_popen_command(**geth_kwargs)
         self.stdin = stdin
@@ -285,6 +289,7 @@ class DevGethProcess(BaseGethProcess):
 
         self.data_dir = get_chain_data_dir(base_dir, chain_name)
         geth_kwargs = construct_test_chain_kwargs(data_dir=self.data_dir, **overrides)
+        validate_geth_kwargs(geth_kwargs)
 
         # ensure that an account is present
         coinbase = ensure_account_exists(**geth_kwargs)

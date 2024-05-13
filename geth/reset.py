@@ -1,6 +1,14 @@
+from __future__ import (
+    annotations,
+)
+
 import os
 from typing import (
     Any,
+)
+
+from geth.utils.validation import (
+    validate_geth_kwargs,
 )
 
 from .chains import (
@@ -19,6 +27,7 @@ from .wrapper import (
 def soft_reset_chain(
     allow_live: bool = False, allow_testnet: bool = False, **geth_kwargs: Any
 ) -> None:
+    validate_geth_kwargs(geth_kwargs)
     data_dir = geth_kwargs.get("data_dir")
 
     if data_dir is None or (not allow_live and is_live_chain(data_dir)):
@@ -33,18 +42,16 @@ def soft_reset_chain(
 
     suffix_args = geth_kwargs.pop("suffix_args", [])
     suffix_args.extend(("removedb",))
+    geth_kwargs.update({"suffix_args": suffix_args})
 
-    geth_kwargs["suffix_args"] = suffix_args
+    _, proc = spawn_geth(geth_kwargs)
 
-    # type ignored TODO rethink GethKwargs in a separate PR
-    _, proc = spawn_geth(**geth_kwargs)  # type: ignore[no-untyped-call]
+    stdoutdata, stderrdata = proc.communicate(b"y")
 
-    stdoutdata, stderrdata = proc.communicate("y")
-
-    if "Removing chaindata" not in stdoutdata:
+    if "Removing chaindata" not in stdoutdata.decode():
         raise ValueError(
-            f"An error occurred while removing the chain:\n\nError:\n{stderrdata}\n\n"
-            f"Output:\n{stdoutdata}"
+            "An error occurred while removing the chain:\n\nError:\n"
+            f"{stderrdata.decode()}\n\nOutput:\n{stdoutdata.decode()}"
         )
 
 

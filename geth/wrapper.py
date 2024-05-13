@@ -26,6 +26,9 @@ from geth.utils.networking import (
     get_open_port,
     is_port_open,
 )
+from geth.utils.validation import (
+    validate_geth_kwargs,
+)
 
 is_nice_available = functools.partial(is_executable_available, "nice")
 
@@ -305,8 +308,8 @@ def construct_popen_command(  # type: ignore
     return builder.command
 
 
-# type ignored TODO rethink GethKwargs in a separate PR
 def geth_wrapper(**geth_kwargs):  # type: ignore[no-untyped-def]
+    validate_geth_kwargs(geth_kwargs)
     stdin = geth_kwargs.pop("stdin", None)
     command = construct_popen_command(**geth_kwargs)  # type: ignore[no-untyped-call]
 
@@ -334,10 +337,13 @@ def geth_wrapper(**geth_kwargs):  # type: ignore[no-untyped-def]
     return stdoutdata, stderrdata, command, proc
 
 
-# type ignored TODO rethink GethKwargs in a separate PR
 def spawn_geth(  # type: ignore[no-untyped-def]
-    geth_kwargs, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    geth_kwargs: dict[str, Any],
+    stdin=subprocess.PIPE,
+    stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE,
 ):
+    validate_geth_kwargs(geth_kwargs)
     command = construct_popen_command(**geth_kwargs)  # type: ignore[no-untyped-call]
 
     proc = subprocess.Popen(
