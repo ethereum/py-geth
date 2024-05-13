@@ -26,17 +26,6 @@ import sys
 
 GETH_VERSION_REGEX = re.compile(r"v\d*_\d+")  # v0_0_0 pattern
 
-# get the current go version
-go_version = None
-with open(".circleci/config.yml") as circleci_config:
-    golang_keyword = "&common_go_v"
-    for line in circleci_config:
-        if golang_keyword in line:
-            go_version = line[line.find(golang_keyword) + len(golang_keyword) :].strip()
-            break
-if go_version is None:
-    raise ValueError("go version was not properly parsed from config")
-
 currently_supported_geth_versions = []
 with open("tox.ini") as tox_ini:
     for line_number, line in enumerate(tox_ini, start=1):
@@ -97,7 +86,7 @@ for index, user_provided_version in enumerate(user_provided_versions):
         py_version_decimal = f"{py_version[0]}.{py_version[1:]}"
         CIRCLE_CI_PATTERN["jobs"] += (
             f"  py{py_version}-install-geth-{user_provided_version}:\n"
-            f"    <<: *common_go_v{go_version}\n"
+            f"    <<: *common_go_steps\n"
             "    docker:\n"
             f"      - image: cimg/python:{py_version_decimal}\n"
             "        environment:\n"
