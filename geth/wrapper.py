@@ -16,6 +16,12 @@ from typing import (
 from geth.exceptions import (
     GethError,
 )
+from geth.models import (
+    GethKwargs,
+)
+from geth.types import (
+    IO_Any,
+)
 from geth.utils.encoding import (
     force_bytes,
 )
@@ -114,50 +120,50 @@ class CommandBuilder:
         self.command.extend([str(v) for v in value_list])
 
 
-# type ignored TODO rethink GethKwargs in a separate PR
-def construct_popen_command(  # type: ignore
-    data_dir=None,
-    dev_mode=None,
-    geth_executable=None,
-    max_peers=None,
-    network_id=None,
-    no_discover=None,
-    mine=False,
-    autodag=False,
-    miner_threads=None,  # deprecated
-    miner_etherbase=None,
-    nice=True,
-    unlock=None,
-    password=None,
-    preload=None,
-    port=None,
-    verbosity=None,
-    ipc_disable=None,
-    ipc_path=None,
-    ipc_disabled=None,
-    rpc_enabled=None,
-    rpc_addr=None,
-    rpc_port=None,
-    rpc_api=None,
-    rpc_cors_domain=None,
-    ws_enabled=None,
-    ws_addr=None,
-    ws_origins=None,
-    ws_port=None,
-    ws_api=None,
-    suffix_args=None,
-    suffix_kwargs=None,
-    shh=None,
-    allow_insecure_unlock=None,
-    tx_pool_global_slots=None,
-    tx_pool_price_limit=None,
-    cache=None,
-    gcmode=None,
-):
-    if geth_executable is None:
-        geth_executable = get_geth_binary_path()
+def construct_popen_command(
+    geth_kwargs: GethKwargs,
+    # data_dir=None,
+    # dev_mode=None,
+    # geth_executable=None,
+    # max_peers=None,
+    # network_id=None,
+    # no_discover=None,
+    # mine=False,
+    # autodag=False,
+    # miner_threads=None,  # deprecated
+    # miner_etherbase=None,
+    # nice=True,
+    # unlock=None,
+    # password=None,
+    # preload=None,
+    # port=None,
+    # verbosity=None,
+    # ipc_disable=None,
+    # ipc_path=None,
+    # ipc_disabled=None,
+    # rpc_enabled=None,
+    # rpc_addr=None,
+    # rpc_port=None,
+    # rpc_api=None,
+    # rpc_cors_domain=None,
+    # ws_enabled=None,
+    # ws_addr=None,
+    # ws_origins=None,
+    # ws_port=None,
+    # ws_api=None,
+    # suffix_args=None,
+    # suffix_kwargs=None,
+    # shh=None,
+    # allow_insecure_unlock=None,
+    # tx_pool_global_slots=None,
+    # tx_pool_price_limit=None,
+    # cache=None,
+    # gcmode=None,
+) -> list[str]:
+    if geth_kwargs.geth_executable is None:
+        geth_kwargs.geth_executable = get_geth_binary_path()
 
-    if not is_executable_available(geth_executable):
+    if not is_executable_available(geth_kwargs.geth_executable):
         raise ValueError(
             "No geth executable found.  Please ensure geth is installed and "
             "available on your PATH or use the GETH_BINARY environment variable"
@@ -165,144 +171,145 @@ def construct_popen_command(  # type: ignore
 
     builder = CommandBuilder()
 
-    if nice and is_nice_available():
+    if geth_kwargs.nice and is_nice_available():
         builder.extend(("nice", "-n", "20"))
 
-    builder.append(geth_executable)
+    builder.append(geth_kwargs.geth_executable)
 
-    if dev_mode:
+    if geth_kwargs.dev_mode:
         builder.append("--dev")
 
-    if rpc_enabled:
+    if geth_kwargs.rpc_enabled:
         builder.append("--http")
 
-    if rpc_addr is not None:
-        builder.extend(("--http.addr", rpc_addr))
+    if geth_kwargs.rpc_addr is not None:
+        builder.extend(("--http.addr", geth_kwargs.rpc_addr))
 
-    if rpc_port is not None:
-        builder.extend(("--http.port", rpc_port))
+    if geth_kwargs.rpc_port is not None:
+        builder.extend(("--http.port", geth_kwargs.rpc_port))
 
-    if rpc_api is not None:
-        builder.extend(("--http.api", rpc_api))
+    if geth_kwargs.rpc_api is not None:
+        builder.extend(("--http.api", geth_kwargs.rpc_api))
 
-    if rpc_cors_domain is not None:
-        builder.extend(("--http.corsdomain", rpc_cors_domain))
+    if geth_kwargs.rpc_cors_domain is not None:
+        builder.extend(("--http.corsdomain", geth_kwargs.rpc_cors_domain))
 
-    if ws_enabled:
+    if geth_kwargs.ws_enabled:
         builder.append("--ws")
 
-    if ws_addr is not None:
-        builder.extend(("--ws.addr", ws_addr))
+    if geth_kwargs.ws_addr is not None:
+        builder.extend(("--ws.addr", geth_kwargs.ws_addr))
 
-    if ws_origins is not None:
-        builder.extend(("--ws.origins", ws_port))
+    if geth_kwargs.ws_origins is not None:
+        builder.extend(("--ws.origins", geth_kwargs.ws_port))
 
-    if ws_port is not None:
-        builder.extend(("--ws.port", ws_port))
+    if geth_kwargs.ws_port is not None:
+        builder.extend(("--ws.port", geth_kwargs.ws_port))
 
-    if ws_api is not None:
-        builder.extend(("--ws.api", ws_api))
+    if geth_kwargs.ws_api is not None:
+        builder.extend(("--ws.api", geth_kwargs.ws_api))
 
-    if data_dir is not None:
-        builder.extend(("--datadir", data_dir))
+    if geth_kwargs.data_dir is not None:
+        builder.extend(("--datadir", geth_kwargs.data_dir))
 
-    if max_peers is not None:
-        builder.extend(("--maxpeers", max_peers))
+    if geth_kwargs.max_peers is not None:
+        builder.extend(("--maxpeers", geth_kwargs.max_peers))
 
-    if network_id is not None:
-        builder.extend(("--networkid", network_id))
+    if geth_kwargs.network_id is not None:
+        builder.extend(("--networkid", geth_kwargs.network_id))
 
-    if port is not None:
-        builder.extend(("--port", port))
+    if geth_kwargs.port is not None:
+        builder.extend(("--port", geth_kwargs.port))
 
-    if ipc_disable:
+    if geth_kwargs.ipc_disable:
         builder.append("--ipcdisable")
 
-    if ipc_path is not None:
-        builder.extend(("--ipcpath", ipc_path))
+    if geth_kwargs.ipc_path is not None:
+        builder.extend(("--ipcpath", geth_kwargs.ipc_path))
 
-    if verbosity is not None:
+    if geth_kwargs.verbosity is not None:
         builder.extend(
             (
                 "--verbosity",
-                verbosity,
+                geth_kwargs.verbosity,
             )
         )
 
-    if unlock is not None:
+    if geth_kwargs.unlock is not None:
         builder.extend(
             (
                 "--unlock",
-                unlock,
+                geth_kwargs.unlock,
             )
         )
 
-    if password is not None:
+    if geth_kwargs.password is not None:
         builder.extend(
             (
                 "--password",
-                password,
+                geth_kwargs.password,
             )
         )
 
-    if preload is not None:
-        builder.extend(("--preload", preload))
+    if geth_kwargs.preload is not None:
+        builder.extend(("--preload", geth_kwargs.preload))
 
-    if no_discover:
+    if geth_kwargs.no_discover:
         builder.append("--nodiscover")
 
-    if mine:
-        if unlock is None:
+    if geth_kwargs.mine:
+        if geth_kwargs.unlock is None:
             raise ValueError("Cannot mine without an unlocked account")
         builder.append("--mine")
 
-    if miner_threads is not None:
+    if geth_kwargs.miner_threads is not None:
         logging.warning(
             "`--miner.threads` is deprecated and will be removed in a future release."
         )
-        if not mine:
+        if not geth_kwargs.mine:
             raise ValueError("`mine` must be truthy when specifying `miner_threads`")
-        builder.extend(("--miner.threads", miner_threads))
+        builder.extend(("--miner.threads", geth_kwargs.miner_threads))
 
-    if miner_etherbase is not None:
-        if not mine:
+    if geth_kwargs.miner_etherbase is not None:
+        if not geth_kwargs.mine:
             raise ValueError("`mine` must be truthy when specifying `miner_etherbase`")
-        builder.extend(("--miner.etherbase", miner_etherbase))
+        builder.extend(("--miner.etherbase", geth_kwargs.miner_etherbase))
 
-    if autodag:
+    if geth_kwargs.autodag:
         builder.append("--autodag")
 
-    if shh:
+    if geth_kwargs.shh:
         builder.append("--shh")
 
-    if allow_insecure_unlock:
+    if geth_kwargs.allow_insecure_unlock:
         builder.append("--allow-insecure-unlock")
 
-    if tx_pool_global_slots is not None:
-        builder.extend(("--txpool.globalslots", tx_pool_global_slots))
+    if geth_kwargs.tx_pool_global_slots is not None:
+        builder.extend(("--txpool.globalslots", geth_kwargs.tx_pool_global_slots))
 
-    if tx_pool_price_limit is not None:
-        builder.extend(("--txpool.pricelimit", tx_pool_price_limit))
+    if geth_kwargs.tx_pool_price_limit is not None:
+        builder.extend(("--txpool.pricelimit", geth_kwargs.tx_pool_price_limit))
 
-    if cache:
-        builder.extend(("--cache", cache))
+    if geth_kwargs.cache:
+        builder.extend(("--cache", geth_kwargs.cache))
 
-    if gcmode:
-        builder.extend(("--gcmode", gcmode))
+    if geth_kwargs.gcmode:
+        builder.extend(("--gcmode", geth_kwargs.gcmode))
 
-    if suffix_kwargs:
-        builder.extend(suffix_kwargs)
+    if geth_kwargs.suffix_kwargs:
+        builder.extend(geth_kwargs.suffix_kwargs)
 
-    if suffix_args:
-        builder.extend(suffix_args)
+    if geth_kwargs.suffix_args:
+        builder.extend(geth_kwargs.suffix_args)
 
     return builder.command
 
 
-# type ignored TODO rethink GethKwargs in a separate PR
-def geth_wrapper(**geth_kwargs):  # type: ignore[no-untyped-def]
-    stdin = geth_kwargs.pop("stdin", None)
-    command = construct_popen_command(**geth_kwargs)  # type: ignore[no-untyped-call]
+def geth_wrapper(
+    geth_kwargs: GethKwargs,
+) -> tuple[bytes, bytes, list[str], subprocess.Popen[bytes]]:
+    stdin: str | bytes | None = geth_kwargs.stdin or None
+    command = construct_popen_command(geth_kwargs)
 
     proc = subprocess.Popen(
         command,
@@ -328,11 +335,13 @@ def geth_wrapper(**geth_kwargs):  # type: ignore[no-untyped-def]
     return stdoutdata, stderrdata, command, proc
 
 
-# type ignored TODO rethink GethKwargs in a separate PR
-def spawn_geth(  # type: ignore[no-untyped-def]
-    geth_kwargs, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-):
-    command = construct_popen_command(**geth_kwargs)  # type: ignore[no-untyped-call]
+def spawn_geth(
+    geth_kwargs: GethKwargs,
+    stdin: IO_Any = subprocess.PIPE,
+    stdout: IO_Any = subprocess.PIPE,
+    stderr: IO_Any = subprocess.PIPE,
+) -> tuple[list[str], subprocess.Popen[bytes]]:
+    command = construct_popen_command(geth_kwargs)
 
     proc = subprocess.Popen(
         command,

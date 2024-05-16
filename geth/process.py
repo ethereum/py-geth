@@ -72,7 +72,8 @@ class BaseGethProcess:
         stderr=subprocess.PIPE,
     ):
         self.geth_kwargs = geth_kwargs
-        self.command = construct_popen_command(**geth_kwargs)
+        geth_kwargs_model = GethKwargs(**geth_kwargs)
+        self.command = construct_popen_command(geth_kwargs_model)
         self.stdin = stdin
         self.stdout = stdout
         self.stderr = stderr

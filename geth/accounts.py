@@ -33,9 +33,7 @@ def get_accounts(
     geth_kwargs.data_dir = data_dir
     geth_kwargs.suffix_args = ["account", "list"]
 
-    # TODO spawn_geth still takes a dict, change to GethKwargs when typing wrapper.py
-    geth_kwargs_dict = geth_kwargs.model_dump(exclude_none=True)
-    command, proc = spawn_geth(geth_kwargs_dict)  # type: ignore[no-untyped-call]
+    command, proc = spawn_geth(geth_kwargs)
     stdoutdata, stderrdata = proc.communicate()
 
     if proc.returncode:
@@ -131,9 +129,7 @@ def create_new_account(
     elif not isinstance(password, bytes):
         raise ValueError("Password must be either a path to a file or bytes")
 
-    # TODO spawn_geth still takes a dict, change to GethKwargs when typing wrapper.py
-    geth_kwargs_dict = geth_kwargs.model_dump(exclude_none=True)
-    command, proc = spawn_geth(geth_kwargs_dict)  # type: ignore[no-untyped-call]
+    command, proc = spawn_geth(geth_kwargs)
 
     if isinstance(password, str):
         stdoutdata, stderrdata = proc.communicate()

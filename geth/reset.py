@@ -46,9 +46,7 @@ def soft_reset_chain(
 
     geth_kwargs.suffix_args = suffix_args
 
-    # TODO spawn_geth still takes a dict, change to GethKwargs when typing wrapper.py
-    geth_kwargs_dict = geth_kwargs.model_dump(exclude_none=True)
-    _, proc = spawn_geth(geth_kwargs_dict)  # type: ignore[no-untyped-call]
+    _, proc = spawn_geth(geth_kwargs)
 
     stdoutdata, stderrdata = proc.communicate(b"y")
 

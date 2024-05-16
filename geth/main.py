@@ -2,11 +2,15 @@ import re
 
 import semantic_version
 
+from geth.models import (
+    GethKwargs,
+)
+from geth.wrapper import (
+    geth_wrapper,
+)
+
 from .utils.encoding import (
     force_text,
-)
-from .wrapper import (
-    geth_wrapper,
 )
 
 
@@ -17,7 +21,9 @@ def get_geth_version_info_string(**geth_kwargs):
             "`suffix_args` parameter"
         )
     geth_kwargs["suffix_args"] = ["version"]
-    stdoutdata, stderrdata, command, proc = geth_wrapper(**geth_kwargs)
+    # TODO convert to GethKwargs in function args in separate PR
+    geth_kwargs_model = GethKwargs(**geth_kwargs)
+    stdoutdata, stderrdata, command, proc = geth_wrapper(geth_kwargs_model)
     return stdoutdata
 
 
