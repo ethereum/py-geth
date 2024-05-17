@@ -3,7 +3,6 @@ from __future__ import (
 )
 
 import functools
-import logging
 import os
 import subprocess
 import sys
@@ -127,7 +126,6 @@ def construct_popen_command(  # type: ignore
     no_discover=None,
     mine=False,
     autodag=False,
-    miner_threads=None,  # deprecated
     miner_etherbase=None,
     nice=True,
     unlock=None,
@@ -258,14 +256,6 @@ def construct_popen_command(  # type: ignore
         if unlock is None:
             raise ValueError("Cannot mine without an unlocked account")
         builder.append("--mine")
-
-    if miner_threads is not None:
-        logging.warning(
-            "`--miner.threads` is deprecated and will be removed in a future release."
-        )
-        if not mine:
-            raise ValueError("`mine` must be truthy when specifying `miner_threads`")
-        builder.extend(("--miner.threads", miner_threads))
 
     if miner_etherbase is not None:
         if not mine:
