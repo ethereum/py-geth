@@ -137,7 +137,6 @@ def construct_popen_command(  # type: ignore
     verbosity=None,
     ipc_disable=None,
     ipc_path=None,
-    ipc_api=None,  # deprecated.
     ipc_disabled=None,
     rpc_enabled=None,
     rpc_addr=None,
@@ -167,11 +166,6 @@ def construct_popen_command(  # type: ignore
             "available on your PATH or use the GETH_BINARY environment variable"
         )
 
-    if ipc_api is not None:
-        raise DeprecationWarning(
-            "The ipc_api flag has been deprecated.  The ipc API is now on by "
-            "default.  Use `ipc_disable=True` to disable this API"
-        )
     builder = CommandBuilder()
 
     if nice and is_nice_available():
