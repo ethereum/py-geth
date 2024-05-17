@@ -1,4 +1,7 @@
 import re
+from typing import (
+    Any,
+)
 
 import semantic_version
 
@@ -14,7 +17,7 @@ from .wrapper import (
 )
 
 
-def get_geth_version_info_string(**geth_kwargs):
+def get_geth_version_info_string(**geth_kwargs: Any) -> str:
     if "suffix_args" in geth_kwargs:
         raise TypeError(
             "The `get_geth_version` function cannot be called with the "
@@ -22,14 +25,14 @@ def get_geth_version_info_string(**geth_kwargs):
         )
     geth_kwargs["suffix_args"] = ["version"]
     validate_geth_kwargs(geth_kwargs)
-    stdoutdata, stderrdata, command, proc = geth_wrapper(**geth_kwargs)
-    return stdoutdata
+    stdoutdata, stderrdata, command, proc = geth_wrapper(**geth_kwargs)  # type: ignore[no-untyped-call]  # noqa: E501
+    return stdoutdata.decode("utf-8")  # type: ignore[no-any-return]
 
 
 VERSION_REGEX = r"Version: (.*)\n"
 
 
-def get_geth_version(**geth_kwargs):
+def get_geth_version(**geth_kwargs: Any) -> semantic_version.Version:
     validate_geth_kwargs(geth_kwargs)
     version_info_string = get_geth_version_info_string(**geth_kwargs)
     version_match = re.search(VERSION_REGEX, force_text(version_info_string, "utf8"))
