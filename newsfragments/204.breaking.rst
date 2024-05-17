@@ -1,0 +1,1 @@
+Changed return type of ``get_geth_version_info_string`` from ``bytes`` to ``str``

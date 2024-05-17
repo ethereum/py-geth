@@ -116,7 +116,6 @@ class CommandBuilder:
         self.command.extend([str(v) for v in value_list])
 
 
-# type ignored TODO rethink GethKwargs in a separate PR
 def construct_popen_command(  # type: ignore
     data_dir=None,
     dev_mode=None,
