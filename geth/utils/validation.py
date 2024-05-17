@@ -62,7 +62,6 @@ class GethKwargs(BaseModel):
     gasprice: int | None = None
     gcmode: Literal["full", "archive"] | None = None
     genesis: str | None = None
-    ipc_api: str | None = None  # deprecated
     ipc_disable: bool | None = None
     ipc_path: str | None = None
     max_peers: str | None = None
