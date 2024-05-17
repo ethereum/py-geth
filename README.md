@@ -26,8 +26,8 @@ python -m pip install py-geth
 To run geth connected to the mainnet
 
 ```python
->>> from geth import LiveGethProcess
->>> geth = LiveGethProcess()
+>>> from geth import MainnetGethProcess
+>>> geth = MainnetGethProcess()
 >>> geth.start()
 ```
 
