@@ -1,26 +1,31 @@
+from __future__ import (
+    annotations,
+)
+
 import json
 import logging
 import os
 import subprocess
 import time
+from types import (
+    TracebackType,
+)
+from typing import (
+    Any,
+    cast,
+)
+from urllib.error import (
+    URLError,
+)
+from urllib.request import (
+    urlopen,
+)
 
 import semantic_version
 
 from geth import (
     get_geth_version,
 )
-
-try:
-    from urllib.request import (
-        URLError,
-        urlopen,
-    )
-except ImportError:
-    from urllib2 import (
-        urlopen,
-        URLError,
-    )
-
 from geth.accounts import (
     ensure_account_exists,
     get_accounts,
@@ -34,6 +39,9 @@ from geth.chain import (
     initialize_chain,
     is_live_chain,
     is_ropsten_chain,
+)
+from geth.types import (
+    IO_Any,
 )
 from geth.utils.dag import (
     is_dag_generated,
@@ -65,26 +73,26 @@ class BaseGethProcess:
 
     def __init__(
         self,
-        geth_kwargs,
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        geth_kwargs: dict[str, Any],
+        stdin: IO_Any = subprocess.PIPE,
+        stdout: IO_Any = subprocess.PIPE,
+        stderr: IO_Any = subprocess.PIPE,
     ):
         validate_geth_kwargs(geth_kwargs)
         self.geth_kwargs = geth_kwargs
-        self.command = construct_popen_command(**geth_kwargs)
+        self.command = construct_popen_command(**geth_kwargs)  # type: ignore[no-untyped-call]  # noqa: E501
         self.stdin = stdin
         self.stdout = stdout
         self.stderr = stderr
 
     is_running = False
 
-    def start(self):
+    def start(self) -> None:
         if self.is_running:
             raise ValueError("Already running")
         self.is_running = True
 
-        logger.info("Launching geth: %s", " ".join(self.command))
+        logger.info(f"Launching geth: {' '.join(self.command)}")
         self.proc = subprocess.Popen(
             self.command,
             stdin=self.stdin,
@@ -92,11 +100,11 @@ class BaseGethProcess:
             stderr=self.stderr,
         )
 
-    def __enter__(self):
+    def __enter__(self) -> BaseGethProcess:
         self.start()
         return self
 
-    def stop(self):
+    def stop(self) -> None:
         if not self.is_running:
             raise ValueError("Not running")
 
@@ -105,35 +113,43 @@ class BaseGethProcess:
 
         self.is_running = False
 
-    def __exit__(self, *exc_info):
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        tb: TracebackType | None,
+    ) -> None:
         self.stop()
 
     @property
-    def is_alive(self):
+    def is_alive(self) -> bool:
         return self.is_running and self.proc.poll() is None
 
     @property
-    def is_stopped(self):
+    def is_stopped(self) -> bool:
         return self.proc is not None and self.proc.poll() is not None
 
     @property
-    def accounts(self):
+    def accounts(self) -> tuple[str, ...]:
         return get_accounts(**self.geth_kwargs)
 
     @property
-    def rpc_enabled(self):
-        return self.geth_kwargs.get("rpc_enabled", False)
+    def rpc_enabled(self) -> bool:
+        _rpc_enabled = self.geth_kwargs.get("rpc_enabled", False)
+        return cast(bool, _rpc_enabled)
 
     @property
-    def rpc_host(self):
-        return self.geth_kwargs.get("rpc_host", "127.0.0.1")
+    def rpc_host(self) -> str:
+        _rpc_host = self.geth_kwargs.get("rpc_host", "127.0.0.1")
+        return cast(str, _rpc_host)
 
     @property
-    def rpc_port(self):
-        return self.geth_kwargs.get("rpc_port", "8545")
+    def rpc_port(self) -> str:
+        _rpc_port = self.geth_kwargs.get("rpc_port", "8545")
+        return cast(str, _rpc_port)
 
     @property
-    def is_rpc_ready(self):
+    def is_rpc_ready(self) -> bool:
         try:
             urlopen(f"http://{self.rpc_host}:{self.rpc_port}")
         except URLError:
@@ -141,7 +157,7 @@ class BaseGethProcess:
         else:
             return True
 
-    def wait_for_rpc(self, timeout=0):
+    def wait_for_rpc(self, timeout: int = 0) -> None:
         if not self.rpc_enabled:
             raise ValueError("RPC interface is not enabled")
 
@@ -153,25 +169,28 @@ class BaseGethProcess:
                 _timeout.check()
 
     @property
-    def ipc_enabled(self):
+    def ipc_enabled(self) -> bool:
         return not self.geth_kwargs.get("ipc_disable", None)
 
     @property
-    def ipc_path(self):
-        return self.geth_kwargs.get(
+    def ipc_path(self) -> str:
+        _ipc_path = self.geth_kwargs.get(
             "ipc_path",
             os.path.abspath(
                 os.path.expanduser(
                     os.path.join(
-                        self.data_dir,
+                        # TODO: only derived types have a `data_dir` attribute,
+                        # so how to resolve this?
+                        self.data_dir,  # type: ignore
                         "geth.ipc",
                     )
                 )
             ),
         )
+        return cast(str, _ipc_path)
 
     @property
-    def is_ipc_ready(self):
+    def is_ipc_ready(self) -> bool:
         try:
             with get_ipc_socket(self.ipc_path):
                 pass
@@ -180,7 +199,7 @@ class BaseGethProcess:
         else:
             return True
 
-    def wait_for_ipc(self, timeout=0):
+    def wait_for_ipc(self, timeout: int = 0) -> None:
         if not self.ipc_enabled:
             raise ValueError("IPC interface is not enabled")
 
@@ -192,14 +211,15 @@ class BaseGethProcess:
                 _timeout.check()
 
     @property
-    def is_dag_generated(self):
+    def is_dag_generated(self) -> bool:
         return is_dag_generated()
 
     @property
-    def is_mining(self):
-        return self.geth_kwargs.get("mine", False)
+    def is_mining(self) -> bool:
+        _is_mining = self.geth_kwargs.get("mine", False)
+        return cast(bool, _is_mining)
 
-    def wait_for_dag(self, timeout=0):
+    def wait_for_dag(self, timeout: int = 0) -> None:
         if not self.is_mining and not self.geth_kwargs.get("autodag", False):
             raise ValueError("Geth not configured to generate DAG")
 
@@ -212,7 +232,7 @@ class BaseGethProcess:
 
 
 class MainnetGethProcess(BaseGethProcess):
-    def __init__(self, geth_kwargs=None):
+    def __init__(self, geth_kwargs: dict[str, Any] | None = None):
         if geth_kwargs is None:
             geth_kwargs = {}
 
@@ -222,12 +242,12 @@ class MainnetGethProcess(BaseGethProcess):
         super().__init__(geth_kwargs)
 
     @property
-    def data_dir(self):
+    def data_dir(self) -> str:
         return get_live_data_dir()
 
 
 class RopstenGethProcess(BaseGethProcess):
-    def __init__(self, geth_kwargs=None):
+    def __init__(self, geth_kwargs: dict[str, Any] | None = None):
         if geth_kwargs is None:
             geth_kwargs = {}
 
@@ -246,7 +266,7 @@ class RopstenGethProcess(BaseGethProcess):
         super().__init__(geth_kwargs)
 
     @property
-    def data_dir(self):
+    def data_dir(self) -> str:
         return get_ropsten_data_dir()
 
 
@@ -261,7 +281,13 @@ class DevGethProcess(BaseGethProcess):
     Geth developer mode process for testing purposes.
     """
 
-    def __init__(self, chain_name, base_dir=None, overrides=None, genesis_data=None):
+    def __init__(
+        self,
+        chain_name: str,
+        base_dir: str | None = None,
+        overrides: dict[str, Any] | None = None,
+        genesis_data: dict[str, Any] | None = None,
+    ):
         if overrides is None:
             overrides = {}
 
@@ -297,12 +323,12 @@ class DevGethProcess(BaseGethProcess):
             )
 
             modify_genesis_based_on_geth_version(genesis_data)
-            initialize_chain(genesis_data, self.data_dir)
+            initialize_chain(genesis_data, self.data_dir)  # type: ignore[no-untyped-call]  # noqa: E501
 
         super().__init__(geth_kwargs)
 
 
-def modify_genesis_based_on_geth_version(genesis_data):
+def modify_genesis_based_on_geth_version(genesis_data: dict[str, Any]) -> None:
     geth_version = get_geth_version()
     if geth_version <= semantic_version.Version("1.14.0"):
         # geth <= v1.14.0 needs negative `terminalTotalDifficulty` to load EVM
