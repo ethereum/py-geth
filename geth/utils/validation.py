@@ -31,7 +31,6 @@ class GethKwargs(BaseModel):
         max_peers (str): Maximum number of network peers.
         metrics (bool): Enable metrics collection.
         mine (bool): Enable mining.
-        miner_threads (int): Number of CPU threads to use for mining.
         network_id (str): The network identifier.
         nodiscover (bool): Disable network discovery.
         password (str): Path to a file that contains a password.
@@ -67,7 +66,6 @@ class GethKwargs(BaseModel):
     max_peers: str | None = None
     metrics: bool | None = None
     mine: bool | None = False
-    miner_threads: int | None = None  # deprecated
     miner_etherbase: int | None = None
     network_id: str | None = None
     no_discover: bool | None = None
