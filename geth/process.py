@@ -3,7 +3,6 @@ import logging
 import os
 import subprocess
 import time
-import warnings
 
 import semantic_version
 
@@ -225,18 +224,6 @@ class MainnetGethProcess(BaseGethProcess):
     @property
     def data_dir(self):
         return get_live_data_dir()
-
-
-class LiveGethProcess(MainnetGethProcess):
-    def __init__(self, *args, **kwargs):
-        warnings.warn(
-            DeprecationWarning(
-                "The `LiveGethProcess` has been renamed to `MainnetGethProcess`. "
-                "The `LiveGethProcess` alias will be removed in subsequent releases"
-            ),
-            stacklevel=2,
-        )
-        super().__init__(*args, **kwargs)
 
 
 class RopstenGethProcess(BaseGethProcess):
