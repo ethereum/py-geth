@@ -22,28 +22,20 @@ class GethKwargs(BaseModel):
         autodag (bool): generate a DAG (pre-merge only)
         allowinsecure (bool): Allow insecure accounts.
         data_dir (str): The directory to store the chain data.
-        etherbase (str): The account to send mining rewards to.
-        extradata (str): Extra data to include in the block.
-        gasprice (int): Minimum gas price for mining.
-        genesis (str): The genesis file to use.
         geth_executable: (str) The path to the geth executable
         ipcdisable (bool): Disable the IPC-RPC server.
         max_peers (str): Maximum number of network peers.
-        metrics (bool): Enable metrics collection.
         mine (bool): Enable mining.
         network_id (str): The network identifier.
         nodiscover (bool): Disable network discovery.
         password (str): Path to a file that contains a password.
         port (str): The port to listen on.
-        pprof (bool): Enable pprof collection.
         rpc (bool): Enable the HTTP-RPC server.
         rpcaddr (str): The HTTP-RPC server listening interface.
         rpc_port (str): The HTTP-RPC server listening port.
         rpcapi (str): The HTTP-RPC server API.
-        targetgaslimit (int): Target gas limit for mining.
         unlock (str): Comma separated list of accounts to unlock.
         verbosity (int): Logging verbosity.
-        vmodule (str): Logging verbosity module.
         ws_enabled (bool): Enable the WS-RPC server.
         ws_addr (str): The WS-RPC server listening interface.
         ws_api (str): The WS-RPC server API.
@@ -55,48 +47,40 @@ class GethKwargs(BaseModel):
     autodag: bool | None = False
     cache: int | None = None
     data_dir: str | None = None
-    dev_mode: bool | None = None
-    etherbase: str | None = None
-    extradata: str | None = None
-    gasprice: int | None = None
+    dev_mode: bool | None = False
     gcmode: Literal["full", "archive"] | None = None
-    genesis: str | None = None
+    geth_executable: str | None = None
     ipc_disable: bool | None = None
     ipc_path: str | None = None
     max_peers: str | None = None
-    metrics: bool | None = None
     mine: bool | None = False
     miner_etherbase: int | None = None
     network_id: str | None = None
+    nice: bool | None = True
     no_discover: bool | None = None
     password: str | None = None
-    preload: str | None = None
     port: str | None = None
-    pprof: bool | None = None
-    rpc_enabled: bool | None = None
+    preload: str | None = None
     rpc_addr: str | None = None
-    rpc_port: str | None = None
     rpc_api: str | None = None
     rpc_cors_domain: str | None = None
+    rpc_enabled: bool | None = None
+    rpc_port: str | None = None
     shh: bool | None = None
-    targetgaslimit: int | None = None
+    stdin: str | None = None
+    suffix_args: list[str] | None = None
+    suffix_kwargs: dict[str, Any] | None = None
     tx_pool_global_slots: int | None = None
     tx_pool_price_limit: int | None = None
     unlock: str | None = None
     verbosity: int | None = None
-    vmodule: str | None = None
-    ws_enabled: bool | None = None
     ws_addr: str | None = None
     ws_api: str | None = None
+    ws_enabled: bool | None = None
     ws_origins: str | None = None
     ws_port: int | None = None
-    model_config = ConfigDict(extra="forbid")
 
-    geth_executable: str | None = None
-    nice: bool | None = True
-    suffix_args: list[str] | None = None
-    suffix_kwargs: dict[str, Any] | None = None
-    stdin: str | None = None
+    model_config = ConfigDict(extra="forbid")
 
     def set_field_if_none(self, field_name: str, value: Any) -> None:
         if getattr(self, field_name, None) is None:
