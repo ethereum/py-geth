@@ -25,8 +25,8 @@ def get_geth_version_info_string(**geth_kwargs: Any) -> str:
         )
     geth_kwargs["suffix_args"] = ["version"]
     validate_geth_kwargs(geth_kwargs)
-    stdoutdata, stderrdata, command, proc = geth_wrapper(**geth_kwargs)  # type: ignore[no-untyped-call]  # noqa: E501
-    return stdoutdata.decode("utf-8")  # type: ignore[no-any-return]
+    stdoutdata, stderrdata, command, proc = geth_wrapper(**geth_kwargs)
+    return stdoutdata.decode("utf-8")
 
 
 VERSION_REGEX = r"Version: (.*)\n"

@@ -80,7 +80,7 @@ class BaseGethProcess:
     ):
         validate_geth_kwargs(geth_kwargs)
         self.geth_kwargs = geth_kwargs
-        self.command = construct_popen_command(**geth_kwargs)  # type: ignore[no-untyped-call]  # noqa: E501
+        self.command = construct_popen_command(**geth_kwargs)
         self.stdin = stdin
         self.stdout = stdout
         self.stderr = stderr
