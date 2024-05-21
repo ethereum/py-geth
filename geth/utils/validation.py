@@ -23,8 +23,6 @@ from geth.types import (
 
 
 class GethKwargs(BaseModel):
-    allow_insecure_unlock: bool | None = None
-    autodag: bool | None = False
     cache: str | None = None
     data_dir: str | None = None
     dev_mode: bool | None = False
@@ -33,8 +31,6 @@ class GethKwargs(BaseModel):
     ipc_disable: bool | None = None
     ipc_path: str | None = None
     max_peers: str | None = None
-    mine: bool | None = False
-    miner_etherbase: str | None = None
     network_id: str | None = None
     nice: bool | None = True
     no_discover: bool | None = None
@@ -46,13 +42,11 @@ class GethKwargs(BaseModel):
     rpc_cors_domain: str | None = None
     rpc_enabled: bool | None = None
     rpc_port: str | None = None
-    shh: bool | None = None
     stdin: str | None = None
     suffix_args: list[str] | None = None
     suffix_kwargs: dict[str, str] | None = None
     tx_pool_global_slots: str | None = None
     tx_pool_price_limit: str | None = None
-    unlock: str | None = None
     verbosity: str | None = None
     ws_addr: str | None = None
     ws_api: str | None = None
@@ -76,7 +70,7 @@ def validate_geth_kwargs(geth_kwargs: GethKwargsTypedDict) -> None:
 
 
 class GenesisDataConfig(BaseModel):
-    ethash: dict[str, Any] = {}
+    ethash: dict[str, Any] = {}  # so that geth treats config as PoW -> PoS transition
     homesteadBlock: int = 0
     daoForkBlock: int = 0
     daoForkSupport: bool = True

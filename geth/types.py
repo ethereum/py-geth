@@ -14,8 +14,6 @@ IO_Any = Union[IO[Any], int, None]
 
 
 class GethKwargsTypedDict(TypedDict, total=False):
-    allow_insecure_unlock: bool | None
-    autodag: bool | None
     cache: str | None
     data_dir: str | None
     dev_mode: bool | None
@@ -24,8 +22,6 @@ class GethKwargsTypedDict(TypedDict, total=False):
     ipc_disable: bool | None
     ipc_path: str | None
     max_peers: str | None
-    mine: bool | None
-    miner_etherbase: str | None
     network_id: str | None
     nice: bool | None
     no_discover: bool | None
@@ -37,13 +33,11 @@ class GethKwargsTypedDict(TypedDict, total=False):
     rpc_cors_domain: str | None
     rpc_enabled: bool | None
     rpc_port: str | None
-    shh: bool | None
     stdin: str | None
     suffix_args: list[str] | None
     suffix_kwargs: dict[str, str] | None
     tx_pool_global_slots: str | None
     tx_pool_price_limit: str | None
-    unlock: str | None
     verbosity: str | None
     ws_addr: str | None
     ws_api: str | None

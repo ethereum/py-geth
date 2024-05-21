@@ -51,9 +51,6 @@ from geth.types import (
     GethKwargsTypedDict,
     IO_Any,
 )
-from geth.utils.dag import (
-    is_dag_generated,
-)
 from geth.utils.networking import (
     get_ipc_socket,
 )
@@ -219,26 +216,6 @@ class BaseGethProcess(ABC):
         with Timeout(timeout) as _timeout:
             while True:
                 if self.is_ipc_ready:
-                    break
-                time.sleep(0.1)
-                _timeout.check()
-
-    @property
-    def is_dag_generated(self) -> bool:
-        return is_dag_generated()
-
-    @property
-    def is_mining(self) -> bool:
-        _is_mining = self.geth_kwargs.get("mine", False)
-        return cast(bool, _is_mining)
-
-    def wait_for_dag(self, timeout: int = 0) -> None:
-        if not self.is_mining and not self.geth_kwargs.get("autodag", False):
-            raise PyGethValueError("Geth not configured to generate DAG")
-
-        with Timeout(timeout) as _timeout:
-            while True:
-                if self.is_dag_generated:
                     break
                 time.sleep(0.1)
                 _timeout.check()

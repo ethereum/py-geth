@@ -96,24 +96,16 @@ and stderr output to a logfile.
 All logs will be written to logfiles in `./logs/` in the current directory.
 
 The underlying `geth` process can take additional time to open the RPC or IPC
-connections, as well as to start mining if it needs to generate the DAG.  You
-can use the following interfaces to query whether these are ready.
+connections. You can use the following interfaces to query whether these are ready.
 
 ```python
+>>> geth.wait_for_rpc(timeout=30)  # wait up to 30 seconds for the RPC connection to open
 >>> geth.is_rpc_ready
 True
->>> geth.wait_for_rpc(timeout=30)  # wait up to 30 seconds for the RPC connection to open
+>>> geth.wait_for_ipc(timeout=30)  # wait up to 30 seconds for the IPC socket to open
 >>> geth.is_ipc_ready
 True
->>> geth.wait_for_ipc(timeout=30)  # wait up to 30 seconds for the IPC socket to open
->>> geth.is_dag_generated
-True
->>> geth.is_mining
-True
->>> geth.wait_for_dag(timeout=600)  # wait up to 10 minutes for the DAG to generate.
 ```
-
-> The DAG functionality currently only applies to the DAG for epoch 0.
 
 ## Installing specific versions of `geth`
 
@@ -237,14 +229,14 @@ the version for the one you wish to add support for. Note that the `v` in the ve
 optional.
 
 ```shell
-$ python update_geth.py v1_10_9
+$ python update_geth.py v1_13_0
 ```
 
 To introduce support for more than one version, pass in the versions in increasing order,
 ending with the latest version.
 
 ```shell
-$ python update_geth.py v1_10_7 v1_10_8 v1_10_9
+$ python update_geth.py v1_13_0 v1_13_1 v1_13_2
 ```
 
 Always review your changes before committing as something may cause this existing pattern to change at some point.
