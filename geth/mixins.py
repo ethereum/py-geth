@@ -8,6 +8,7 @@ import os
 import queue
 import time
 from typing import (
+    TYPE_CHECKING,
     Any,
     Callable,
 )
@@ -50,8 +51,15 @@ def _get_file_logger(name: str, filename: str) -> logging.Logger:
     return logger
 
 
-class JoinableQueue(queue.Queue):
-    def __iter__(self):
+# only needed until we drop support for python 3.8
+if TYPE_CHECKING:
+    BaseQueue = queue.Queue[Any]
+else:
+    BaseQueue = queue.Queue
+
+
+class JoinableQueue(BaseQueue):
+    def __iter__(self) -> Any:
         while True:
             item = self.get()
 
@@ -130,7 +138,9 @@ class InterceptedStreamsMixin:
             time.sleep(0)
 
     def start(self) -> None:
-        super().start()
+        # type ignored because this is a mixin but will always have a start method
+        # because it will be mixed with BaseGethProcess
+        super().start()  # type: ignore[misc]
 
         spawn(self.produce_stdout_queue)
         spawn(self.produce_stderr_queue)
@@ -139,7 +149,9 @@ class InterceptedStreamsMixin:
         spawn(self.consume_stderr_queue)
 
     def stop(self) -> None:
-        super().stop()
+        # type ignored because this is a mixin but will always have a stop method
+        # because it will be mixed with BaseGethProcess
+        super().stop()  # type: ignore[misc]
 
         try:
             self.stdout_queue.put(StopIteration)
