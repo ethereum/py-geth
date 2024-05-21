@@ -111,7 +111,7 @@ True
 
 > This feature is experimental and subject to breaking changes.
 
-Versions of `geth` dating back to v1.13.0 can be installed using `py-geth`.
+Versions of `geth` dating back to v1.14.0 can be installed using `py-geth`.
 See [install.py](https://github.com/ethereum/py-geth/blob/main/geth/install.py) for
 the current list of supported versions.
 
@@ -229,14 +229,14 @@ the version for the one you wish to add support for. Note that the `v` in the ve
 optional.
 
 ```shell
-$ python update_geth.py v1_13_0
+$ python update_geth.py v1_14_0
 ```
 
 To introduce support for more than one version, pass in the versions in increasing order,
 ending with the latest version.
 
 ```shell
-$ python update_geth.py v1_13_0 v1_13_1 v1_13_2
+$ python update_geth.py v1_14_0 v1_14_2 v1_14_3
 ```
 
 Always review your changes before committing as something may cause this existing pattern to change at some point.
