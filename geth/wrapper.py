@@ -204,9 +204,6 @@ def construct_popen_command(**geth_kwargs: Unpack[GethKwargsTypedDict]) -> list[
     if gk.verbosity is not None:
         builder.extend(("--verbosity", gk.verbosity))
 
-    if gk.unlock is not None:
-        builder.extend(("--unlock", gk.unlock))
-
     if isinstance(gk.password, str) and gk.password is not None:
         # If password is a string, it's a file path
         # If password is bytes, it's the password itself and is passed directly to
@@ -218,24 +215,6 @@ def construct_popen_command(**geth_kwargs: Unpack[GethKwargsTypedDict]) -> list[
 
     if gk.no_discover:
         builder.append("--nodiscover")
-
-    if gk.mine:
-        if gk.unlock is None:
-            raise PyGethValueError("Cannot mine without an unlocked account")
-        builder.append("--mine")
-
-    if gk.miner_etherbase is not None:
-        if not gk.mine:
-            raise PyGethValueError(
-                "`mine` must be truthy when specifying `miner_etherbase`"
-            )
-        builder.extend(("--miner.etherbase", gk.miner_etherbase))
-
-    if gk.autodag:
-        builder.append("--autodag")
-
-    if gk.allow_insecure_unlock:
-        builder.append("--allow-insecure-unlock")
 
     if gk.tx_pool_global_slots is not None:
         builder.extend(("--txpool.globalslots", gk.tx_pool_global_slots))
