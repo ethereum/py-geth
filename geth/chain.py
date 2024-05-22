@@ -73,12 +73,12 @@ def get_live_data_dir() -> str:
     return data_dir
 
 
-def get_ropsten_data_dir() -> str:
+def get_sepolia_data_dir() -> str:
     return os.path.abspath(
         os.path.expanduser(
             os.path.join(
                 get_live_data_dir(),
-                "ropsten",
+                "sepolia",
             )
         )
     )
@@ -102,8 +102,8 @@ def is_live_chain(data_dir: str) -> bool:
     return is_same_path(data_dir, get_live_data_dir())
 
 
-def is_ropsten_chain(data_dir: str) -> bool:
-    return is_same_path(data_dir, get_ropsten_data_dir())
+def is_sepolia_chain(data_dir: str) -> bool:
+    return is_same_path(data_dir, get_sepolia_data_dir())
 
 
 def write_genesis_file(
