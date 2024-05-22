@@ -1,5 +1,5 @@
 from geth import (
-    RopstenGethProcess,
+    SepoliaGethProcess,
 )
 from geth.mixins import (
     LoggingMixin,
@@ -9,12 +9,12 @@ from geth.utils.networking import (
 )
 
 
-class LoggedRopstenGethProcess(LoggingMixin, RopstenGethProcess):
+class LoggedSepoliaGethProcess(LoggingMixin, SepoliaGethProcess):
     pass
 
 
 def test_testnet_chain_with_no_overrides():
-    geth = LoggedRopstenGethProcess(geth_kwargs={"port": get_open_port()})
+    geth = LoggedSepoliaGethProcess(geth_kwargs={"port": get_open_port()})
 
     geth.start()
 

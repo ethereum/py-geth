@@ -38,10 +38,10 @@ from geth.chain import (
     get_default_base_dir,
     get_genesis_file_path,
     get_live_data_dir,
-    get_ropsten_data_dir,
+    get_sepolia_data_dir,
     initialize_chain,
     is_live_chain,
-    is_ropsten_chain,
+    is_sepolia_chain,
 )
 from geth.exceptions import (
     PyGethNotImplementedError,
@@ -238,7 +238,7 @@ class MainnetGethProcess(BaseGethProcess):
         return get_live_data_dir()
 
 
-class RopstenGethProcess(BaseGethProcess):
+class SepoliaGethProcess(BaseGethProcess):
     def __init__(self, geth_kwargs: GethKwargsTypedDict | None = None):
         if geth_kwargs is None:
             geth_kwargs = {}
@@ -252,17 +252,17 @@ class RopstenGethProcess(BaseGethProcess):
                 f"You cannot specify `network_id` for a {type(self).__name__}"
             )
 
-        geth_kwargs["network_id"] = "3"
-        geth_kwargs["data_dir"] = get_ropsten_data_dir()
+        geth_kwargs["network_id"] = "11155111"
+        geth_kwargs["data_dir"] = get_sepolia_data_dir()
 
         super().__init__(geth_kwargs)
 
     @property
     def data_dir(self) -> str:
-        return get_ropsten_data_dir()
+        return get_sepolia_data_dir()
 
 
-class TestnetGethProcess(RopstenGethProcess):
+class TestnetGethProcess(SepoliaGethProcess):
     """
     Alias for whatever the current primary testnet chain is.
     """
@@ -310,7 +310,7 @@ class DevGethProcess(BaseGethProcess):
             (
                 not os.path.exists(genesis_file_path),
                 not is_live_chain(self.data_dir),
-                not is_ropsten_chain(self.data_dir),
+                not is_sepolia_chain(self.data_dir),
             )
         )
         if needs_init:

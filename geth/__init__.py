@@ -15,7 +15,7 @@ from .mixins import (
 from .process import (
     DevGethProcess,
     MainnetGethProcess,
-    RopstenGethProcess,
+    SepoliaGethProcess,
     TestnetGethProcess,
 )
 
