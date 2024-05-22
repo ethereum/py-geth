@@ -60,6 +60,8 @@ from geth.utils.timeout import (
     Timeout,
 )
 from geth.utils.validation import (
+    GenesisDataTypedDict,
+    validate_genesis_data,
     validate_geth_kwargs,
 )
 from geth.wrapper import (
@@ -293,13 +295,15 @@ class DevGethProcess(BaseGethProcess):
         chain_name: str,
         base_dir: str | None = None,
         overrides: dict[str, Any] | None = None,
-        genesis_data: dict[str, Any] | None = None,
+        genesis_data: GenesisDataTypedDict | None = None,
     ):
         if overrides is None:
             overrides = {}
 
         if genesis_data is None:
-            genesis_data = GENESIS_JSON.copy()
+            genesis_data = GenesisDataTypedDict(**GENESIS_JSON)
+
+        validate_genesis_data(genesis_data)
 
         if "data_dir" in overrides:
             raise ValueError("You cannot specify `data_dir` for a DevGethProcess")
@@ -330,7 +334,7 @@ class DevGethProcess(BaseGethProcess):
             )
 
             modify_genesis_based_on_geth_version(genesis_data)
-            initialize_chain(genesis_data, self.data_dir)  # type: ignore[no-untyped-call]  # noqa: E501
+            initialize_chain(genesis_data, self.data_dir)
 
         super().__init__(geth_kwargs)
 
@@ -339,7 +343,7 @@ class DevGethProcess(BaseGethProcess):
         return self._data_dir
 
 
-def modify_genesis_based_on_geth_version(genesis_data: dict[str, Any]) -> None:
+def modify_genesis_based_on_geth_version(genesis_data: GenesisDataTypedDict) -> None:
     geth_version = get_geth_version()
     if geth_version <= semantic_version.Version("1.14.0"):
         # geth <= v1.14.0 needs negative `terminalTotalDifficulty` to load EVM
