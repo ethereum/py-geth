@@ -2,6 +2,10 @@ from __future__ import (
     annotations,
 )
 
+from abc import (
+    ABC,
+    abstractmethod,
+)
 import json
 import logging
 import os
@@ -68,7 +72,7 @@ with open(os.path.join(os.path.dirname(__file__), "genesis.json")) as genesis_fi
     GENESIS_JSON = json.load(genesis_file)
 
 
-class BaseGethProcess:
+class BaseGethProcess(ABC):
     _proc = None
 
     def __init__(
@@ -120,6 +124,11 @@ class BaseGethProcess:
         tb: TracebackType | None,
     ) -> None:
         self.stop()
+
+    @property
+    @abstractmethod
+    def data_dir(self) -> str:
+        raise NotImplementedError("Must be implemented by subclasses.")
 
     @property
     def is_alive(self) -> bool:
@@ -179,9 +188,7 @@ class BaseGethProcess:
             os.path.abspath(
                 os.path.expanduser(
                     os.path.join(
-                        # TODO: only derived types have a `data_dir` attribute,
-                        # so how to resolve this?
-                        self.data_dir,  # type: ignore
+                        self.data_dir,
                         "geth.ipc",
                     )
                 )
@@ -300,7 +307,7 @@ class DevGethProcess(BaseGethProcess):
         if base_dir is None:
             base_dir = get_default_base_dir()
 
-        self.data_dir = get_chain_data_dir(base_dir, chain_name)
+        self._data_dir = get_chain_data_dir(base_dir, chain_name)
         geth_kwargs = construct_test_chain_kwargs(data_dir=self.data_dir, **overrides)
         validate_geth_kwargs(geth_kwargs)
 
@@ -326,6 +333,10 @@ class DevGethProcess(BaseGethProcess):
             initialize_chain(genesis_data, self.data_dir)  # type: ignore[no-untyped-call]  # noqa: E501
 
         super().__init__(geth_kwargs)
+
+    @property
+    def data_dir(self) -> str:
+        return self._data_dir
 
 
 def modify_genesis_based_on_geth_version(genesis_data: dict[str, Any]) -> None:
