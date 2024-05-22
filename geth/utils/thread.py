@@ -1,10 +1,11 @@
 import threading
 from typing import (
     Any,
+    Callable,
 )
 
 
-def spawn(target: Any, *args: Any, **kwargs: Any) -> threading.Thread:
+def spawn(target: Callable[..., Any], *args: Any, **kwargs: Any) -> threading.Thread:
     thread = threading.Thread(
         target=target,
         args=args,
