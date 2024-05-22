@@ -1,8 +1,9 @@
+from __future__ import (
+    annotations,
+)
+
 import os
 import sys
-from typing import (
-    Optional,
-)
 
 MAGIC_PREFIX = b"\xfe\xca\xdd\xba\xad\xde\xe1\xfe"  # 0xfee1deadbaddcafe
 
@@ -10,7 +11,7 @@ MAGIC_PREFIX = b"\xfe\xca\xdd\xba\xad\xde\xe1\xfe"  # 0xfee1deadbaddcafe
 def get_dag_file_path(
     revision: int = 23,
     seedhash: str = "0000000000000000",
-    base_dir: Optional[str] = None,
+    base_dir: str | None = None,
 ) -> str:
     if seedhash != "0000000000000000":
         raise NotImplementedError("Non-zero seedhashes are not supported")
@@ -44,7 +45,7 @@ def get_magic_bytes(dag_file_path: str) -> bytes:
 def is_dag_generated(
     revision: int = 23,
     seedhash: str = "0000000000000000",
-    base_dir: Optional[str] = None,
+    base_dir: str | None = None,
 ) -> bool:
     dag_file_path = get_dag_file_path(revision, seedhash, base_dir)
 

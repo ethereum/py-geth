@@ -1,3 +1,7 @@
+from __future__ import (
+    annotations,
+)
+
 import time
 from types import (
     TracebackType,
@@ -5,8 +9,6 @@ from types import (
 from typing import (
     Any,
     Literal,
-    Optional,
-    Type,
 )
 
 
@@ -22,23 +24,23 @@ class Timeout(Exception):
 
     def __init__(
         self,
-        seconds: Optional[int] = None,
-        exception: Optional[Any] = None,
+        seconds: int | None = None,
+        exception: Any | None = None,
         *args: Any,
         **kwargs: Any,
     ):
         self.seconds = seconds
         self.exception = exception
 
-    def __enter__(self) -> "Timeout":
+    def __enter__(self) -> Timeout:
         self.start()
         return self
 
     def __exit__(
         self,
-        exc_type: Optional[Type[BaseException]],
-        exc_value: Optional[BaseException],
-        tb: Optional[TracebackType],
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        tb: TracebackType | None,
     ) -> Literal[False]:
         return False
 

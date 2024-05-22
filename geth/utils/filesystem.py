@@ -1,16 +1,9 @@
-import errno
 import os
 import shutil
 
 
 def mkdir(path: str) -> None:
-    try:
-        os.makedirs(path)
-    except OSError as exc:  # Python >2.5
-        if exc.errno == errno.EEXIST and os.path.isdir(path):
-            pass
-        else:
-            raise
+    os.makedirs(path, exist_ok=True)
 
 
 def ensure_path_exists(dir_path: str) -> bool:
