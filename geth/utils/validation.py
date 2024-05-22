@@ -5,6 +5,7 @@ from __future__ import (
 from typing import (
     Any,
     Literal,
+    TypedDict,
 )
 
 from pydantic import (
@@ -82,10 +83,6 @@ class GethKwargs(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    def set_field_if_none(self, field_name: str, value: Any) -> None:
-        if getattr(self, field_name, None) is None:
-            setattr(self, field_name, value)
-
 
 def validate_geth_kwargs(geth_kwargs: dict[str, Any]) -> bool:
     """
@@ -96,4 +93,70 @@ def validate_geth_kwargs(geth_kwargs: dict[str, Any]) -> bool:
     except TypeError:
         # TODO more specific error message
         raise ValueError("Invalid geth_kwargs")
+    return True
+
+
+class GenesisDataTypedDict(TypedDict, total=False):
+    alloc: dict[str, dict[str, Any]]
+    coinbase: str
+    config: dict[str, Any]
+    difficulty: str
+    extraData: str
+    gasLimit: str
+    mixhash: str
+    nonce: str
+    parentHash: str
+    timestamp: str
+
+
+class GenesisData(BaseModel):
+    alloc: dict[str, dict[str, Any]] = {}
+    coinbase: str = "0x3333333333333333333333333333333333333333"
+    config: dict[str, Any] = {
+        "ethash": {},
+        "homesteadBlock": 0,
+        "daoForkBlock": 0,
+        "daoForkSupport": True,
+        "eip150Block": 0,
+        "eip155Block": 0,
+        "eip158Block": 0,
+        "byzantiumBlock": 0,
+        "constantinopleBlock": 0,
+        "petersburgBlock": 0,
+        "istanbulBlock": 0,
+        "berlinBlock": 0,
+        "londonBlock": 0,
+        "arrowGlacierBlock": 0,
+        "grayGlacierBlock": 0,
+        # merge
+        "terminalTotalDifficulty": 0,
+        "terminalTotalDifficultyPassed": True,
+        # post-merge, timestamp is used for network transitions
+        "shanghaiTime": 0,
+        "cancunTime": 0,
+    }
+    difficulty: str = "0x0"
+    extraData: str = (
+        "0x0000000000000000000000000000000000000000000000000000000000000000"
+    )
+    gasLimit: str = "0x47d5cc"
+    mixhash: str = "0x0000000000000000000000000000000000000000000000000000000000000000"
+    nonce: str = "0x0"
+    parentHash: str = (
+        "0x0000000000000000000000000000000000000000000000000000000000000000"
+    )
+    timestamp: str = "0x0"
+
+    model_config = ConfigDict(extra="forbid")
+
+
+def validate_genesis_data(genesis_data: GenesisDataTypedDict) -> bool:
+    """
+    Validates the genesis data.
+    """
+    try:
+        GenesisData(**genesis_data)
+    except TypeError:
+        # TODO more specific error message
+        raise ValueError("Invalid genesis_data")
     return True

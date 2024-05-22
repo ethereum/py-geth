@@ -50,6 +50,7 @@ setup(
         "semantic-version>=2.6.0",
         "pydantic>=2.6.0",
         "eval_type_backport>=0.1.0; python_version < '3.10'",
+        "typing-extensions>=4.0.1",
     ],
     python_requires=">=3.8, <4",
     extras_require=extras_require,

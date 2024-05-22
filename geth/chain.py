@@ -1,7 +1,15 @@
+from __future__ import (
+    annotations,
+)
+
 import json
 import os
 import subprocess
 import sys
+
+from typing_extensions import (
+    Unpack,
+)
 
 from .utils.encoding import (
     force_obj_to_text,
@@ -9,6 +17,11 @@ from .utils.encoding import (
 from .utils.filesystem import (
     ensure_path_exists,
     is_same_path,
+)
+from .utils.validation import (
+    GenesisData,
+    GenesisDataTypedDict,
+    validate_genesis_data,
 )
 from .wrapper import (
     get_geth_binary_path,
@@ -87,75 +100,32 @@ def is_ropsten_chain(data_dir: str) -> bool:
     return is_same_path(data_dir, get_ropsten_data_dir())
 
 
-# type ignored TODO rethink genesis file in a separate PR
-def write_genesis_file(  # type: ignore[no-untyped-def]
-    genesis_file_path,
-    overwrite=False,
-    nonce="0x0",
-    timestamp="0x0",
-    parentHash="0x0000000000000000000000000000000000000000000000000000000000000000",
-    extraData="0x0000000000000000000000000000000000000000000000000000000000000000",
-    gasLimit="0x47d5cc",
-    difficulty="0x0",
-    mixhash="0x0000000000000000000000000000000000000000000000000000000000000000",
-    coinbase="0x3333333333333333333333333333333333333333",
-    alloc=None,
-    config=None,
-):
+def write_genesis_file(
+    genesis_file_path: str,
+    overwrite: bool = False,
+    **genesis_data: Unpack[GenesisDataTypedDict],
+) -> None:
     if os.path.exists(genesis_file_path) and not overwrite:
         raise ValueError(
-            "Genesis file already present.  call with `overwrite=True` to overwrite this file"  # noqa: E501
+            "Genesis file already present. Call with "
+            "`overwrite=True` to overwrite this file"
         )
 
-    if alloc is None:
-        alloc = {}
-
-    if config is None:
-        config = {
-            "ethash": {},
-            "homesteadBlock": 0,
-            "daoForkBlock": 0,
-            "daoForkSupport": True,
-            "eip150Block": 0,
-            "eip155Block": 0,
-            "eip158Block": 0,
-            "byzantiumBlock": 0,
-            "constantinopleBlock": 0,
-            "petersburgBlock": 0,
-            "istanbulBlock": 0,
-            "berlinBlock": 0,
-            "londonBlock": 0,
-            "arrowGlacierBlock": 0,
-            "grayGlacierBlock": 0,
-            # merge
-            "terminalTotalDifficulty": 0,
-            "terminalTotalDifficultyPassed": True,
-            # post-merge, timestamp is used for network transitions
-            "shanghaiTime": 0,
-            "cancunTime": 0,
-        }
-
-    genesis_data = {
-        "nonce": nonce,
-        "timestamp": timestamp,
-        "parentHash": parentHash,
-        "extraData": extraData,
-        "gasLimit": gasLimit,
-        "difficulty": difficulty,
-        "mixhash": mixhash,
-        "coinbase": coinbase,
-        "alloc": alloc,
-        "config": config,
-    }
+    validate_genesis_data(genesis_data)
+    # use GenesisData to fill defaults
+    genesis_data_filled = GenesisData(**genesis_data)
 
     with open(genesis_file_path, "w") as genesis_file:
-        genesis_file.write(json.dumps(force_obj_to_text(genesis_data)))
+        genesis_file.write(
+            json.dumps(force_obj_to_text(genesis_data_filled.model_dump()))
+        )
 
 
-def initialize_chain(genesis_data, data_dir):  # type: ignore[no-untyped-def]
+def initialize_chain(genesis_data: GenesisDataTypedDict, data_dir: str) -> None:
+    validate_genesis_data(genesis_data)
     # init with genesis.json
     genesis_file_path = get_genesis_file_path(data_dir)
-    write_genesis_file(genesis_file_path, **genesis_data)  # type: ignore[no-untyped-call]  # noqa: E501
+    write_genesis_file(genesis_file_path, **genesis_data)
     init_proc = subprocess.Popen(
         (
             get_geth_binary_path(),
