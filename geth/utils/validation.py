@@ -5,12 +5,15 @@ from __future__ import (
 from typing import (
     Any,
     Literal,
-    TypedDict,
 )
 
 from pydantic import (
     BaseModel,
     ConfigDict,
+)
+
+from geth.utils.types import (
+    GenesisDataTypedDict,
 )
 
 
@@ -94,19 +97,6 @@ def validate_geth_kwargs(geth_kwargs: dict[str, Any]) -> bool:
         # TODO more specific error message
         raise ValueError("Invalid geth_kwargs")
     return True
-
-
-class GenesisDataTypedDict(TypedDict, total=False):
-    alloc: dict[str, dict[str, Any]]
-    coinbase: str
-    config: dict[str, Any]
-    difficulty: str
-    extraData: str
-    gasLimit: str
-    mixhash: str
-    nonce: str
-    parentHash: str
-    timestamp: str
 
 
 class GenesisData(BaseModel):

@@ -15,9 +15,6 @@ from typing import (
 from geth.exceptions import (
     GethError,
 )
-from geth.types import (
-    IO_Any,
-)
 from geth.utils.encoding import (
     force_bytes,
 )
@@ -27,6 +24,9 @@ from geth.utils.filesystem import (
 from geth.utils.networking import (
     get_open_port,
     is_port_open,
+)
+from geth.utils.types import (
+    IO_Any,
 )
 from geth.utils.validation import (
     GethKwargs,

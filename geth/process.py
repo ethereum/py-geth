@@ -44,9 +44,6 @@ from geth.chain import (
     is_live_chain,
     is_ropsten_chain,
 )
-from geth.types import (
-    IO_Any,
-)
 from geth.utils.dag import (
     is_dag_generated,
 )
@@ -58,6 +55,9 @@ from geth.utils.proc import (
 )
 from geth.utils.timeout import (
     Timeout,
+)
+from geth.utils.types import (
+    IO_Any,
 )
 from geth.utils.validation import (
     GenesisDataTypedDict,
