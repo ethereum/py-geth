@@ -17,45 +17,61 @@ from geth.utils.validation import (
 )
 
 
-def test_validate_geth_kwargs_good():
-    geth_kwargs = {
-        "data_dir": "/tmp",
-        "network_id": "123",
-        "rpc_port": "1234",
-        "dev_mode": True,
-    }
-
+@pytest.mark.parametrize(
+    "geth_kwargs",
+    [
+        {
+            "data_dir": "/tmp",
+            "network_id": "123",
+            "rpc_port": "1234",
+            "dev_mode": True,
+        },
+    ],
+)
+def test_validate_geth_kwargs_good(geth_kwargs):
     assert validate_geth_kwargs(geth_kwargs) is True
 
 
-def test_validate_geth_kwargs_bad():
-    geth_kwargs = {
-        "data_dir": "/tmp",
-        "network_id": 123,
-        "dev_mode": "abc",
-    }
-
+@pytest.mark.parametrize(
+    "geth_kwargs",
+    [
+        {
+            "data_dir": "/tmp",
+            "network_id": 123,
+            "dev_mode": "abc",
+        }
+    ],
+)
+def test_validate_geth_kwargs_bad(geth_kwargs):
     with pytest.raises(ValueError):
         validate_geth_kwargs(geth_kwargs)
 
 
-def test_validate_genesis_data_good():
-    genesis_data = {
-        "difficulty": "0x00012131",
-        "nonce": "abc",
-        "timestamp": "1234",
-    }
-
+@pytest.mark.parametrize(
+    "genesis_data",
+    [
+        {
+            "difficulty": "0x00012131",
+            "nonce": "abc",
+            "timestamp": "1234",
+        }
+    ],
+)
+def test_validate_genesis_data_good(genesis_data):
     assert validate_genesis_data(genesis_data) is True
 
 
-def test_validate_genesis_data_bad():
-    genesis_data = {
-        "difficulty": "0x00012131",
-        "nonce": "abc",
-        "cats": "1234",
-    }
-
+@pytest.mark.parametrize(
+    "genesis_data",
+    [
+        {
+            "difficulty": "0x00012131",
+            "nonce": "abc",
+            "cats": "1234",
+        }
+    ],
+)
+def test_validate_genesis_data_bad(genesis_data):
     with pytest.raises(ValueError):
         validate_genesis_data(genesis_data)
 
