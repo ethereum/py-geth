@@ -139,7 +139,7 @@ class GenesisData(BaseModel):
     extraData: str = (
         "0x0000000000000000000000000000000000000000000000000000000000000000"
     )
-    gasLimit: str = "0x47d5cc"
+    gasLimit: str = "0x47e7c4"
     mixhash: str = "0x0000000000000000000000000000000000000000000000000000000000000000"
     nonce: str = "0x0"
     parentHash: str = (
