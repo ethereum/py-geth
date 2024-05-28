@@ -17,7 +17,7 @@ from typing import (
     Generator,
 )
 
-from geth.utils.types import (
+from geth.types import (
     IO_Any,
 )
 

@@ -12,7 +12,7 @@ from pydantic import (
     ConfigDict,
 )
 
-from geth.utils.types import (
+from geth.types import (
     GenesisDataTypedDict,
 )
 
