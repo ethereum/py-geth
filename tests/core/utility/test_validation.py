@@ -70,23 +70,12 @@ def test_validate_genesis_data_bad():
 def test_model_fields_match_typed_dict(model, typed_dict):
     # Get the fields and types from the Pydantic model
     model_fields = get_type_hints(model)
+    assert len(model_fields) > 0, "Model has no fields"
 
     # Get the fields and types from the TypedDict
     typed_dict_fields = get_type_hints(typed_dict)
+    assert len(typed_dict_fields) > 0, "TypedDict has no fields"
+    assert len(typed_dict_fields) == len(model_fields), "Field counts do not match"
 
-    # Verify that the number of fields match
-    assert len(model_fields) == len(typed_dict_fields), "Number of fields do not match"
-
-    # Verify that each field in the model matches the TypedDict
-    for field, field_type in model_fields.items():
-        assert field in typed_dict_fields, f"Field {field} not found in TypedDict"
-        assert (
-            typed_dict_fields[field] == field_type
-        ), f"Field {field} type mismatch: {typed_dict_fields[field]} != {field_type}"
-
-    # Verify that each field in the TypedDict matches the model
-    for field, field_type in typed_dict_fields.items():
-        assert field in model_fields, f"Field {field} not found in Model"
-        assert (
-            model_fields[field] == field_type
-        ), f"Field {field} type mismatch: {model_fields[field]} != {field_type}"
+    # Verify that the fields match
+    assert model_fields == typed_dict_fields, "Fields do not match"
