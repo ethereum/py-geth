@@ -11,6 +11,10 @@ from typing import (
     Literal,
 )
 
+from geth.exceptions import (
+    PyGethValueError,
+)
+
 
 class Timeout(Exception):
     """
@@ -52,24 +56,24 @@ class Timeout(Exception):
     @property
     def expire_at(self) -> float:
         if self.seconds is None:
-            raise ValueError(
+            raise PyGethValueError(
                 "Timeouts with `seconds == None` do not have an expiration time"
             )
         elif self.begun_at is None:
-            raise ValueError("Timeout has not been started")
+            raise PyGethValueError("Timeout has not been started")
         return self.begun_at + self.seconds
 
     def start(self) -> None:
         if self.is_running is not None:
-            raise ValueError("Timeout has already been started")
+            raise PyGethValueError("Timeout has already been started")
         self.begun_at = time.time()
         self.is_running = True
 
     def check(self) -> None:
         if self.is_running is None:
-            raise ValueError("Timeout has not been started")
+            raise PyGethValueError("Timeout has not been started")
         elif self.is_running is False:
-            raise ValueError("Timeout has already been cancelled")
+            raise PyGethValueError("Timeout has already been cancelled")
         elif self.seconds is None:
             return
         elif time.time() > self.expire_at:

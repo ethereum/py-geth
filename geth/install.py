@@ -17,6 +17,12 @@ from typing import (
     Generator,
 )
 
+from geth.exceptions import (
+    PyGethException,
+    PyGethKeyError,
+    PyGethOSError,
+    PyGethValueError,
+)
 from geth.types import (
     IO_Any,
 )
@@ -68,7 +74,7 @@ def get_platform() -> str:
     elif sys.platform == WINDOWS:
         return WINDOWS
     else:
-        raise KeyError(f"Unknown platform: {sys.platform}")
+        raise PyGethKeyError(f"Unknown platform: {sys.platform}")
 
 
 def is_executable_available(program: str) -> bool:
@@ -261,7 +267,7 @@ def extract_source_code_release(identifier: str) -> None:
             for member in tar.getmembers():
                 member_path = os.path.join(path, member.name)
                 if not is_within_directory(path, member_path):
-                    raise Exception("Attempted Path Traversal in Tar File")
+                    raise PyGethException("Attempted Path Traversal in Tar File")
 
             tar.extractall(path)
 
@@ -270,7 +276,7 @@ def extract_source_code_release(identifier: str) -> None:
 
 def build_from_source_code(identifier: str) -> None:
     if not is_go_available():
-        raise OSError(
+        raise PyGethOSError(
             "The `go` runtime was not found but is required to build geth.  If "
             "the `go` executable is not in your $PATH you can specify the path "
             "using the environment variable GO_BINARY to specify the path."
@@ -287,7 +293,7 @@ def build_from_source_code(identifier: str) -> None:
 
     built_executable_path = get_built_executable_path(identifier)
     if not os.path.exists(built_executable_path):
-        raise OSError(
+        raise PyGethOSError(
             "Built executable not found in expected location: "
             f"{built_executable_path}"
         )
@@ -300,7 +306,9 @@ def build_from_source_code(identifier: str) -> None:
         if os.path.islink(executable_path):
             os.remove(executable_path)
         else:
-            raise OSError(f"Non-symlink file already present at `{executable_path}`")
+            raise PyGethOSError(
+                f"Non-symlink file already present at `{executable_path}`"
+            )
     os.symlink(built_executable_path, executable_path)
     chmod_plus_x(executable_path)
 
@@ -395,13 +403,13 @@ def install_geth(identifier: str, platform: str | None = None) -> None:
         platform = get_platform()
 
     if platform not in INSTALL_FUNCTIONS:
-        raise ValueError(
+        raise PyGethValueError(
             "Installation of go-ethereum is not supported on your platform "
             f"({platform}). Supported platforms are: "
             f"{', '.join(sorted(INSTALL_FUNCTIONS.keys()))}"
         )
     elif identifier not in INSTALL_FUNCTIONS[platform]:
-        raise ValueError(
+        raise PyGethValueError(
             f"Installation of geth=={identifier} is not supported. Must be one of "
             f"{', '.join(sorted(INSTALL_FUNCTIONS[platform].keys()))}"
         )

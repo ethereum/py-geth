@@ -7,6 +7,10 @@ from typing import (
     Any,
 )
 
+from geth.exceptions import (
+    PyGethTypeError,
+)
+
 
 def is_string(value: Any) -> bool:
     return isinstance(value, (bytes, bytearray, str))
@@ -22,11 +26,11 @@ def force_bytes(value: bytes | bytearray | str, encoding: str = "iso-8859-1") ->
         if isinstance(encoded, (bytes, bytearray)):
             return encoded
         else:
-            raise TypeError(
+            raise PyGethTypeError(
                 f"Encoding {encoding!r} produced non-binary result: {encoded!r}"
             )
     else:
-        raise TypeError(f"Unsupported type: {type(value)}")
+        raise PyGethTypeError(f"Unsupported type: {type(value)}")
 
 
 def force_text(value: bytes | bytearray | str, encoding: str = "iso-8859-1") -> str:
@@ -35,7 +39,7 @@ def force_text(value: bytes | bytearray | str, encoding: str = "iso-8859-1") -> 
     elif isinstance(value, str):
         return value
     else:
-        raise TypeError(f"Unsupported type: {type(value)}")
+        raise PyGethTypeError(f"Unsupported type: {type(value)}")
 
 
 def force_obj_to_text(obj: Any) -> Any:

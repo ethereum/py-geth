@@ -13,7 +13,8 @@ from typing import (
 )
 
 from geth.exceptions import (
-    GethError,
+    PyGethGethError,
+    PyGethValueError,
 )
 from geth.types import (
     IO_Any,
@@ -128,7 +129,7 @@ def construct_popen_command(**geth_kwargs: Any) -> list[str]:
         gk.geth_executable = get_geth_binary_path()
 
     if not is_executable_available(gk.geth_executable):
-        raise ValueError(
+        raise PyGethValueError(
             "No geth executable found.  Please ensure geth is installed and "
             "available on your PATH or use the GETH_BINARY environment variable"
         )
@@ -208,12 +209,14 @@ def construct_popen_command(**geth_kwargs: Any) -> list[str]:
 
     if gk.mine:
         if gk.unlock is None:
-            raise ValueError("Cannot mine without an unlocked account")
+            raise PyGethValueError("Cannot mine without an unlocked account")
         builder.append("--mine")
 
     if gk.miner_etherbase is not None:
         if not gk.mine:
-            raise ValueError("`mine` must be truthy when specifying `miner_etherbase`")
+            raise PyGethValueError(
+                "`mine` must be truthy when specifying `miner_etherbase`"
+            )
         builder.extend(("--miner.etherbase", gk.miner_etherbase))
 
     if gk.autodag:
@@ -263,7 +266,7 @@ def geth_wrapper(
     stdoutdata, stderrdata = proc.communicate(stdin)
 
     if proc.returncode != 0:
-        raise GethError(
+        raise PyGethGethError(
             command=command,
             return_code=proc.returncode,
             stdin_data=stdin,

@@ -1,0 +1,1 @@
+Update all raised ``Exceptions`` to inherit from a ``PyGethException``

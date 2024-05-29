@@ -5,6 +5,10 @@ from typing import (
 
 import semantic_version
 
+from geth.exceptions import (
+    PyGethTypeError,
+    PyGethValueError,
+)
 from geth.utils.validation import (
     validate_geth_kwargs,
 )
@@ -19,7 +23,7 @@ from .wrapper import (
 
 def get_geth_version_info_string(**geth_kwargs: Any) -> str:
     if "suffix_args" in geth_kwargs:
-        raise TypeError(
+        raise PyGethTypeError(
             "The `get_geth_version` function cannot be called with the "
             "`suffix_args` parameter"
         )
@@ -37,7 +41,7 @@ def get_geth_version(**geth_kwargs: Any) -> semantic_version.Version:
     version_info_string = get_geth_version_info_string(**geth_kwargs)
     version_match = re.search(VERSION_REGEX, force_text(version_info_string, "utf8"))
     if not version_match:
-        raise ValueError(
+        raise PyGethValueError(
             f"Did not match version string in geth output:\n{version_info_string}"
         )
     version_string = version_match.groups()[0]
