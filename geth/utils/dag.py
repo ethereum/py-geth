@@ -5,6 +5,11 @@ from __future__ import (
 import os
 import sys
 
+from geth.exceptions import (
+    PyGethNotImplementedError,
+    PyGethValueError,
+)
+
 MAGIC_PREFIX = b"\xfe\xca\xdd\xba\xad\xde\xe1\xfe"  # 0xfee1deadbaddcafe
 
 
@@ -14,7 +19,7 @@ def get_dag_file_path(
     base_dir: str | None = None,
 ) -> str:
     if seedhash != "0000000000000000":
-        raise NotImplementedError("Non-zero seedhashes are not supported")
+        raise PyGethNotImplementedError("Non-zero seedhashes are not supported")
 
     if base_dir is None:
         if sys.platform in {"darwin", "linux", "linux2", "linux3"}:
@@ -29,7 +34,7 @@ def get_dag_file_path(
                 )
             )
         else:
-            raise ValueError(f"Unknown platform: {sys.platform}")
+            raise PyGethValueError(f"Unknown platform: {sys.platform}")
 
     dag_filename = f"full-R{revision}-{seedhash}"
 

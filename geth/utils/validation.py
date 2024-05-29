@@ -13,6 +13,9 @@ from pydantic import (
     ValidationError,
 )
 
+from geth.exceptions import (
+    PyGethValueError,
+)
 from geth.types import (
     GenesisDataTypedDict,
 )
@@ -95,9 +98,9 @@ def validate_geth_kwargs(geth_kwargs: dict[str, Any]) -> bool:
     try:
         GethKwargs(**geth_kwargs)
     except ValidationError as e:
-        raise ValueError(f"geth_kwargs validation failed: {e}")
+        raise PyGethValueError(f"geth_kwargs validation failed: {e}")
     except TypeError as e:
-        raise ValueError(f"error while validating geth_kwargs: {e}")
+        raise PyGethValueError(f"error while validating geth_kwargs: {e}")
     return True
 
 
@@ -155,16 +158,18 @@ def validate_genesis_data(genesis_data: GenesisDataTypedDict) -> bool:
         try:
             GenesisDataConfig(**genesis_data_config)
         except ValidationError as e:
-            raise ValueError(f"genesis_data config field validation failed: {e}")
+            raise PyGethValueError(f"genesis_data config field validation failed: {e}")
         except TypeError as e:
-            raise ValueError(f"error while validating genesis_data config field: {e}")
+            raise PyGethValueError(
+                f"error while validating genesis_data config field: {e}"
+            )
     """
     Validates the genesis data
     """
     try:
         GenesisData(**genesis_data)
     except ValidationError as e:
-        raise ValueError(f"genesis_data validation failed: {e}")
+        raise PyGethValueError(f"genesis_data validation failed: {e}")
     except TypeError as e:
-        raise ValueError(f"error while validating genesis_data: {e}")
+        raise PyGethValueError(f"error while validating genesis_data: {e}")
     return True

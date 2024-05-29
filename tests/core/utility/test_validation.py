@@ -9,6 +9,9 @@ from typing import (
 
 import pytest
 
+from geth.exceptions import (
+    PyGethValueError,
+)
 from geth.types import (
     GenesisDataTypedDict,
 )
@@ -45,7 +48,7 @@ def test_validate_geth_kwargs_good(geth_kwargs):
     ],
 )
 def test_validate_geth_kwargs_bad(geth_kwargs):
-    with pytest.raises(ValueError):
+    with pytest.raises(PyGethValueError):
         validate_geth_kwargs(geth_kwargs)
 
 
@@ -84,7 +87,7 @@ def test_validate_genesis_data_good(genesis_data):
     ],
 )
 def test_validate_genesis_data_bad(genesis_data):
-    with pytest.raises(ValueError):
+    with pytest.raises(PyGethValueError):
         validate_genesis_data(genesis_data)
 
 

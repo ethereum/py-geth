@@ -11,6 +11,9 @@ from typing_extensions import (
     Unpack,
 )
 
+from geth.exceptions import (
+    PyGethValueError,
+)
 from geth.types import (
     GenesisDataTypedDict,
 )
@@ -63,7 +66,7 @@ def get_live_data_dir() -> str:
         )
 
     else:
-        raise ValueError(
+        raise PyGethValueError(
             f"Unsupported platform: '{sys.platform}'.  Only darwin/linux2/win32 are"
             " supported.  You must specify the geth datadir manually"
         )
@@ -109,7 +112,7 @@ def write_genesis_file(
     **genesis_data: Unpack[GenesisDataTypedDict],
 ) -> None:
     if os.path.exists(genesis_file_path) and not overwrite:
-        raise ValueError(
+        raise PyGethValueError(
             "Genesis file already present. Call with "
             "`overwrite=True` to overwrite this file"
         )
@@ -144,7 +147,7 @@ def initialize_chain(genesis_data: GenesisDataTypedDict, data_dir: str) -> None:
     stdoutdata, stderrdata = init_proc.communicate()
     init_proc.wait()
     if init_proc.returncode:
-        raise ValueError(
+        raise PyGethValueError(
             "Error initializing genesis.json: \n"
             f"    stdout={stdoutdata.decode()}\n"
             f"    stderr={stderrdata.decode()}"
