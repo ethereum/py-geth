@@ -70,7 +70,17 @@ def test_validate_genesis_data_good(genesis_data):
             "difficulty": "0x00012131",
             "nonce": "abc",
             "cats": "1234",
-        }
+        },
+        {
+            "difficulty": "0x00012131",
+            "nonce": "abc",
+            "config": "1234",
+        },
+        {
+            "difficulty": "0x00012131",
+            "nonce": "abc",
+            "config": None,
+        },
     ],
 )
 def test_validate_genesis_data_bad(genesis_data):

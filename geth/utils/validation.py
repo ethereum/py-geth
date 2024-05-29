@@ -10,6 +10,7 @@ from typing import (
 from pydantic import (
     BaseModel,
     ConfigDict,
+    ValidationError,
 )
 
 from geth.types import (
@@ -93,9 +94,10 @@ def validate_geth_kwargs(geth_kwargs: dict[str, Any]) -> bool:
     """
     try:
         GethKwargs(**geth_kwargs)
-    except TypeError:
-        # TODO more specific error message
-        raise ValueError("Invalid geth_kwargs")
+    except ValidationError as e:
+        raise ValueError(f"geth_kwargs validation failed: {e}")
+    except TypeError as e:
+        raise ValueError(f"error while validating geth_kwargs: {e}")
     return True
 
 
@@ -152,16 +154,17 @@ def validate_genesis_data(genesis_data: GenesisDataTypedDict) -> bool:
     if genesis_data_config:
         try:
             GenesisDataConfig(**genesis_data_config)
-        except TypeError:
-            # TODO more specific error message
-            raise ValueError("Invalid genesis_data config")
-
+        except ValidationError as e:
+            raise ValueError(f"genesis_data config field validation failed: {e}")
+        except TypeError as e:
+            raise ValueError(f"error while validating genesis_data config field: {e}")
     """
     Validates the genesis data
     """
     try:
         GenesisData(**genesis_data)
-    except TypeError:
-        # TODO more specific error message
-        raise ValueError("Invalid genesis_data")
+    except ValidationError as e:
+        raise ValueError(f"genesis_data validation failed: {e}")
+    except TypeError as e:
+        raise ValueError(f"error while validating genesis_data: {e}")
     return True
