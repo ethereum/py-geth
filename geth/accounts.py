@@ -8,6 +8,9 @@ from typing import (
     Any,
 )
 
+from geth.exceptions import (
+    PyGethValueError,
+)
 from geth.utils.validation import (
     validate_geth_kwargs,
 )
@@ -38,7 +41,7 @@ def get_accounts(data_dir: str, **geth_kwargs: Any) -> tuple[str, ...] | tuple[(
         if "no keys in store" in stderrdata.decode():
             return tuple()
         else:
-            raise ValueError(
+            raise PyGethValueError(
                 format_error_message(
                     "Error trying to list accounts",
                     command,
@@ -118,9 +121,9 @@ def create_new_account(data_dir: str, password: bytes | str, **geth_kwargs: Any)
         if os.path.exists(password):
             geth_kwargs["password"] = password
         else:
-            raise ValueError(f"Password file not found at path: {password}")
+            raise PyGethValueError(f"Password file not found at path: {password}")
     elif not isinstance(password, bytes):
-        raise ValueError("Password must be either a path to a file or bytes")
+        raise PyGethValueError("Password must be either a path to a file or bytes")
 
     command, proc = spawn_geth(geth_kwargs)
 
@@ -130,7 +133,7 @@ def create_new_account(data_dir: str, password: bytes | str, **geth_kwargs: Any)
         stdoutdata, stderrdata = proc.communicate(b"\n".join((password, password)))
 
     if proc.returncode:
-        raise ValueError(
+        raise PyGethValueError(
             format_error_message(
                 "Error trying to create a new account",
                 command,
@@ -142,7 +145,7 @@ def create_new_account(data_dir: str, password: bytes | str, **geth_kwargs: Any)
 
     match = account_regex.search(stdoutdata)
     if not match:
-        raise ValueError(
+        raise PyGethValueError(
             format_error_message(
                 "Did not find an address in process output",
                 command,

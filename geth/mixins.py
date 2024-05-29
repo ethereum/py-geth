@@ -13,6 +13,9 @@ from typing import (
     Callable,
 )
 
+from geth.exceptions import (
+    PyGethAttributeError,
+)
 from geth.utils.filesystem import (
     ensure_path_exists,
 )
@@ -113,7 +116,7 @@ class InterceptedStreamsMixin:
                 self.stdout_queue.put(line)
                 time.sleep(0)
         else:
-            raise AttributeError("No `proc` attribute found")
+            raise PyGethAttributeError("No `proc` attribute found")
 
     def produce_stderr_queue(self) -> None:
         if hasattr(self, "proc"):
@@ -121,7 +124,7 @@ class InterceptedStreamsMixin:
                 self.stderr_queue.put(line)
                 time.sleep(0)
         else:
-            raise AttributeError("No `proc` attribute found")
+            raise PyGethAttributeError("No `proc` attribute found")
 
     def consume_stdout_queue(self) -> None:
         for line in self.stdout_queue:

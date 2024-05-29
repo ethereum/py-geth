@@ -44,6 +44,10 @@ from geth.chain import (
     is_live_chain,
     is_ropsten_chain,
 )
+from geth.exceptions import (
+    PyGethNotImplementedError,
+    PyGethValueError,
+)
 from geth.types import (
     IO_Any,
 )
@@ -95,7 +99,7 @@ class BaseGethProcess(ABC):
 
     def start(self) -> None:
         if self.is_running:
-            raise ValueError("Already running")
+            raise PyGethValueError("Already running")
         self.is_running = True
 
         logger.info(f"Launching geth: {' '.join(self.command)}")
@@ -112,7 +116,7 @@ class BaseGethProcess(ABC):
 
     def stop(self) -> None:
         if not self.is_running:
-            raise ValueError("Not running")
+            raise PyGethValueError("Not running")
 
         if self.proc.poll() is None:
             kill_proc(self.proc)
@@ -130,7 +134,7 @@ class BaseGethProcess(ABC):
     @property
     @abstractmethod
     def data_dir(self) -> str:
-        raise NotImplementedError("Must be implemented by subclasses.")
+        raise PyGethNotImplementedError("Must be implemented by subclasses.")
 
     @property
     def is_alive(self) -> bool:
@@ -170,7 +174,7 @@ class BaseGethProcess(ABC):
 
     def wait_for_rpc(self, timeout: int = 0) -> None:
         if not self.rpc_enabled:
-            raise ValueError("RPC interface is not enabled")
+            raise PyGethValueError("RPC interface is not enabled")
 
         with Timeout(timeout) as _timeout:
             while True:
@@ -210,7 +214,7 @@ class BaseGethProcess(ABC):
 
     def wait_for_ipc(self, timeout: int = 0) -> None:
         if not self.ipc_enabled:
-            raise ValueError("IPC interface is not enabled")
+            raise PyGethValueError("IPC interface is not enabled")
 
         with Timeout(timeout) as _timeout:
             while True:
@@ -230,7 +234,7 @@ class BaseGethProcess(ABC):
 
     def wait_for_dag(self, timeout: int = 0) -> None:
         if not self.is_mining and not self.geth_kwargs.get("autodag", False):
-            raise ValueError("Geth not configured to generate DAG")
+            raise PyGethValueError("Geth not configured to generate DAG")
 
         with Timeout(timeout) as _timeout:
             while True:
@@ -246,7 +250,9 @@ class MainnetGethProcess(BaseGethProcess):
             geth_kwargs = {}
 
         if "data_dir" in geth_kwargs:
-            raise ValueError("You cannot specify `data_dir` for a MainnetGethProcess")
+            raise PyGethValueError(
+                "You cannot specify `data_dir` for a MainnetGethProcess"
+            )
 
         super().__init__(geth_kwargs)
 
@@ -261,11 +267,11 @@ class RopstenGethProcess(BaseGethProcess):
             geth_kwargs = {}
 
         if "data_dir" in geth_kwargs:
-            raise ValueError(
+            raise PyGethValueError(
                 f"You cannot specify `data_dir` for a {type(self).__name__}"
             )
         if "network_id" in geth_kwargs:
-            raise ValueError(
+            raise PyGethValueError(
                 f"You cannot specify `network_id` for a {type(self).__name__}"
             )
 
@@ -306,7 +312,7 @@ class DevGethProcess(BaseGethProcess):
         validate_genesis_data(genesis_data)
 
         if "data_dir" in overrides:
-            raise ValueError("You cannot specify `data_dir` for a DevGethProcess")
+            raise PyGethValueError("You cannot specify `data_dir` for a DevGethProcess")
 
         if base_dir is None:
             base_dir = get_default_base_dir()

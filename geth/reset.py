@@ -7,6 +7,9 @@ from typing import (
     Any,
 )
 
+from geth.exceptions import (
+    PyGethValueError,
+)
 from geth.utils.validation import (
     validate_geth_kwargs,
 )
@@ -31,12 +34,12 @@ def soft_reset_chain(
     data_dir = geth_kwargs.get("data_dir")
 
     if data_dir is None or (not allow_live and is_live_chain(data_dir)):
-        raise ValueError(
+        raise PyGethValueError(
             "To reset the live chain you must call this function with `allow_live=True`"
         )
 
     if not allow_testnet and is_testnet_chain(data_dir):
-        raise ValueError(
+        raise PyGethValueError(
             "To reset the testnet chain you must call this function with `allow_testnet=True`"  # noqa: E501
         )
 
@@ -49,7 +52,7 @@ def soft_reset_chain(
     stdoutdata, stderrdata = proc.communicate(b"y")
 
     if "Removing chaindata" not in stdoutdata.decode():
-        raise ValueError(
+        raise PyGethValueError(
             "An error occurred while removing the chain:\n\nError:\n"
             f"{stderrdata.decode()}\n\nOutput:\n{stdoutdata.decode()}"
         )
@@ -59,12 +62,12 @@ def hard_reset_chain(
     data_dir: str, allow_live: bool = False, allow_testnet: bool = False
 ) -> None:
     if not allow_live and is_live_chain(data_dir):
-        raise ValueError(
+        raise PyGethValueError(
             "To reset the live chain you must call this function with `allow_live=True`"
         )
 
     if not allow_testnet and is_testnet_chain(data_dir):
-        raise ValueError(
+        raise PyGethValueError(
             "To reset the testnet chain you must call this function with `allow_testnet=True`"  # noqa: E501
         )
 
