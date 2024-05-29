@@ -99,32 +99,36 @@ def validate_geth_kwargs(geth_kwargs: dict[str, Any]) -> bool:
     return True
 
 
+class GenesisDataConfig(BaseModel):
+    ethash: dict[str, Any] = {}
+    homesteadBlock: int = 0
+    daoForkBlock: int = 0
+    daoForkSupport: bool = True
+    eip150Block: int = 0
+    eip155Block: int = 0
+    eip158Block: int = 0
+    byzantiumBlock: int = 0
+    constantinopleBlock: int = 0
+    petersburgBlock: int = 0
+    istanbulBlock: int = 0
+    berlinBlock: int = 0
+    londonBlock: int = 0
+    arrowGlacierBlock: int = 0
+    grayGlacierBlock: int = 0
+    # merge
+    terminalTotalDifficulty: int = 0
+    terminalTotalDifficultyPassed: bool = True
+    # post-merge, timestamp is used for network transitions
+    shanghaiTime: int = 0
+    cancunTime: int = 0
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class GenesisData(BaseModel):
     alloc: dict[str, dict[str, Any]] = {}
     coinbase: str = "0x3333333333333333333333333333333333333333"
-    config: dict[str, Any] = {
-        "ethash": {},
-        "homesteadBlock": 0,
-        "daoForkBlock": 0,
-        "daoForkSupport": True,
-        "eip150Block": 0,
-        "eip155Block": 0,
-        "eip158Block": 0,
-        "byzantiumBlock": 0,
-        "constantinopleBlock": 0,
-        "petersburgBlock": 0,
-        "istanbulBlock": 0,
-        "berlinBlock": 0,
-        "londonBlock": 0,
-        "arrowGlacierBlock": 0,
-        "grayGlacierBlock": 0,
-        # merge
-        "terminalTotalDifficulty": 0,
-        "terminalTotalDifficultyPassed": True,
-        # post-merge, timestamp is used for network transitions
-        "shanghaiTime": 0,
-        "cancunTime": 0,
-    }
+    config: dict[str, Any] = GenesisDataConfig().model_dump()
     difficulty: str = "0x0"
     extraData: str = (
         "0x0000000000000000000000000000000000000000000000000000000000000000"
@@ -142,7 +146,18 @@ class GenesisData(BaseModel):
 
 def validate_genesis_data(genesis_data: GenesisDataTypedDict) -> bool:
     """
-    Validates the genesis data.
+    Validates the genesis data config field
+    """
+    genesis_data_config = genesis_data.get("config", None)
+    if genesis_data_config:
+        try:
+            GenesisDataConfig(**genesis_data_config)
+        except TypeError:
+            # TODO more specific error message
+            raise ValueError("Invalid genesis_data config")
+
+    """
+    Validates the genesis data
     """
     try:
         GenesisData(**genesis_data)

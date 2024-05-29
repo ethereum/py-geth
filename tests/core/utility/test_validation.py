@@ -9,9 +9,11 @@ from typing import (
 
 import pytest
 
+from geth.types import (
+    GenesisDataTypedDict,
+)
 from geth.utils.validation import (
     GenesisData,
-    GenesisDataTypedDict,
     validate_genesis_data,
     validate_geth_kwargs,
 )

@@ -11,6 +11,10 @@ from typing_extensions import (
     Unpack,
 )
 
+from geth.types import (
+    GenesisDataTypedDict,
+)
+
 from .utils.encoding import (
     force_obj_to_text,
 )
@@ -20,7 +24,6 @@ from .utils.filesystem import (
 )
 from .utils.validation import (
     GenesisData,
-    GenesisDataTypedDict,
     validate_genesis_data,
 )
 from .wrapper import (
@@ -113,11 +116,11 @@ def write_genesis_file(
 
     validate_genesis_data(genesis_data)
     # use GenesisData to fill defaults
-    genesis_data_filled = GenesisData(**genesis_data)
+    genesis_data_model = GenesisData(**genesis_data)
 
     with open(genesis_file_path, "w") as genesis_file:
         genesis_file.write(
-            json.dumps(force_obj_to_text(genesis_data_filled.model_dump()))
+            json.dumps(force_obj_to_text(genesis_data_model.model_dump()))
         )
 
 
