@@ -9,12 +9,12 @@ from geth.accounts import (
 def test_create_new_account_with_text_password(tmpdir):
     data_dir = str(tmpdir.mkdir("data-dir"))
 
-    assert not get_accounts(data_dir)
+    assert not get_accounts(data_dir=data_dir)
 
-    account_0 = create_new_account(data_dir, b"some-text-password")
-    account_1 = create_new_account(data_dir, b"some-text-password")
+    account_0 = create_new_account(data_dir=data_dir, password=b"some-text-password")
+    account_1 = create_new_account(data_dir=data_dir, password=b"some-text-password")
 
-    accounts = get_accounts(data_dir)
+    accounts = get_accounts(data_dir=data_dir)
     assert sorted((account_0, account_1)) == sorted(tuple(set(accounts)))
 
 
@@ -26,10 +26,10 @@ def test_create_new_account_with_file_based_password(tmpdir):
 
     data_dir = os.path.dirname(pw_file_path)
 
-    assert not get_accounts(data_dir)
+    assert not get_accounts(data_dir=data_dir)
 
-    account_0 = create_new_account(data_dir, pw_file_path)
-    account_1 = create_new_account(data_dir, pw_file_path)
+    account_0 = create_new_account(data_dir=data_dir, password=pw_file_path)
+    account_1 = create_new_account(data_dir=data_dir, password=pw_file_path)
 
-    accounts = get_accounts(data_dir)
+    accounts = get_accounts(data_dir=data_dir)
     assert sorted((account_0, account_1)) == sorted(tuple(set(accounts)))

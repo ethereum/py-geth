@@ -4,12 +4,16 @@ from __future__ import (
 
 import os
 import re
-from typing import (
-    Any,
+
+from typing_extensions import (
+    Unpack,
 )
 
 from geth.exceptions import (
     PyGethValueError,
+)
+from geth.types import (
+    GethKwargsTypedDict,
 )
 from geth.utils.validation import (
     validate_geth_kwargs,
@@ -23,7 +27,9 @@ from .wrapper import (
 )
 
 
-def get_accounts(data_dir: str, **geth_kwargs: Any) -> tuple[str, ...] | tuple[()]:
+def get_accounts(
+    **geth_kwargs: Unpack[GethKwargsTypedDict],
+) -> tuple[str, ...] | tuple[()]:
     """
     Returns all geth accounts as tuple of hex encoded strings
 
@@ -32,9 +38,12 @@ def get_accounts(data_dir: str, **geth_kwargs: Any) -> tuple[str, ...] | tuple[(
     """
     validate_geth_kwargs(geth_kwargs)
 
-    command, proc = spawn_geth(
-        dict(data_dir=data_dir, suffix_args=["account", "list"], **geth_kwargs)
-    )
+    if not geth_kwargs.get("data_dir"):
+        raise PyGethValueError("data_dir is required to get accounts")
+
+    geth_kwargs["suffix_args"] = ["account", "list"]
+
+    command, proc = spawn_geth(geth_kwargs)
     stdoutdata, stderrdata = proc.communicate()
 
     if proc.returncode:
@@ -57,7 +66,7 @@ def get_accounts(data_dir: str, **geth_kwargs: Any) -> tuple[str, ...] | tuple[(
 account_regex = re.compile(b"([a-f0-9]{40})")
 
 
-def create_new_account(data_dir: str, password: bytes | str, **geth_kwargs: Any) -> str:
+def create_new_account(**geth_kwargs: Unpack[GethKwargsTypedDict]) -> str:
     """
     Creates a new Ethereum account on geth.
 
@@ -108,22 +117,30 @@ def create_new_account(data_dir: str, password: bytes | str, **geth_kwargs: Any)
             account = create_new_account(data_dir, DEFAULT_PASSWORD_PATH)
             return account
 
-    :param data_dir: Geth datadir path - where to keep "keystore" folder
-    :param password: Password to use for the new account, either the password as bytes
-        or a str path to a file containing the password
-    :param geth_kwargs: Extra command line arguments to pass to geth
+    :param geth_kwargs: Command line arguments to pass to geth Required keys are:
+        data_dir: Geth datadir path - where to keep "keystore" folder
+        password: Password to use for the new account, either the password as bytes
+                  or a str path to a file containing the password
     :return: Account as 0x prefixed hex string
     """
-    geth_kwargs.update({"data_dir": data_dir, "suffix_args": ["account", "new"]})
+    if not geth_kwargs.get("data_dir"):
+        raise PyGethValueError("data_dir is required to create a new account")
+
+    if not geth_kwargs.get("password"):
+        raise PyGethValueError("password is required to create a new account")
+
+    password = geth_kwargs.get("password")
+
+    geth_kwargs.update({"suffix_args": ["account", "new"]})
     validate_geth_kwargs(geth_kwargs)
 
     if isinstance(password, str):
-        if os.path.exists(password):
-            geth_kwargs["password"] = password
-        else:
+        if not os.path.exists(password):
             raise PyGethValueError(f"Password file not found at path: {password}")
     elif not isinstance(password, bytes):
-        raise PyGethValueError("Password must be either a path to a file or bytes")
+        raise PyGethValueError(
+            "Password must be either a str (path to a file) or bytes"
+        )
 
     command, proc = spawn_geth(geth_kwargs)
 
@@ -158,11 +175,14 @@ def create_new_account(data_dir: str, password: bytes | str, **geth_kwargs: Any)
     return "0x" + match.groups()[0].decode()
 
 
-def ensure_account_exists(data_dir: str, **geth_kwargs: Any) -> str:
+def ensure_account_exists(**geth_kwargs: Unpack[GethKwargsTypedDict]) -> str:
+    if not geth_kwargs.get("data_dir"):
+        raise PyGethValueError("data_dir is required to get accounts")
+
     validate_geth_kwargs(geth_kwargs)
-    accounts = get_accounts(data_dir, **geth_kwargs)
+    accounts = get_accounts(**geth_kwargs)
     if not accounts:
-        account = create_new_account(data_dir, **geth_kwargs)
+        account = create_new_account(**geth_kwargs)
     else:
         account = accounts[0]
     return account

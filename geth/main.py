@@ -1,13 +1,20 @@
-import re
-from typing import (
-    Any,
+from __future__ import (
+    annotations,
 )
 
+import re
+
 import semantic_version
+from typing_extensions import (
+    Unpack,
+)
 
 from geth.exceptions import (
     PyGethTypeError,
     PyGethValueError,
+)
+from geth.types import (
+    GethKwargsTypedDict,
 )
 from geth.utils.validation import (
     validate_geth_kwargs,
@@ -21,7 +28,7 @@ from .wrapper import (
 )
 
 
-def get_geth_version_info_string(**geth_kwargs: Any) -> str:
+def get_geth_version_info_string(**geth_kwargs: Unpack[GethKwargsTypedDict]) -> str:
     if "suffix_args" in geth_kwargs:
         raise PyGethTypeError(
             "The `get_geth_version` function cannot be called with the "
@@ -36,7 +43,9 @@ def get_geth_version_info_string(**geth_kwargs: Any) -> str:
 VERSION_REGEX = r"Version: (.*)\n"
 
 
-def get_geth_version(**geth_kwargs: Any) -> semantic_version.Version:
+def get_geth_version(
+    **geth_kwargs: Unpack[GethKwargsTypedDict],
+) -> semantic_version.Version:
     validate_geth_kwargs(geth_kwargs)
     version_info_string = get_geth_version_info_string(**geth_kwargs)
     version_match = re.search(VERSION_REGEX, force_text(version_info_string, "utf8"))
