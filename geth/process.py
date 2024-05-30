@@ -15,7 +15,6 @@ from types import (
     TracebackType,
 )
 from typing import (
-    Any,
     cast,
 )
 from urllib.error import (
@@ -49,6 +48,7 @@ from geth.exceptions import (
     PyGethValueError,
 )
 from geth.types import (
+    GethKwargsTypedDict,
     IO_Any,
 )
 from geth.utils.dag import (
@@ -83,7 +83,7 @@ class BaseGethProcess(ABC):
 
     def __init__(
         self,
-        geth_kwargs: dict[str, Any],
+        geth_kwargs: GethKwargsTypedDict,
         stdin: IO_Any = subprocess.PIPE,
         stdout: IO_Any = subprocess.PIPE,
         stderr: IO_Any = subprocess.PIPE,
@@ -245,7 +245,7 @@ class BaseGethProcess(ABC):
 
 
 class MainnetGethProcess(BaseGethProcess):
-    def __init__(self, geth_kwargs: dict[str, Any] | None = None):
+    def __init__(self, geth_kwargs: GethKwargsTypedDict | None = None):
         if geth_kwargs is None:
             geth_kwargs = {}
 
@@ -262,7 +262,7 @@ class MainnetGethProcess(BaseGethProcess):
 
 
 class RopstenGethProcess(BaseGethProcess):
-    def __init__(self, geth_kwargs: dict[str, Any] | None = None):
+    def __init__(self, geth_kwargs: GethKwargsTypedDict | None = None):
         if geth_kwargs is None:
             geth_kwargs = {}
 
@@ -300,7 +300,7 @@ class DevGethProcess(BaseGethProcess):
         self,
         chain_name: str,
         base_dir: str | None = None,
-        overrides: dict[str, Any] | None = None,
+        overrides: GethKwargsTypedDict | None = None,
         genesis_data: GenesisDataTypedDict | None = None,
     ):
         if overrides is None:
@@ -318,7 +318,8 @@ class DevGethProcess(BaseGethProcess):
             base_dir = get_default_base_dir()
 
         self._data_dir = get_chain_data_dir(base_dir, chain_name)
-        geth_kwargs = construct_test_chain_kwargs(data_dir=self.data_dir, **overrides)
+        overrides["data_dir"] = self._data_dir
+        geth_kwargs = construct_test_chain_kwargs(**overrides)
         validate_geth_kwargs(geth_kwargs)
 
         # ensure that an account is present

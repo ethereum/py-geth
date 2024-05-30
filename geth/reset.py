@@ -3,12 +3,16 @@ from __future__ import (
 )
 
 import os
-from typing import (
-    Any,
+
+from typing_extensions import (
+    Unpack,
 )
 
 from geth.exceptions import (
     PyGethValueError,
+)
+from geth.types import (
+    GethKwargsTypedDict,
 )
 from geth.utils.validation import (
     validate_geth_kwargs,
@@ -28,7 +32,9 @@ from .wrapper import (
 
 
 def soft_reset_chain(
-    allow_live: bool = False, allow_testnet: bool = False, **geth_kwargs: Any
+    allow_live: bool = False,
+    allow_testnet: bool = False,
+    **geth_kwargs: Unpack[GethKwargsTypedDict],
 ) -> None:
     validate_geth_kwargs(geth_kwargs)
     data_dir = geth_kwargs.get("data_dir")
@@ -43,7 +49,7 @@ def soft_reset_chain(
             "To reset the testnet chain you must call this function with `allow_testnet=True`"  # noqa: E501
         )
 
-    suffix_args = geth_kwargs.pop("suffix_args", [])
+    suffix_args = geth_kwargs.pop("suffix_args") or []
     suffix_args.extend(("removedb",))
     geth_kwargs.update({"suffix_args": suffix_args})
 

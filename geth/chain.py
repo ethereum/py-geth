@@ -118,7 +118,7 @@ def write_genesis_file(
         )
 
     validate_genesis_data(genesis_data)
-    # use GenesisData to fill defaults
+    # use GenesisData model to fill defaults
     genesis_data_model = GenesisData(**genesis_data)
 
     with open(genesis_file_path, "w") as genesis_file:
