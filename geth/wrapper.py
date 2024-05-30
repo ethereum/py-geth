@@ -10,6 +10,11 @@ import tempfile
 from typing import (
     Any,
     Iterable,
+    cast,
+)
+
+from typing_extensions import (
+    Unpack,
 )
 
 from geth.exceptions import (
@@ -17,6 +22,7 @@ from geth.exceptions import (
     PyGethValueError,
 )
 from geth.types import (
+    GethKwargsTypedDict,
     IO_Any,
 )
 from geth.utils.encoding import (
@@ -57,7 +63,10 @@ def get_max_socket_path_length() -> int:
         return 260
 
 
-def construct_test_chain_kwargs(**overrides: Any) -> dict[str, Any]:
+def construct_test_chain_kwargs(
+    **overrides: Unpack[GethKwargsTypedDict],
+) -> GethKwargsTypedDict:
+    validate_geth_kwargs(overrides)
     overrides.setdefault("dev_mode", True)
     overrides.setdefault("password", DEFAULT_PASSWORD_PATH)
     overrides.setdefault("no_discover", True)
@@ -87,11 +96,10 @@ def construct_test_chain_kwargs(**overrides: Any) -> dict[str, Any]:
     if "ipc_path" not in overrides:
         # try to use a `geth.ipc` within the provided data_dir if the path is
         # short enough.
-        if "data_dir" in overrides:
+        if overrides.get("data_dir") is not None:
+            data_dir = cast(str, overrides["data_dir"])
             max_path_length = get_max_socket_path_length()
-            geth_ipc_path = os.path.abspath(
-                os.path.join(overrides["data_dir"], "geth.ipc")
-            )
+            geth_ipc_path = os.path.abspath(os.path.join(data_dir, "geth.ipc"))
             if len(geth_ipc_path) <= max_path_length:
                 overrides.setdefault("ipc_path", geth_ipc_path)
 
@@ -101,7 +109,7 @@ def construct_test_chain_kwargs(**overrides: Any) -> dict[str, Any]:
             os.path.join(tempfile.mkdtemp(), "geth.ipc"),
         )
 
-    overrides.setdefault("verbosity", "5")
+    overrides.setdefault("verbosity", 5)
 
     return overrides
 
@@ -121,8 +129,9 @@ class CommandBuilder:
         self.command.extend([str(v) for v in value_list])
 
 
-def construct_popen_command(**geth_kwargs: Any) -> list[str]:
+def construct_popen_command(**geth_kwargs: Unpack[GethKwargsTypedDict]) -> list[str]:
     # validate geth_kwargs and fill defaults that may not have been provided
+    validate_geth_kwargs(geth_kwargs)
     gk = GethKwargs(**geth_kwargs)
 
     if gk.geth_executable is None:
@@ -198,7 +207,10 @@ def construct_popen_command(**geth_kwargs: Any) -> list[str]:
     if gk.unlock is not None:
         builder.extend(("--unlock", gk.unlock))
 
-    if gk.password is not None:
+    if isinstance(gk.password, str) and gk.password is not None:
+        # If password is a string, it's a file path
+        # If password is bytes, it's the password itself and is passed directly to
+        # the geth process elsewhere
         builder.extend(("--password", gk.password))
 
     if gk.preload is not None:
@@ -247,7 +259,7 @@ def construct_popen_command(**geth_kwargs: Any) -> list[str]:
 
 
 def geth_wrapper(
-    **geth_kwargs: Any,
+    **geth_kwargs: Unpack[GethKwargsTypedDict],
 ) -> tuple[bytes, bytes, list[str], subprocess.Popen[bytes]]:
     validate_geth_kwargs(geth_kwargs)
     stdin = geth_kwargs.pop("stdin", None)
@@ -259,11 +271,11 @@ def geth_wrapper(
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
-
+    stdin_bytes: bytes | None = None
     if stdin is not None:
-        stdin = force_bytes(stdin)
+        stdin_bytes = force_bytes(stdin)
 
-    stdoutdata, stderrdata = proc.communicate(stdin)
+    stdoutdata, stderrdata = proc.communicate(stdin_bytes)
 
     if proc.returncode != 0:
         raise PyGethGethError(
@@ -278,7 +290,7 @@ def geth_wrapper(
 
 
 def spawn_geth(
-    geth_kwargs: dict[str, Any],
+    geth_kwargs: GethKwargsTypedDict,
     stdin: IO_Any = subprocess.PIPE,
     stdout: IO_Any = subprocess.PIPE,
     stderr: IO_Any = subprocess.PIPE,
