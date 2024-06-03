@@ -109,7 +109,7 @@ def construct_test_chain_kwargs(
             os.path.join(tempfile.mkdtemp(), "geth.ipc"),
         )
 
-    overrides.setdefault("verbosity", 5)
+    overrides.setdefault("verbosity", "5")
 
     return overrides
 

@@ -25,7 +25,7 @@ from geth.types import (
 class GethKwargs(BaseModel):
     allow_insecure_unlock: bool | None = None
     autodag: bool | None = False
-    cache: int | None = None
+    cache: str | None = None
     data_dir: str | None = None
     dev_mode: bool | None = False
     gcmode: Literal["full", "archive"] | None = None
@@ -34,7 +34,7 @@ class GethKwargs(BaseModel):
     ipc_path: str | None = None
     max_peers: str | None = None
     mine: bool | None = False
-    miner_etherbase: int | None = None
+    miner_etherbase: str | None = None
     network_id: str | None = None
     nice: bool | None = True
     no_discover: bool | None = None
@@ -49,11 +49,11 @@ class GethKwargs(BaseModel):
     shh: bool | None = None
     stdin: str | None = None
     suffix_args: list[str] | None = None
-    suffix_kwargs: dict[str, Any] | None = None
-    tx_pool_global_slots: int | None = None
-    tx_pool_price_limit: int | None = None
+    suffix_kwargs: dict[str, str] | None = None
+    tx_pool_global_slots: str | None = None
+    tx_pool_price_limit: str | None = None
     unlock: str | None = None
-    verbosity: int | None = None
+    verbosity: str | None = None
     ws_addr: str | None = None
     ws_api: str | None = None
     ws_enabled: bool | None = None
