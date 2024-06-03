@@ -67,7 +67,7 @@ account_regex = re.compile(b"([a-f0-9]{40})")
 
 
 def create_new_account(**geth_kwargs: Unpack[GethKwargsTypedDict]) -> str:
-    """
+    r"""
     Creates a new Ethereum account on geth.
 
     This is useful for testing when you want to stress
@@ -117,11 +117,18 @@ def create_new_account(**geth_kwargs: Unpack[GethKwargsTypedDict]) -> str:
             account = create_new_account(data_dir, DEFAULT_PASSWORD_PATH)
             return account
 
-    :param geth_kwargs: Command line arguments to pass to geth Required keys are:
-        data_dir: Geth datadir path - where to keep "keystore" folder
-        password: Password to use for the new account, either the password as bytes
-                  or a str path to a file containing the password
+    :param \**geth_kwargs:
+        Command line arguments to pass to geth. See below:
+
+    :Required Keyword Arguments:
+        * *data_dir* (``str``) --
+          Geth datadir path - where to keep "keystore" folder
+        * *password* (``str`` or ``bytes``) --
+          Password to use for the new account, either the password as bytes or a str
+          path to a file containing the password.
+
     :return: Account as 0x prefixed hex string
+    :rtype: str
     """
     if not geth_kwargs.get("data_dir"):
         raise PyGethValueError("data_dir is required to create a new account")
