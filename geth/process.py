@@ -318,7 +318,7 @@ class DevGethProcess(BaseGethProcess):
             base_dir = get_default_base_dir()
 
         self._data_dir = get_chain_data_dir(base_dir, chain_name)
-        overrides["data_dir"] = self._data_dir
+        overrides["data_dir"] = self.data_dir
         geth_kwargs = construct_test_chain_kwargs(**overrides)
         validate_geth_kwargs(geth_kwargs)
 
