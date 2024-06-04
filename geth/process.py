@@ -296,6 +296,8 @@ class DevGethProcess(BaseGethProcess):
     Geth developer mode process for testing purposes.
     """
 
+    _data_dir: str
+
     def __init__(
         self,
         chain_name: str,
