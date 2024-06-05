@@ -63,7 +63,7 @@ class GethKwargs(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
-def validate_geth_kwargs(geth_kwargs: GethKwargsTypedDict) -> bool:
+def validate_geth_kwargs(geth_kwargs: GethKwargsTypedDict) -> None:
     """
     Converts geth_kwargs to GethKwargs and raises a ValueError if the conversion fails.
     """
@@ -73,7 +73,6 @@ def validate_geth_kwargs(geth_kwargs: GethKwargsTypedDict) -> bool:
         raise PyGethValueError(f"geth_kwargs validation failed: {e}")
     except TypeError as e:
         raise PyGethValueError(f"error while validating geth_kwargs: {e}")
-    return True
 
 
 class GenesisDataConfig(BaseModel):
@@ -121,7 +120,17 @@ class GenesisData(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
-def validate_genesis_data(genesis_data: GenesisDataTypedDict) -> bool:
+def validate_genesis_data(genesis_data: GenesisDataTypedDict) -> None:
+    """
+    Validates the genesis data
+    """
+    try:
+        GenesisData(**genesis_data)
+    except ValidationError as e:
+        raise PyGethValueError(f"genesis_data validation failed: {e}")
+    except TypeError as e:
+        raise PyGethValueError(f"error while validating genesis_data: {e}")
+
     """
     Validates the genesis data config field
     """
@@ -135,13 +144,35 @@ def validate_genesis_data(genesis_data: GenesisDataTypedDict) -> bool:
             raise PyGethValueError(
                 f"error while validating genesis_data config field: {e}"
             )
+
+
+def fill_default_genesis_data(
+    genesis_data: GenesisDataTypedDict,
+) -> GenesisData:
     """
-    Validates the genesis data
+    Fills in default values for the genesis data
     """
     try:
-        GenesisData(**genesis_data)
+        genesis_data_filled = GenesisData(**genesis_data)
     except ValidationError as e:
-        raise PyGethValueError(f"genesis_data validation failed: {e}")
+        raise PyGethValueError(
+            f"genesis_data validation failed while filling defaults: {e}"
+        )
     except TypeError as e:
-        raise PyGethValueError(f"error while validating genesis_data: {e}")
-    return True
+        raise PyGethValueError(f"error while filling default genesis_data: {e}")
+
+    if genesis_data.get("config"):
+        try:
+            genesis_data_config_filled = GenesisDataConfig(**genesis_data["config"])
+        except ValidationError as e:
+            raise PyGethValueError(
+                f"genesis_data validation failed while filling config defaults: {e}"
+            )
+        except TypeError as e:
+            raise PyGethValueError(
+                f"error while filling default genesis_data config: {e}"
+            )
+
+        genesis_data_filled.config = genesis_data_config_filled.model_dump()
+
+    return genesis_data_filled
