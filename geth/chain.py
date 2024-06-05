@@ -26,7 +26,7 @@ from .utils.filesystem import (
     is_same_path,
 )
 from .utils.validation import (
-    GenesisData,
+    fill_default_genesis_data,
     validate_genesis_data,
 )
 from .wrapper import (
@@ -119,11 +119,11 @@ def write_genesis_file(
 
     validate_genesis_data(genesis_data)
     # use GenesisData model to fill defaults
-    genesis_data_model = GenesisData(**genesis_data)
+    filled_genesis_data_model = fill_default_genesis_data(genesis_data)
 
     with open(genesis_file_path, "w") as genesis_file:
         genesis_file.write(
-            json.dumps(force_obj_to_text(genesis_data_model.model_dump()))
+            json.dumps(force_obj_to_text(filled_genesis_data_model.model_dump()))
         )
 
 
