@@ -12,3 +12,4 @@ prune venv*
 
 include geth/default_blockchain_password
 include geth/genesis.json
+include geth/py.typed

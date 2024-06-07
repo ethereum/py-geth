@@ -5,6 +5,10 @@ from typing import (
     Generator,
 )
 
+from geth.exceptions import (
+    PyGethValueError,
+)
+
 from .timeout import (
     Timeout,
 )
@@ -57,4 +61,4 @@ def wait_for_http_connection(port: int, timeout: int = 5) -> None:
             else:
                 break
         else:
-            raise ValueError("Unable to establish HTTP connection")
+            raise PyGethValueError("Unable to establish HTTP connection")

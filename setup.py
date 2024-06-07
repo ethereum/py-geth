@@ -59,6 +59,7 @@ setup(
     zip_safe=False,
     keywords="ethereum go-ethereum geth",
     packages=find_packages(exclude=["tests", "tests.*"]),
+    package_data={"geth": ["py.typed"]},
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
