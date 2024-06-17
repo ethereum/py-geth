@@ -61,4 +61,7 @@ def wait_for_http_connection(port: int, timeout: int = 5) -> None:
             else:
                 break
         else:
-            raise PyGethValueError("Unable to establish HTTP connection")
+            raise PyGethValueError(
+                "Unable to establish HTTP connection, "
+                f"timed out after {timeout} seconds"
+            )

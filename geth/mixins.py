@@ -93,8 +93,8 @@ class InterceptedStreamsMixin:
     stderr lines into some set of provided callback functions.
     """
 
-    stdout_callbacks: list[Callable[..., Any]]
-    stderr_callbacks: list[Callable[..., Any]]
+    stdout_callbacks: list[Callable[[str], None]]
+    stderr_callbacks: list[Callable[[str], None]]
 
     def __init__(self, *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
@@ -104,10 +104,10 @@ class InterceptedStreamsMixin:
         self.stderr_callbacks = []
         self.stderr_queue = JoinableQueue()
 
-    def register_stdout_callback(self, callback_fn: Callable[..., Any]) -> None:
+    def register_stdout_callback(self, callback_fn: Callable[[str], None]) -> None:
         self.stdout_callbacks.append(callback_fn)
 
-    def register_stderr_callback(self, callback_fn: Callable[..., Any]) -> None:
+    def register_stderr_callback(self, callback_fn: Callable[[str], None]) -> None:
         self.stderr_callbacks.append(callback_fn)
 
     def produce_stdout_queue(self) -> None:

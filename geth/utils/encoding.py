@@ -30,7 +30,9 @@ def force_bytes(value: bytes | bytearray | str, encoding: str = "iso-8859-1") ->
                 f"Encoding {encoding!r} produced non-binary result: {encoded!r}"
             )
     else:
-        raise PyGethTypeError(f"Unsupported type: {type(value)}")
+        raise PyGethTypeError(
+            f"Unsupported type: {type(value)}, expected bytes, bytearray or str"
+        )
 
 
 def force_text(value: bytes | bytearray | str, encoding: str = "iso-8859-1") -> str:
@@ -39,7 +41,10 @@ def force_text(value: bytes | bytearray | str, encoding: str = "iso-8859-1") -> 
     elif isinstance(value, str):
         return value
     else:
-        raise PyGethTypeError(f"Unsupported type: {type(value)}")
+        raise PyGethTypeError(
+            f"Unsupported type: {type(value)}, "
+            "expected value to be bytes, bytearray or str"
+        )
 
 
 def force_obj_to_text(obj: Any) -> Any:

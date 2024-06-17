@@ -45,7 +45,7 @@ class PyGethException(Exception):
         self.user_message = user_message
 
 
-class GethError:
+class GethError(Exception):
     message = "An error occurred during execution"
 
     def __init__(
