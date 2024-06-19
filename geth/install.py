@@ -30,6 +30,8 @@ from geth.types import (
 V1_14_0 = "v1.14.0"
 V1_14_2 = "v1.14.2"
 V1_14_3 = "v1.14.3"
+V1_14_4 = "v1.14.4"
+V1_14_5 = "v1.14.5"
 
 
 LINUX = "linux"
@@ -318,6 +320,8 @@ def install_from_source_code_release(identifier: str) -> None:
 install_v1_14_0 = functools.partial(install_from_source_code_release, V1_14_0)
 install_v1_14_2 = functools.partial(install_from_source_code_release, V1_14_2)
 install_v1_14_3 = functools.partial(install_from_source_code_release, V1_14_3)
+install_v1_14_4 = functools.partial(install_from_source_code_release, V1_14_4)
+install_v1_14_5 = functools.partial(install_from_source_code_release, V1_14_5)
 
 
 INSTALL_FUNCTIONS = {
@@ -325,11 +329,15 @@ INSTALL_FUNCTIONS = {
         V1_14_0: install_v1_14_0,
         V1_14_2: install_v1_14_2,
         V1_14_3: install_v1_14_3,
+        V1_14_4: install_v1_14_4,
+        V1_14_5: install_v1_14_5,
     },
     OSX: {
         V1_14_0: install_v1_14_0,
         V1_14_2: install_v1_14_2,
         V1_14_3: install_v1_14_3,
+        V1_14_4: install_v1_14_4,
+        V1_14_5: install_v1_14_5,
     },
 }
 
