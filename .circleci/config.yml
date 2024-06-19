@@ -202,6 +202,76 @@ jobs:
         environment:
           GETH_VERSION: v1.14.3
           TOXENV: py312-install-geth-v1_14_3
+  py38-install-geth-v1_14_4:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.8
+        environment:
+          GETH_VERSION: v1.14.4
+          TOXENV: py38-install-geth-v1_14_4
+  py39-install-geth-v1_14_4:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.9
+        environment:
+          GETH_VERSION: v1.14.4
+          TOXENV: py39-install-geth-v1_14_4
+  py310-install-geth-v1_14_4:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.10
+        environment:
+          GETH_VERSION: v1.14.4
+          TOXENV: py310-install-geth-v1_14_4
+  py311-install-geth-v1_14_4:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.11
+        environment:
+          GETH_VERSION: v1.14.4
+          TOXENV: py311-install-geth-v1_14_4
+  py312-install-geth-v1_14_4:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.12
+        environment:
+          GETH_VERSION: v1.14.4
+          TOXENV: py312-install-geth-v1_14_4
+  py38-install-geth-v1_14_5:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.8
+        environment:
+          GETH_VERSION: v1.14.5
+          TOXENV: py38-install-geth-v1_14_5
+  py39-install-geth-v1_14_5:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.9
+        environment:
+          GETH_VERSION: v1.14.5
+          TOXENV: py39-install-geth-v1_14_5
+  py310-install-geth-v1_14_5:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.10
+        environment:
+          GETH_VERSION: v1.14.5
+          TOXENV: py310-install-geth-v1_14_5
+  py311-install-geth-v1_14_5:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.11
+        environment:
+          GETH_VERSION: v1.14.5
+          TOXENV: py311-install-geth-v1_14_5
+  py312-install-geth-v1_14_5:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.12
+        environment:
+          GETH_VERSION: v1.14.5
+          TOXENV: py312-install-geth-v1_14_5
 
   py38-lint:
     <<: *common_go_steps
@@ -312,6 +382,18 @@ workflows:
       - py310-install-geth-v1_14_3
       - py311-install-geth-v1_14_3
       - py312-install-geth-v1_14_3
+
+      - py38-install-geth-v1_14_4
+      - py39-install-geth-v1_14_4
+      - py310-install-geth-v1_14_4
+      - py311-install-geth-v1_14_4
+      - py312-install-geth-v1_14_4
+
+      - py38-install-geth-v1_14_5
+      - py39-install-geth-v1_14_5
+      - py310-install-geth-v1_14_5
+      - py311-install-geth-v1_14_5
+      - py312-install-geth-v1_14_5
 
       - py38-lint
       - py39-lint
