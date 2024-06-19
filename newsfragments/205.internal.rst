@@ -1,1 +1,0 @@
-Change args for ``construct_popen_command`` from indivdual kwargs to geth_kwargs and validate with GethKwargs model

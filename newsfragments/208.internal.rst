@@ -1,1 +1,0 @@
-Refactor ``data_dir`` property of ``BaseGethProcess`` and derived classes to fix typing

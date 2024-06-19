@@ -1,1 +1,0 @@
-Add support for geth versions ``v1.14.4`` and ``v1.14.5``.

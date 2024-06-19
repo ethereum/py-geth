@@ -1,1 +1,0 @@
-Add support for newly released geth version ``v1.13.15``.

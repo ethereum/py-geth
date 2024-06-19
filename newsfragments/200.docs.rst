@@ -1,1 +1,0 @@
-Update documentation for ``DevGethProcess`` transition to using ``geth --dev``.

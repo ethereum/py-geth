@@ -1,1 +1,0 @@
-Removed deprecated ``LiveGethProcess``, use ``MainnetGethProcess`` instead

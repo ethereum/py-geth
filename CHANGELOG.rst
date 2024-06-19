@@ -1,3 +1,58 @@
+py-geth v5.0.0-beta.1 (2024-06-19)
+----------------------------------
+
+Breaking Changes
+~~~~~~~~~~~~~~~~
+
+- Return type of functions in ``accounts.py`` changed from ``bytes`` to ``str`` (`#199 <https://github.com/ethereum/py-geth/issues/199>`__)
+- Changed return type of ``get_geth_version_info_string`` from ``bytes`` to ``str`` (`#204 <https://github.com/ethereum/py-geth/issues/204>`__)
+- Use a ``pydantic`` model and a ``TypedDict`` to validate and fill default kwargs for ``genesis_data``. Alters the signature of ``write_genesis_file`` to require ``kwargs`` or a ``dict`` for ``genesis_data``. (`#210 <https://github.com/ethereum/py-geth/issues/210>`__)
+- Use ``GethKwargsTypedDict`` to typecheck the ``geth_kwargs`` dict when passed as an argument. Breaks signatures of functions ``get_accounts``, ``create_new_account``, and ``ensure_account_exists``, requiring all ``kwargs`` now. (`#213 <https://github.com/ethereum/py-geth/issues/213>`__)
+
+
+Bugfixes
+~~~~~~~~
+
+- Remove duplicates from dev mode account parsing for ``get_accounts()``. (`#219 <https://github.com/ethereum/py-geth/issues/219>`__)
+
+
+Improved Documentation
+~~~~~~~~~~~~~~~~~~~~~~
+
+- Update documentation for ``DevGethProcess`` transition to using ``geth --dev``. (`#200 <https://github.com/ethereum/py-geth/issues/200>`__)
+
+
+Features
+~~~~~~~~
+
+- Add support for newly released geth version ``v1.13.15``. (`#193 <https://github.com/ethereum/py-geth/issues/193>`__)
+- Add support for geth ``v1.14.0`` - ``v1.14.3``, with the exception for the missing geth ``v1.14.1`` release. (`#195 <https://github.com/ethereum/py-geth/issues/195>`__)
+- Add support for geth versions ``v1.14.4`` and ``v1.14.5``. (`#206 <https://github.com/ethereum/py-geth/issues/206>`__)
+- Update all raised ``Exceptions`` to inherit from a ``PyGethException`` (`#212 <https://github.com/ethereum/py-geth/issues/212>`__)
+
+
+Internal Changes - for py-geth Contributors
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Adding basic type hints across the lib (`#196 <https://github.com/ethereum/py-geth/issues/196>`__)
+- Use a pydantic model to validate typing of ``geth_kwargs`` when passed as an argument (`#199 <https://github.com/ethereum/py-geth/issues/199>`__)
+- Change args for ``construct_popen_command`` from indivdual kwargs to geth_kwargs and validate with GethKwargs model (`#205 <https://github.com/ethereum/py-geth/issues/205>`__)
+- Use the latest golang version ``v1.22.4`` when running CircleCI jobs. (`#206 <https://github.com/ethereum/py-geth/issues/206>`__)
+- Refactor ``data_dir`` property of ``BaseGethProcess`` and derived classes to fix typing (`#208 <https://github.com/ethereum/py-geth/issues/208>`__)
+- Run ``mypy`` locally with all dev deps installed, instead of using the pre-commit ``mirrors-mypy`` hook (`#210 <https://github.com/ethereum/py-geth/issues/210>`__)
+- Add ``fill_default_genesis_data`` function to properly fill ``genesis_data`` defaults (`#215 <https://github.com/ethereum/py-geth/issues/215>`__)
+
+
+Removals
+~~~~~~~~
+
+- Remove support for geth < ``v1.13.0``. (`#195 <https://github.com/ethereum/py-geth/issues/195>`__)
+- Remove deprecated ``ipc_api`` and ``miner_threads`` geth cli flags (`#202 <https://github.com/ethereum/py-geth/issues/202>`__)
+- Removed deprecated ``LiveGethProcess``, use ``MainnetGethProcess`` instead (`#203 <https://github.com/ethereum/py-geth/issues/203>`__)
+- Remove handling of ``--ssh`` geth kwarg (`#205 <https://github.com/ethereum/py-geth/issues/205>`__)
+- Drop support for geth ``v1.13.x``, keeping only ``v1.14.0`` and above. Also removes all APIs related to mining, DAG, and the ``personal`` namespace. (`#206 <https://github.com/ethereum/py-geth/issues/206>`__)
+
+
 py-geth v4.4.0 (2024-03-27)
 ---------------------------
 

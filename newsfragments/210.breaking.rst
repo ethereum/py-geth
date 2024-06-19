@@ -1,1 +1,0 @@
-Use a ``pydantic`` model and a ``TypedDict`` to validate and fill default kwargs for ``genesis_data``. Alters the signature of ``write_genesis_file`` to require ``kwargs`` or a ``dict`` for ``genesis_data``.

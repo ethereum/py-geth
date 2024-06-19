@@ -1,1 +1,0 @@
-Drop support for geth ``v1.13.x``, keeping only ``v1.14.0`` and above. Also removes all APIs related to mining, DAG, and the ``personal`` namespace.

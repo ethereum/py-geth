@@ -1,1 +1,0 @@
-Return type of functions in ``accounts.py`` changed from ``bytes`` to ``str``

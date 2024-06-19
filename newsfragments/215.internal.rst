@@ -1,1 +1,0 @@
-Add ``fill_default_genesis_data`` function to properly fill ``genesis_data`` defaults

@@ -1,1 +1,0 @@
-Use ``GethKwargsTypedDict`` to typecheck the ``geth_kwargs`` dict when passed as an argument. Breaks signatures of functions ``get_accounts``, ``create_new_account``, and ``ensure_account_exists``, requiring all ``kwargs`` now.
