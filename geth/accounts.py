@@ -197,5 +197,5 @@ def ensure_account_exists(**geth_kwargs: Unpack[GethKwargsTypedDict]) -> str:
 
 def parse_geth_accounts(raw_accounts_output: bytes) -> tuple[str, ...]:
     accounts = account_regex.findall(raw_accounts_output)
-    accounts = set(accounts)  # remove duplicates
-    return tuple("0x" + account.decode() for account in accounts)
+    accounts_set = set(accounts)  # remove duplicates
+    return tuple("0x" + account.decode() for account in accounts_set)
