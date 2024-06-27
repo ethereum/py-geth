@@ -104,8 +104,11 @@ def test_validate_genesis_data_bad(genesis_data):
             },
             {
                 "alloc": {},
+                "baseFeePerGas": "0x0",
+                "blobGasUsed": "0x0",
                 "coinbase": "0x3333333333333333333333333333333333333333",
                 "config": {
+                    "chainId": 0,
                     "ethash": {},
                     "homesteadBlock": 0,
                     "daoForkBlock": 0,
@@ -127,10 +130,13 @@ def test_validate_genesis_data_bad(genesis_data):
                     "cancunTime": 0,
                 },
                 "difficulty": "0x00012131",
+                "excessBlobGas": "0x0",
                 "extraData": "0x0000000000000000000000000000000000000000000000000000000000000000",  # noqa: E501
                 "gasLimit": "0x47e7c4",
-                "mixhash": "0x0000000000000000000000000000000000000000000000000000000000000000",  # noqa: E501
+                "gasUsed": "0x0",
+                "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",  # noqa: E501
                 "nonce": "abc",
+                "number": "0x0",
                 "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",  # noqa: E501
                 "timestamp": "1234",
             },
@@ -150,8 +156,11 @@ def test_validate_genesis_data_bad(genesis_data):
             },
             {
                 "alloc": {},
+                "baseFeePerGas": "0x0",
+                "blobGasUsed": "0x0",
                 "coinbase": "0x3333333333333333333333333333333333333333",
                 "config": {
+                    "chainId": 0,
                     "ethash": {},
                     "homesteadBlock": 5,
                     "daoForkBlock": 1,
@@ -173,10 +182,13 @@ def test_validate_genesis_data_bad(genesis_data):
                     "cancunTime": 0,
                 },
                 "difficulty": "0x00012131",
+                "excessBlobGas": "0x0",
                 "extraData": "0x0000000000000000000000000000000000000000000000000000000000000000",  # noqa: E501
                 "gasLimit": "0x47e7c4",
-                "mixhash": "0x0000000000000000000000000000000000000000000000000000000000000000",  # noqa: E501
+                "gasUsed": "0x0",
+                "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",  # noqa: E501
                 "nonce": "abc",
+                "number": "0x0",
                 "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",  # noqa: E501
                 "timestamp": "0x0",
             },

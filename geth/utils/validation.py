@@ -98,22 +98,24 @@ class GenesisDataConfig(BaseModel):
 
 class GenesisData(BaseModel):
     alloc: dict[str, dict[str, Any]] = {}
+    baseFeePerGas: str = "0x0"
+    blobGasUsed: str = "0x0"
     coinbase: str = "0x3333333333333333333333333333333333333333"
     config: dict[str, Any] = GenesisDataConfig().model_dump()
     difficulty: str = "0x0"
+    excessBlobGas: str = "0x0"
     extraData: str = (
         "0x0000000000000000000000000000000000000000000000000000000000000000"
     )
     gasLimit: str = "0x47e7c4"
-    mixhash: str = "0x0000000000000000000000000000000000000000000000000000000000000000"
+    gasUsed: str = "0x0"
+    mixHash: str = "0x0000000000000000000000000000000000000000000000000000000000000000"
     nonce: str = "0x0"
+    number: str = "0x0"
     parentHash: str = (
         "0x0000000000000000000000000000000000000000000000000000000000000000"
     )
     timestamp: str = "0x0"
-    baseFeePerGas: str = "0x0"
-    excessBlobGas: str = "0x0"
-    blobGasUsed: str = "0x0"
 
     model_config = ConfigDict(extra="forbid")
 
