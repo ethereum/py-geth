@@ -111,6 +111,9 @@ class GenesisData(BaseModel):
         "0x0000000000000000000000000000000000000000000000000000000000000000"
     )
     timestamp: str = "0x0"
+    baseFeePerGas: str = "0x0"
+    excessBlobGas: str = "0x0"
+    blobGasUsed: str = "0x0"
 
     model_config = ConfigDict(extra="forbid")
 
