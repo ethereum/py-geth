@@ -1,0 +1,1 @@
+Add missing fields for genesis data. Change mixhash -> mixHash to more closely match Geth
