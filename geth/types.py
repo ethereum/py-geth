@@ -48,12 +48,17 @@ class GethKwargsTypedDict(TypedDict, total=False):
 
 class GenesisDataTypedDict(TypedDict, total=False):
     alloc: dict[str, dict[str, Any]]
+    baseFeePerGas: str
+    blobGasUsed: str
     coinbase: str
     config: dict[str, Any]
     difficulty: str
+    excessBlobGas: str
     extraData: str
     gasLimit: str
-    mixhash: str
+    gasUsed: str
+    mixHash: str
     nonce: str
+    number: str
     parentHash: str
     timestamp: str
