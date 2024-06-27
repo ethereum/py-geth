@@ -70,6 +70,7 @@ def validate_geth_kwargs(geth_kwargs: GethKwargsTypedDict) -> None:
 
 
 class GenesisDataConfig(BaseModel):
+    chainId: int = 0
     ethash: dict[str, Any] = {}  # so that geth treats config as PoW -> PoS transition
     homesteadBlock: int = 0
     daoForkBlock: int = 0
