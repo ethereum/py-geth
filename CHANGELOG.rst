@@ -1,3 +1,12 @@
+py-geth v5.0.0-beta.2 (2024-06-28)
+----------------------------------
+
+Bugfixes
+~~~~~~~~
+
+- Add missing fields for genesis data. Change mixhash -> mixHash to more closely match Geth (`#221 <https://github.com/ethereum/py-geth/issues/221>`__)
+
+
 py-geth v5.0.0-beta.1 (2024-06-19)
 ----------------------------------
 
