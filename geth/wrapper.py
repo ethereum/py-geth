@@ -219,6 +219,9 @@ def construct_popen_command(**geth_kwargs: Unpack[GethKwargsTypedDict]) -> list[
     if gk.tx_pool_global_slots is not None:
         builder.extend(("--txpool.globalslots", gk.tx_pool_global_slots))
 
+    if gk.tx_pool_lifetime is not None:
+        builder.extend(("--txpool.lifetime", gk.tx_pool_lifetime))
+
     if gk.tx_pool_price_limit is not None:
         builder.extend(("--txpool.pricelimit", gk.tx_pool_price_limit))
 

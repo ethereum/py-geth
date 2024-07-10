@@ -37,6 +37,7 @@ class GethKwargsTypedDict(TypedDict, total=False):
     suffix_args: list[str] | None
     suffix_kwargs: dict[str, str] | None
     tx_pool_global_slots: str | None
+    tx_pool_lifetime: str | None
     tx_pool_price_limit: str | None
     verbosity: str | None
     ws_addr: str | None
