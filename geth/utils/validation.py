@@ -46,6 +46,7 @@ class GethKwargs(BaseModel):
     suffix_args: list[str] | None = None
     suffix_kwargs: dict[str, str] | None = None
     tx_pool_global_slots: str | None = None
+    tx_pool_lifetime: str | None = None
     tx_pool_price_limit: str | None = None
     verbosity: str | None = None
     ws_addr: str | None = None
