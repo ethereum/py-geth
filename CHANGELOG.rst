@@ -1,3 +1,14 @@
+py-geth v5.0.0-beta.3 (2024-07-11)
+----------------------------------
+
+Features
+~~~~~~~~
+
+- Add support for geth ``v1.14.6``. (`#224 <https://github.com/ethereum/py-geth/issues/224>`__)
+- Add ``tx_pool_lifetime`` flag option (`#225 <https://github.com/ethereum/py-geth/issues/225>`__)
+- Add support for geth ``v1.14.7`` (`#227 <https://github.com/ethereum/py-geth/issues/227>`__)
+
+
 py-geth v5.0.0-beta.2 (2024-06-28)
 ----------------------------------
 
