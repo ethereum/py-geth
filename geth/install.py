@@ -17,6 +17,8 @@ from typing import (
     Generator,
 )
 
+import requests
+
 from geth.exceptions import (
     PyGethException,
     PyGethKeyError,
@@ -211,29 +213,21 @@ DOWNLOAD_SOURCE_CODE_URI_TEMPLATE = (
 )
 
 
-def download_source_code_release(identifier: str) -> int:
+def download_source_code_release(identifier: str) -> None:
     download_uri = DOWNLOAD_SOURCE_CODE_URI_TEMPLATE.format(identifier)
     source_code_archive_path = get_source_code_archive_path(identifier)
 
     ensure_parent_dir_exists(source_code_archive_path)
+    response = requests.get(download_uri)
+    response.raise_for_status()
+    with open(source_code_archive_path, "wb") as f:
+        f.write(response.content)
 
-    command = [
-        "wget",
-        download_uri,
-        "-c",  # resume previously incomplete download.
-        "-O",
-        source_code_archive_path,
-    ]
-
-    return check_subprocess_call(
-        command,
-        message=f"Downloading source code release from {download_uri}",
-    )
+    print(f"Downloading source code release from {download_uri}")
 
 
 def extract_source_code_release(identifier: str) -> None:
     source_code_archive_path = get_source_code_archive_path(identifier)
-
     source_code_extract_path = get_source_code_extract_path(identifier)
     ensure_path_exists(source_code_extract_path)
 
@@ -326,7 +320,6 @@ install_v1_14_4 = functools.partial(install_from_source_code_release, V1_14_4)
 install_v1_14_5 = functools.partial(install_from_source_code_release, V1_14_5)
 install_v1_14_6 = functools.partial(install_from_source_code_release, V1_14_6)
 install_v1_14_7 = functools.partial(install_from_source_code_release, V1_14_7)
-
 
 INSTALL_FUNCTIONS = {
     LINUX: {
