@@ -12,6 +12,7 @@ extras_require = {
         "mypy==1.10.0",
         "pre-commit>=3.4.0",
         "requests>=2.20",
+        "types-requests",
         "tox>=4.0.0",
         "twine",
         "wheel",
