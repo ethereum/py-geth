@@ -49,7 +49,7 @@ setup(
     install_requires=[
         "eval_type_backport>=0.1.0; python_version < '3.10'",
         "pydantic>=2.6.0",
-        "requests>=2.20",
+        "requests>=2.23",
         "semantic-version>=2.6.0",
         "types-requests>=2.0.0",
         "typing-extensions>=4.0.1",
