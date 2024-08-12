@@ -18,6 +18,11 @@ from typing import (
 )
 
 import requests
+from requests.exceptions import (
+    ConnectionError,
+    HTTPError,
+    Timeout,
+)
 
 from geth.exceptions import (
     PyGethException,
@@ -218,12 +223,18 @@ def download_source_code_release(identifier: str) -> None:
     source_code_archive_path = get_source_code_archive_path(identifier)
 
     ensure_parent_dir_exists(source_code_archive_path)
-    response = requests.get(download_uri)
-    response.raise_for_status()
-    with open(source_code_archive_path, "wb") as f:
-        f.write(response.content)
+    try:
+        response = requests.get(download_uri)
+        response.raise_for_status()
+        with open(source_code_archive_path, "wb") as f:
+            f.write(response.content)
 
-    print(f"Downloading source code release from {download_uri}")
+        print(f"Downloading source code release from {download_uri}")
+
+    except (HTTPError, Timeout, ConnectionError) as e:
+        raise PyGethException(
+            f"An error occurred while downloading from {download_uri}: {e}"
+        )
 
 
 def extract_source_code_release(identifier: str) -> None:
