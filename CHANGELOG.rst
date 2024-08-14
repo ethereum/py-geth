@@ -1,3 +1,18 @@
+py-geth v5.0.0 (2024-08-14)
+---------------------------
+
+Breaking Changes
+~~~~~~~~~~~~~~~~
+
+- Replace ``subprocess+wget`` with ``requests`` to retrieve geth binaries (`#228 <https://github.com/ethereum/py-geth/issues/228>`__)
+
+
+Features
+~~~~~~~~
+
+- Add support for geth ``v1.14.8`` (`#231 <https://github.com/ethereum/py-geth/issues/231>`__)
+
+
 py-geth v5.0.0-beta.3 (2024-07-11)
 ----------------------------------
 
