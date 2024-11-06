@@ -186,18 +186,14 @@ class BaseGethProcess(ABC):
 
     @property
     def ipc_path(self) -> str:
-        _ipc_path = self.geth_kwargs.get(
-            "ipc_path",
-            os.path.abspath(
+        return self.geth_kwargs.get("ipc_path") or os.path.abspath(
                 os.path.expanduser(
                     os.path.join(
                         self.data_dir,
                         "geth.ipc",
                     )
                 )
-            ),
-        )
-        return cast(str, _ipc_path)
+            )
 
     @property
     def is_ipc_ready(self) -> bool:
