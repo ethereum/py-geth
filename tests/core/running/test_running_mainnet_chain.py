@@ -1,3 +1,5 @@
+import pytest
+
 from geth import (
     MainnetGethProcess,
 )
@@ -26,3 +28,16 @@ def test_live_chain_with_no_overrides():
     geth.stop()
 
     assert geth.is_stopped
+
+
+@pytest.mark.parametrize(
+    "ipc_path",
+    [
+        "",
+        None,
+    ],
+)
+def test_ipc_path_always_returns_a_string(ipc_path):
+    geth = LoggedMainnetGethProcess(geth_kwargs={"ipc_path": ipc_path})
+
+    assert isinstance(geth.ipc_path, str)
