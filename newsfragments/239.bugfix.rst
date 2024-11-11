@@ -1,0 +1,1 @@
+``ipc_path`` property should always return a string
