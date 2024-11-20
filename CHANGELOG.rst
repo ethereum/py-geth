@@ -1,3 +1,19 @@
+py-geth v5.1.0 (2024-11-20)
+---------------------------
+
+Bugfixes
+~~~~~~~~
+
+- ``ipc_path`` property should always return a string (`#239 <https://github.com/ethereum/py-geth/issues/239>`__)
+
+
+Features
+~~~~~~~~
+
+- Add support for new geth ``v1.14.9``. (`#234 <https://github.com/ethereum/py-geth/issues/234>`__)
+- Add support for Geth 1.14.12. (`#241 <https://github.com/ethereum/py-geth/issues/241>`__)
+
+
 py-geth v5.0.0 (2024-08-14)
 ---------------------------
 
