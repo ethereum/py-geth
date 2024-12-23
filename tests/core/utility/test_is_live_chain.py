@@ -1,6 +1,5 @@
-import os
-
 import pytest
+import os
 
 from geth.chain import (
     is_live_chain,

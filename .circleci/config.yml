@@ -100,7 +100,7 @@ jobs:
   py38-install-geth-v1_14_0:
     <<: *common_go_steps
     docker:
-      - image: cimg/python:3.10
+      - image: cimg/python:3.8
         environment:
           GETH_VERSION: v1.14.0
           TOXENV: py38-install-geth-v1_14_0
@@ -594,7 +594,6 @@ jobs:
         environment:
           GETH_VERSION: v1.14.12
           TOXENV: py312-install-geth-v1_14_12
-          TOXENV: py312-core
   py313-install-geth-v1_14_12:
     <<: *common_go_steps
     docker:
@@ -634,7 +633,7 @@ jobs:
         environment:
           TOXENV: py312-lint
   py313-lint:
-    <<: *common
+    <<: *common_go_steps
     docker:
       - image: cimg/python:3.13
         environment:
@@ -671,7 +670,7 @@ jobs:
         environment:
           TOXENV: py312-wheel
   py313-wheel:
-    <<: *common
+    <<: *common_go_steps
     docker:
       - image: cimg/python:3.13
         environment:
@@ -822,7 +821,6 @@ define: &all_jobs
 workflows:
   version: 2
   test:
-    jobs:
     jobs: *all_jobs
   nightly:
     triggers:

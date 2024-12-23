@@ -2,12 +2,11 @@ from __future__ import (
     annotations,
 )
 
+import pytest
 import sys
 from typing import (
     get_type_hints,
 )
-
-import pytest
 
 from geth.exceptions import (
     PyGethValueError,

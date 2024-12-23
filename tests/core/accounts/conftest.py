@@ -1,6 +1,5 @@
-import os
-
 import pytest
+import os
 
 PROJECTS_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), "projects")
 
