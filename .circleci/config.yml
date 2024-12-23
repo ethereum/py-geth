@@ -100,7 +100,7 @@ jobs:
   py38-install-geth-v1_14_0:
     <<: *common_go_steps
     docker:
-      - image: cimg/python:3.8
+      - image: cimg/python:3.10
         environment:
           GETH_VERSION: v1.14.0
           TOXENV: py38-install-geth-v1_14_0
@@ -132,6 +132,13 @@ jobs:
         environment:
           GETH_VERSION: v1.14.0
           TOXENV: py312-install-geth-v1_14_0
+  py313-install-geth-v1_14_0:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.13
+        environment:
+          GETH_VERSION: v1.14.0
+          TOXENV: py313-install-geth-v1_14_0
   py38-install-geth-v1_14_2:
     <<: *common_go_steps
     docker:
@@ -167,6 +174,13 @@ jobs:
         environment:
           GETH_VERSION: v1.14.2
           TOXENV: py312-install-geth-v1_14_2
+  py313-install-geth-v1_14_2:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.13
+        environment:
+          GETH_VERSION: v1.14.2
+          TOXENV: py313-install-geth-v1_14_2
   py38-install-geth-v1_14_3:
     <<: *common_go_steps
     docker:
@@ -202,6 +216,13 @@ jobs:
         environment:
           GETH_VERSION: v1.14.3
           TOXENV: py312-install-geth-v1_14_3
+  py313-install-geth-v1_14_3:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.13
+        environment:
+          GETH_VERSION: v1.14.3
+          TOXENV: py313-install-geth-v1_14_3
   py38-install-geth-v1_14_4:
     <<: *common_go_steps
     docker:
@@ -237,6 +258,13 @@ jobs:
         environment:
           GETH_VERSION: v1.14.4
           TOXENV: py312-install-geth-v1_14_4
+  py313-install-geth-v1_14_4:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.13
+        environment:
+          GETH_VERSION: v1.14.4
+          TOXENV: py313-install-geth-v1_14_4
   py38-install-geth-v1_14_5:
     <<: *common_go_steps
     docker:
@@ -272,6 +300,13 @@ jobs:
         environment:
           GETH_VERSION: v1.14.5
           TOXENV: py312-install-geth-v1_14_5
+  py313-install-geth-v1_14_5:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.13
+        environment:
+          GETH_VERSION: v1.14.5
+          TOXENV: py313-install-geth-v1_14_5
   py38-install-geth-v1_14_6:
     <<: *common_go_steps
     docker:
@@ -307,6 +342,13 @@ jobs:
         environment:
           GETH_VERSION: v1.14.6
           TOXENV: py312-install-geth-v1_14_6
+  py313-install-geth-v1_14_6:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.13
+        environment:
+          GETH_VERSION: v1.14.6
+          TOXENV: py313-install-geth-v1_14_6
   py38-install-geth-v1_14_7:
     <<: *common_go_steps
     docker:
@@ -342,6 +384,13 @@ jobs:
         environment:
           GETH_VERSION: v1.14.7
           TOXENV: py312-install-geth-v1_14_7
+  py313-install-geth-v1_14_7:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.13
+        environment:
+          GETH_VERSION: v1.14.7
+          TOXENV: py313-install-geth-v1_14_7
   py38-install-geth-v1_14_8:
     <<: *common_go_steps
     docker:
@@ -377,6 +426,13 @@ jobs:
         environment:
           GETH_VERSION: v1.14.8
           TOXENV: py312-install-geth-v1_14_8
+  py313-install-geth-v1_14_8:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.13
+        environment:
+          GETH_VERSION: v1.14.8
+          TOXENV: py313-install-geth-v1_14_8
   py38-install-geth-v1_14_9:
     <<: *common_go_steps
     docker:
@@ -412,6 +468,13 @@ jobs:
         environment:
           GETH_VERSION: v1.14.9
           TOXENV: py312-install-geth-v1_14_9
+  py313-install-geth-v1_14_9:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.13
+        environment:
+          GETH_VERSION: v1.14.9
+          TOXENV: py313-install-geth-v1_14_9
   py38-install-geth-v1_14_10:
     <<: *common_go_steps
     docker:
@@ -447,6 +510,13 @@ jobs:
         environment:
           GETH_VERSION: v1.14.10
           TOXENV: py312-install-geth-v1_14_10
+  py313-install-geth-v1_14_10:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.13
+        environment:
+          GETH_VERSION: v1.14.10
+          TOXENV: py313-install-geth-v1_14_10
   py38-install-geth-v1_14_11:
     <<: *common_go_steps
     docker:
@@ -482,6 +552,13 @@ jobs:
         environment:
           GETH_VERSION: v1.14.11
           TOXENV: py312-install-geth-v1_14_11
+  py313-install-geth-v1_14_11:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.13
+        environment:
+          GETH_VERSION: v1.14.11
+          TOXENV: py313-install-geth-v1_14_11
   py38-install-geth-v1_14_12:
     <<: *common_go_steps
     docker:
@@ -517,6 +594,14 @@ jobs:
         environment:
           GETH_VERSION: v1.14.12
           TOXENV: py312-install-geth-v1_14_12
+          TOXENV: py312-core
+  py313-install-geth-v1_14_12:
+    <<: *common_go_steps
+    docker:
+      - image: cimg/python:3.13
+        environment:
+          GETH_VERSION: v1.14.12
+          TOXENV: py313-install-geth-v1_14_12
 
   py38-lint:
     <<: *common_go_steps
@@ -548,6 +633,12 @@ jobs:
       - image: cimg/python:3.12
         environment:
           TOXENV: py312-lint
+  py313-lint:
+    <<: *common
+    docker:
+      - image: cimg/python:3.13
+        environment:
+          TOXENV: py313-lint
 
   py38-wheel:
     <<: *common_go_steps
@@ -579,6 +670,12 @@ jobs:
       - image: cimg/python:3.12
         environment:
           TOXENV: py312-wheel
+  py313-wheel:
+    <<: *common
+    docker:
+      - image: cimg/python:3.13
+        environment:
+          TOXENV: py313-wheel
 
   py311-windows-wheel:
     <<: *windows-wheel-setup
@@ -606,92 +703,134 @@ jobs:
       - <<: *run-tox-step
       - <<: *save-cache-step
 
+  py313-windows-wheel:
+    <<: *windows-wheel-setup
+    steps:
+      - checkout
+      - <<: *restore-cache-step
+      - <<: *install-pyenv-step
+      - run:
+          name: set minor version
+          command: echo "export MINOR_VERSION='3.13'" >> $BASH_ENV
+      - <<: *install-latest-python-step
+      - <<: *run-tox-step
+      - <<: *save-cache-step
+
+define: &all_jobs
+  - py38-install-geth-v1_14_0
+  - py39-install-geth-v1_14_0
+  - py310-install-geth-v1_14_0
+  - py311-install-geth-v1_14_0
+  - py312-install-geth-v1_14_0
+  - py313-install-geth-v1_14_0
+
+  - py38-install-geth-v1_14_2
+  - py39-install-geth-v1_14_2
+  - py310-install-geth-v1_14_2
+  - py311-install-geth-v1_14_2
+  - py312-install-geth-v1_14_2
+  - py313-install-geth-v1_14_2
+
+  - py38-install-geth-v1_14_3
+  - py39-install-geth-v1_14_3
+  - py310-install-geth-v1_14_3
+  - py311-install-geth-v1_14_3
+  - py312-install-geth-v1_14_3
+  - py313-install-geth-v1_14_3
+
+  - py38-install-geth-v1_14_4
+  - py39-install-geth-v1_14_4
+  - py310-install-geth-v1_14_4
+  - py311-install-geth-v1_14_4
+  - py312-install-geth-v1_14_4
+  - py313-install-geth-v1_14_4
+
+  - py38-install-geth-v1_14_5
+  - py39-install-geth-v1_14_5
+  - py310-install-geth-v1_14_5
+  - py311-install-geth-v1_14_5
+  - py312-install-geth-v1_14_5
+  - py313-install-geth-v1_14_5
+
+  - py38-install-geth-v1_14_6
+  - py39-install-geth-v1_14_6
+  - py310-install-geth-v1_14_6
+  - py311-install-geth-v1_14_6
+  - py312-install-geth-v1_14_6
+  - py313-install-geth-v1_14_6
+
+  - py38-install-geth-v1_14_7
+  - py39-install-geth-v1_14_7
+  - py310-install-geth-v1_14_7
+  - py311-install-geth-v1_14_7
+  - py312-install-geth-v1_14_7
+  - py313-install-geth-v1_14_7
+
+  - py38-install-geth-v1_14_8
+  - py39-install-geth-v1_14_8
+  - py310-install-geth-v1_14_8
+  - py311-install-geth-v1_14_8
+  - py312-install-geth-v1_14_8
+  - py313-install-geth-v1_14_8
+
+  - py38-install-geth-v1_14_9
+  - py39-install-geth-v1_14_9
+  - py310-install-geth-v1_14_9
+  - py311-install-geth-v1_14_9
+  - py312-install-geth-v1_14_9
+  - py313-install-geth-v1_14_9
+
+  - py38-install-geth-v1_14_10
+  - py39-install-geth-v1_14_10
+  - py310-install-geth-v1_14_10
+  - py311-install-geth-v1_14_10
+  - py312-install-geth-v1_14_10
+  - py313-install-geth-v1_14_10
+
+  - py38-install-geth-v1_14_11
+  - py39-install-geth-v1_14_11
+  - py310-install-geth-v1_14_11
+  - py311-install-geth-v1_14_11
+  - py312-install-geth-v1_14_11
+  - py313-install-geth-v1_14_11
+
+  - py38-install-geth-v1_14_12
+  - py39-install-geth-v1_14_12
+  - py310-install-geth-v1_14_12
+  - py311-install-geth-v1_14_12
+  - py312-install-geth-v1_14_12
+  - py313-install-geth-v1_14_12
+
+  - py38-lint
+  - py39-lint
+  - py310-lint
+  - py311-lint
+  - py312-lint
+  - py313-lint
+
+  - py38-wheel
+  - py39-wheel
+  - py310-wheel
+  - py311-wheel
+  - py312-wheel
+  - py313-wheel
+
+  - py311-windows-wheel
+  - py312-windows-wheel
+  - py313-windows-wheel
+
 workflows:
   version: 2
   test:
     jobs:
-      - py38-install-geth-v1_14_0
-      - py39-install-geth-v1_14_0
-      - py310-install-geth-v1_14_0
-      - py311-install-geth-v1_14_0
-      - py312-install-geth-v1_14_0
-
-      - py38-install-geth-v1_14_2
-      - py39-install-geth-v1_14_2
-      - py310-install-geth-v1_14_2
-      - py311-install-geth-v1_14_2
-      - py312-install-geth-v1_14_2
-
-      - py38-install-geth-v1_14_3
-      - py39-install-geth-v1_14_3
-      - py310-install-geth-v1_14_3
-      - py311-install-geth-v1_14_3
-      - py312-install-geth-v1_14_3
-
-      - py38-install-geth-v1_14_4
-      - py39-install-geth-v1_14_4
-      - py310-install-geth-v1_14_4
-      - py311-install-geth-v1_14_4
-      - py312-install-geth-v1_14_4
-
-      - py38-install-geth-v1_14_5
-      - py39-install-geth-v1_14_5
-      - py310-install-geth-v1_14_5
-      - py311-install-geth-v1_14_5
-      - py312-install-geth-v1_14_5
-
-      - py38-install-geth-v1_14_6
-      - py39-install-geth-v1_14_6
-      - py310-install-geth-v1_14_6
-      - py311-install-geth-v1_14_6
-      - py312-install-geth-v1_14_6
-
-      - py38-install-geth-v1_14_7
-      - py39-install-geth-v1_14_7
-      - py310-install-geth-v1_14_7
-      - py311-install-geth-v1_14_7
-      - py312-install-geth-v1_14_7
-
-      - py38-install-geth-v1_14_8
-      - py39-install-geth-v1_14_8
-      - py310-install-geth-v1_14_8
-      - py311-install-geth-v1_14_8
-      - py312-install-geth-v1_14_8
-
-      - py38-install-geth-v1_14_9
-      - py39-install-geth-v1_14_9
-      - py310-install-geth-v1_14_9
-      - py311-install-geth-v1_14_9
-      - py312-install-geth-v1_14_9
-
-      - py38-install-geth-v1_14_10
-      - py39-install-geth-v1_14_10
-      - py310-install-geth-v1_14_10
-      - py311-install-geth-v1_14_10
-      - py312-install-geth-v1_14_10
-
-      - py38-install-geth-v1_14_11
-      - py39-install-geth-v1_14_11
-      - py310-install-geth-v1_14_11
-      - py311-install-geth-v1_14_11
-      - py312-install-geth-v1_14_11
-
-      - py38-install-geth-v1_14_12
-      - py39-install-geth-v1_14_12
-      - py310-install-geth-v1_14_12
-      - py311-install-geth-v1_14_12
-      - py312-install-geth-v1_14_12
-
-      - py38-lint
-      - py39-lint
-      - py310-lint
-      - py311-lint
-      - py312-lint
-
-      - py38-wheel
-      - py39-wheel
-      - py310-wheel
-      - py311-wheel
-      - py312-wheel
-      - py311-windows-wheel
-      - py312-windows-wheel
+    jobs: *all_jobs
+  nightly:
+    triggers:
+      - schedule:
+          # Weekdays 12:00p UTC
+          cron: "0 12 * * 1,2,3,4,5"
+          filters:
+            branches:
+              only:
+                - main
+    jobs: *all_jobs
