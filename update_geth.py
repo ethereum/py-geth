@@ -25,6 +25,7 @@ import re
 import sys
 
 GETH_VERSION_REGEX = re.compile(r"v\d*_\d+")  # v0_0_0 pattern
+GETH_VERSION_REGEX_NO_V = re.compile(r"\d*_\d+")  # 0_0_0 pattern
 
 currently_supported_geth_versions = []
 with open("tox.ini") as tox_ini:
@@ -47,11 +48,6 @@ with open("tox.ini") as tox_ini:
 LATEST_SUPPORTED_GETH_VERSION = currently_supported_geth_versions[-1]
 LATEST_PYTHON_VERSION = circleci_python_versions[-1]
 
-# .circleci/config.yml pattern
-CIRCLE_CI_PATTERN = {
-    "jobs": "",
-    "workflow_test_jobs": "",
-}
 # geth/install.py pattern
 GETH_INSTALL_PATTERN = {
     "versions": "",
@@ -61,7 +57,7 @@ GETH_INSTALL_PATTERN = {
 
 user_provided_versions = sys.argv[1:]
 normalized_user_versions = []
-for index, user_provided_version in enumerate(user_provided_versions):
+for user_provided_version in user_provided_versions:
     if "v" not in user_provided_version:
         user_provided_version = f"v{user_provided_version}"
     normalized_user_versions.append(user_provided_version)
@@ -77,26 +73,6 @@ for index, user_provided_version in enumerate(user_provided_versions):
             f"provided version is already supported: {user_provided_version}"
         )
     latest_user_provided_version = normalized_user_versions[-1]
-
-    # set up .circleci/config.yml pattern
-    if index > 0:
-        CIRCLE_CI_PATTERN["workflow_test_jobs"] += "\n"
-
-    for py_version in circleci_python_versions:
-        py_version_decimal = f"{py_version[0]}.{py_version[1:]}"
-        CIRCLE_CI_PATTERN["jobs"] += (
-            f"  py{py_version}-install-geth-{user_provided_version}:\n"
-            f"    <<: *common_go_steps\n"
-            "    docker:\n"
-            f"      - image: cimg/python:{py_version_decimal}\n"
-            "        environment:\n"
-            f"          GETH_VERSION: {user_provided_version.replace('_', '.')}\n"
-            f"          TOXENV: py{py_version}-install-geth-{user_provided_version}\n"
-        )
-
-        CIRCLE_CI_PATTERN[
-            "workflow_test_jobs"
-        ] += f"\n      - py{py_version}-install-geth-{user_provided_version}"
 
     # set up geth/install.py pattern
     user_version_upper = user_provided_version.upper()
@@ -114,26 +90,33 @@ for index, user_provided_version in enumerate(user_provided_versions):
         "version<->install"
     ] += f"        {user_version_upper}: {user_version_install},\n"
 
+
+ALL_VERSIONS = currently_supported_geth_versions + normalized_user_versions
+
 # update .circleci/config.yml versions
 with fileinput.FileInput(".circleci/config.yml", inplace=True) as cci_config:
+    all_versions_no_v = [version[1:] for version in ALL_VERSIONS]
+    in_geth_versions = False
     for line in cci_config:
-        if (
-            f"TOXENV: py{LATEST_PYTHON_VERSION}-install-geth-{LATEST_SUPPORTED_GETH_VERSION}"  # noqa: E501
-        ) in line:
-            print(
-                f"          TOXENV: py{LATEST_PYTHON_VERSION}-install-geth-"
-                f"{LATEST_SUPPORTED_GETH_VERSION}\n" + CIRCLE_CI_PATTERN["jobs"],
-                end="",
-            )
-        elif (
-            f"- py{LATEST_PYTHON_VERSION}-install-geth-{LATEST_SUPPORTED_GETH_VERSION}"
-        ) in line:
-            print(
-                f"      - py{LATEST_PYTHON_VERSION}-install-geth-{LATEST_SUPPORTED_GETH_VERSION}\n"  # noqa: E501
-                + CIRCLE_CI_PATTERN["workflow_test_jobs"]
-            )
+        if in_geth_versions:
+            print("                ", end="")
+            for num, v in enumerate(all_versions_no_v, start=1):
+                if num == len(all_versions_no_v):
+                    print(f'"{v}"', end="\n")
+                # at most 6 versions per line
+                elif not num % 6:
+                    print(f'"{v}",\n                ', end="")
+                else:
+                    print(f'"{v}"', end=", ")
+            in_geth_versions = False
         else:
-            print(line, end="")
+            if "geth_version: [" in line:
+                in_geth_versions = True
+            if GETH_VERSION_REGEX_NO_V.search(line):
+                # clean up the older version lines
+                print(end="")
+            else:
+                print(line, end="")
 
 # update geth/install.py versions
 with fileinput.FileInput("geth/install.py", inplace=True) as geth_install:
@@ -175,13 +158,12 @@ with fileinput.FileInput("README.md", inplace=True) as readme:
 
 # update tox.ini versions
 with fileinput.FileInput("tox.ini", inplace=True) as tox_ini:
-    all_versions = currently_supported_geth_versions + normalized_user_versions
     write_versions = False
     for line in tox_ini:
         if write_versions:
             print("        ", end="")
-            for num, v in enumerate(all_versions, start=1):
-                if num == len(all_versions):
+            for num, v in enumerate(ALL_VERSIONS, start=1):
+                if num == len(ALL_VERSIONS):
                     print(f"{v} \\")
                 elif not num % 7:
                     print(f"{v}, \\\n        ", end="")
