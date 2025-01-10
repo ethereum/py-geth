@@ -7,7 +7,7 @@ from setuptools import (
 extras_require = {
     "dev": [
         "build>=0.9.0",
-        "bumpversion>=0.5.3",
+        "bump_my_version>=0.19.0",
         "ipython",
         "mypy==1.10.0",
         "pre-commit>=3.4.0",
@@ -16,7 +16,7 @@ extras_require = {
         "wheel",
     ],
     "docs": [
-        "towncrier>=21,<22",
+        "towncrier>=24,<25",
     ],
     "test": [
         "flaky>=3.2.0",
@@ -36,7 +36,7 @@ with open("./README.md") as readme:
 
 setup(
     name="py-geth",
-    # *IMPORTANT*: Don't manually change the version here. Use the 'bumpversion' utility.
+    # *IMPORTANT*: Don't manually change the version here. Use the 'bump-my-version' utility.
     version="5.1.0",
     description="""py-geth: Run Go-Ethereum as a subprocess""",
     long_description_content_type="text/markdown",
@@ -59,7 +59,7 @@ setup(
     license="MIT",
     zip_safe=False,
     keywords="ethereum go-ethereum geth",
-    packages=find_packages(exclude=["tests", "tests.*"]),
+    packages=find_packages(exclude=["scripts", "scripts.*", "tests", "tests.*"]),
     package_data={"geth": ["py.typed"]},
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
@@ -72,5 +72,6 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
     ],
 )

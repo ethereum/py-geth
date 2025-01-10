@@ -1,7 +1,8 @@
+import pytest
+
 from flaky import (
     flaky,
 )
-import pytest
 
 from geth import (
     DevGethProcess,

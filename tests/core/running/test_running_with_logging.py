@@ -1,6 +1,5 @@
-import threading
-
 import pytest
+import threading
 
 from geth import (
     DevGethProcess,

@@ -15,8 +15,6 @@ This library requires the `geth` executable to be present.
 
 ## Installation
 
-Installation
-
 ```bash
 python -m pip install py-geth
 ```

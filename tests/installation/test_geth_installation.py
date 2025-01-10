@@ -1,6 +1,6 @@
+import pytest
 import os
 
-import pytest
 import semantic_version
 
 from geth import (
