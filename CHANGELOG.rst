@@ -1,3 +1,18 @@
+py-geth v5.2.0 (2025-01-14)
+---------------------------
+
+Features
+~~~~~~~~
+
+- Merge template, including adding ``python313`` support, replace ``bumpversion`` with ``bump-my-version`` (`#243 <https://github.com/ethereum/py-geth/issues/243>`__)
+
+
+Internal Changes - for py-geth Contributors
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Re-organize circleci config, making use of ``matrix``, to parametrize CI jobs and reduce code duplication. (`#244 <https://github.com/ethereum/py-geth/issues/244>`__)
+
+
 py-geth v5.1.0 (2024-11-20)
 ---------------------------
 

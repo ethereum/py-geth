@@ -1,1 +1,0 @@
-Merge template, including adding ``python313`` support, replace ``bumpversion`` with ``bump-my-version``

@@ -1,1 +1,0 @@
-Re-organize circleci config, making use of ``matrix``, to parametrize CI jobs and reduce code duplication.
