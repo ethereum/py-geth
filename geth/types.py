@@ -17,6 +17,7 @@ class GethKwargsTypedDict(TypedDict, total=False):
     cache: str | None
     data_dir: str | None
     dev_mode: bool | None
+    dev_period: str | None
     gcmode: Literal["full", "archive"] | None
     geth_executable: str | None
     ipc_disable: bool | None
