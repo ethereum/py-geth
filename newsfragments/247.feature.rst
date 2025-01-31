@@ -1,1 +1,1 @@
-Adds ability to set 'dev_period' ('--dev-period')
+Adds ability to set 'dev_period' ('--dev.period')
