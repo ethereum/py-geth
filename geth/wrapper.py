@@ -153,6 +153,9 @@ def construct_popen_command(**geth_kwargs: Unpack[GethKwargsTypedDict]) -> list[
     if gk.dev_mode:
         builder.append("--dev")
 
+    if gk.dev_period is not None:
+        builder.extend(("--dev.period", gk.dev_period))
+
     if gk.rpc_enabled:
         builder.append("--http")
 
