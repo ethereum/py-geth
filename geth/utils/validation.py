@@ -26,6 +26,7 @@ class GethKwargs(BaseModel):
     cache: str | None = None
     data_dir: str | None = None
     dev_mode: bool | None = False
+    dev_period: str | None = None
     gcmode: Literal["full", "archive"] | None = None
     geth_executable: str | None = None
     ipc_disable: bool | None = None
