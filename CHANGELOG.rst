@@ -1,3 +1,13 @@
+py-geth v5.2.1 (2025-02-03)
+---------------------------
+
+Features
+~~~~~~~~
+
+- Add support for ``geth v1.14.3``. (`#245 <https://github.com/ethereum/py-geth/issues/245>`__)
+- Adds ability to set 'dev_period' ('--dev.period') (`#247 <https://github.com/ethereum/py-geth/issues/247>`__)
+
+
 py-geth v5.2.0 (2025-01-14)
 ---------------------------
 
