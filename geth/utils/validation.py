@@ -71,6 +71,22 @@ def validate_geth_kwargs(geth_kwargs: GethKwargsTypedDict) -> None:
         raise PyGethValueError(f"error while validating geth_kwargs: {e}")
 
 
+class BlobConfig(BaseModel):
+    target: int = 0
+    max: int = 0
+    updateFraction: int = 0
+
+    model_config = ConfigDict(extra="forbid")
+
+
+DEFAULT_CANCUN_BLOB_CONFIG = BlobConfig(target=3, max=6, updateFraction=3338477)
+DEFAULT_PRAGUE_BLOB_CONFIG = BlobConfig(target=6, max=9, updateFraction=5007716)
+
+
+class DefaultBlobSchedule(BaseModel):
+    cancun: dict[str, Any] = BlobConfig().model_dump()
+
+
 class GenesisDataConfig(BaseModel):
     chainId: int = 0
     ethash: dict[str, Any] = {}  # so that geth treats config as PoW -> PoS transition
@@ -94,6 +110,8 @@ class GenesisDataConfig(BaseModel):
     # post-merge, timestamp is used for network transitions
     shanghaiTime: int = 0
     cancunTime: int = 0
+    # blobs
+    blobScheduleConfig: dict[str, Any] = DefaultBlobSchedule().model_dump()
 
     model_config = ConfigDict(extra="forbid")
 

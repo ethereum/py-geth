@@ -6,6 +6,7 @@ from geth import (
 def test_with_no_overrides(base_dir):
     geth = DevGethProcess("testing", base_dir=base_dir)
 
+    breakpoint()
     geth.start()
 
     assert geth.is_running
