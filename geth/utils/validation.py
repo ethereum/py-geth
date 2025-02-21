@@ -5,12 +5,14 @@ from __future__ import (
 from typing import (
     Any,
     Literal,
+    NoReturn,
 )
 
 from pydantic import (
     BaseModel,
     ConfigDict,
     ValidationError,
+    field_validator,
 )
 
 from geth.exceptions import (
@@ -111,7 +113,17 @@ class GenesisDataConfig(BaseModel):
     shanghaiTime: int = 0
     cancunTime: int = 0
     # blobs
-    blobScheduleConfig: dict[str, Any] = DefaultBlobSchedule().model_dump()
+    blobScheduleConfig: dict[str, Any] = {}
+
+    @field_validator("cancunTime", "blobScheduleConfig", mode="before")
+    @classmethod
+    def check_blob_schedule_required(
+        cls, cancunTime: int, blobScheduleConfig: dict[str, Any]
+    ) -> NoReturn:
+        if cancunTime > 0 and blobScheduleConfig.get("cancun") is None:
+            raise ValueError("blobScheduleConfig is required when cancunTime is set")
+
+    # = DefaultBlobSchedule().model_dump()
 
     model_config = ConfigDict(extra="forbid")
 
@@ -145,6 +157,7 @@ def validate_genesis_data(genesis_data: GenesisDataTypedDict) -> None:
     Validates the genesis data
     """
     try:
+        # breakpoint()
         GenesisData(**genesis_data)
     except ValidationError as e:
         raise PyGethValueError(f"genesis_data validation failed: {e}")

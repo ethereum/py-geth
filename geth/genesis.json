@@ -17,13 +17,7 @@
         "terminalTotalDifficultyPassed": true,
         "shanghaiTime": 0,
         "cancunTime": 0,
-        "defaultBlobSchedule": {
-            "cancun": {
-                "target": 0,
-                "max": 0,
-                "updateFraction": 0
-            }
-        }
+        "blobScheduleConfig": {}
     },
     "nonce": "0x0",
     "timestamp": "0x0",
