@@ -85,6 +85,15 @@ def test_validate_genesis_data_good(genesis_data):
             "config": None,
         },
         "kangaroo",
+        {
+            "difficulty": "0x00012131",
+            "nonce": "abc",
+            "timestamp": "1234",
+            "config": {
+                "cancunTime": 5,
+                "blobSchedule": {},
+            },
+        },
     ],
 )
 def test_validate_genesis_data_bad(genesis_data):
@@ -127,6 +136,13 @@ def test_validate_genesis_data_bad(genesis_data):
                     "terminalTotalDifficultyPassed": True,
                     "shanghaiTime": 0,
                     "cancunTime": 0,
+                    "blobSchedule": {
+                        "cancun": {
+                            "target": 3,
+                            "max": 6,
+                            "baseFeeUpdateFraction": 3338477,
+                        }
+                    },
                 },
                 "difficulty": "0x00012131",
                 "excessBlobGas": "0x0",
@@ -179,6 +195,13 @@ def test_validate_genesis_data_bad(genesis_data):
                     "terminalTotalDifficultyPassed": True,
                     "shanghaiTime": 0,
                     "cancunTime": 0,
+                    "blobSchedule": {
+                        "cancun": {
+                            "target": 3,
+                            "max": 6,
+                            "baseFeeUpdateFraction": 3338477,
+                        }
+                    },
                 },
                 "difficulty": "0x00012131",
                 "excessBlobGas": "0x0",
