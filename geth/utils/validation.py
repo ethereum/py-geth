@@ -114,8 +114,6 @@ class GenesisDataConfig(BaseModel):
             raise PyGethValueError("blobSchedule is required when cancunTime is set")
         return self
 
-    model_config = ConfigDict(extra="forbid")
-
 
 class GenesisData(BaseModel):
     alloc: dict[str, dict[str, Any]] = {}
