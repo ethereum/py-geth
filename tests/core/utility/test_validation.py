@@ -136,13 +136,8 @@ def test_validate_genesis_data_bad(genesis_data):
                     "terminalTotalDifficultyPassed": True,
                     "shanghaiTime": 0,
                     "cancunTime": 0,
-                    "blobSchedule": {
-                        "cancun": {
-                            "target": 3,
-                            "max": 6,
-                            "baseFeeUpdateFraction": 3338477,
-                        }
-                    },
+                    "pragueTime": 0,
+                    "blobSchedule": {},
                 },
                 "difficulty": "0x00012131",
                 "excessBlobGas": "0x0",
@@ -195,13 +190,8 @@ def test_validate_genesis_data_bad(genesis_data):
                     "terminalTotalDifficultyPassed": True,
                     "shanghaiTime": 0,
                     "cancunTime": 0,
-                    "blobSchedule": {
-                        "cancun": {
-                            "target": 3,
-                            "max": 6,
-                            "baseFeeUpdateFraction": 3338477,
-                        }
-                    },
+                    "pragueTime": 0,
+                    "blobSchedule": {},
                 },
                 "difficulty": "0x00012131",
                 "excessBlobGas": "0x0",
