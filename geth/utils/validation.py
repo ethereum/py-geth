@@ -72,14 +72,6 @@ def validate_geth_kwargs(geth_kwargs: GethKwargsTypedDict) -> None:
         raise PyGethValueError(f"error while validating geth_kwargs: {e}")
 
 
-class DefaultBlobSchedule(BaseModel):
-    cancun: dict[str, Any] = {
-        "target": 3,
-        "max": 6,
-        "baseFeeUpdateFraction": 3338477,
-    }
-
-
 class GenesisDataConfig(BaseModel):
     chainId: int = 0
     ethash: dict[str, Any] = {}  # so that geth treats config as PoW -> PoS transition
@@ -103,15 +95,22 @@ class GenesisDataConfig(BaseModel):
     # post-merge, timestamp is used for network transitions
     shanghaiTime: int = 0
     cancunTime: int = 0
+    pragueTime: int = 0
     # blobs
-    blobSchedule: dict[str, Any] = DefaultBlobSchedule().model_dump()
+    blobSchedule: dict[str, Any] = {}
 
     @model_validator(mode="after")
     def check_blob_schedule_required(
         self,
     ) -> GenesisDataConfig:
         if self.cancunTime > 0 and self.blobSchedule.get("cancun") is None:
-            raise PyGethValueError("blobSchedule is required when cancunTime is set")
+            raise PyGethValueError(
+                "blobSchedule 'cancun' value is required when cancunTime is set"
+            )
+        if self.pragueTime > 0 and self.blobSchedule.get("prague") is None:
+            raise PyGethValueError(
+                "blobSchedule 'prague' value is required when pragueTime is set"
+            )
         return self
 
 
