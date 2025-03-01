@@ -1,1 +1,1 @@
-Adds support for geth ``v1.15.0``, ``v1.15.1``, ``v1.15.2``, and ``v1.15.3``, and add new ``blobSchedule`` field to genesis data config.
+Adds support for geth ``v1.15.0`` through ``v1.15.4``,  add new fields ``blobSchedule`` and ``pragueTime`` to genesis data config.
