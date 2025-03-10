@@ -217,6 +217,10 @@ class BaseGethProcess(ABC):
                 time.sleep(0.1)
                 _timeout.check()
 
+    @property
+    def version(self) -> str:
+        return str(get_geth_version(**self.geth_kwargs))
+
 
 class MainnetGethProcess(BaseGethProcess):
     def __init__(self, geth_kwargs: GethKwargsTypedDict | None = None):

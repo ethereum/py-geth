@@ -148,8 +148,12 @@ with fileinput.FileInput("geth/install.py", inplace=True) as geth_install:
 
 # update versions in readme to the latest supported version
 with fileinput.FileInput("README.md", inplace=True) as readme:
-    latest_supported_period = LATEST_SUPPORTED_GETH_VERSION.replace("_", ".")
-    latest_user_provided_period = latest_user_provided_version.replace("_", ".")
+    latest_supported_period = LATEST_SUPPORTED_GETH_VERSION.replace("_", ".").replace(
+        "v", ""
+    )
+    latest_user_provided_period = latest_user_provided_version.replace(
+        "_", "."
+    ).replace("v", "")
     for line in readme:
         print(
             line.replace(latest_supported_period, latest_user_provided_period),
