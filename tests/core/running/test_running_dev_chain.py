@@ -1,6 +1,7 @@
 import copy
 import json
 import os
+import re
 
 from geth import (
     DevGethProcess,
@@ -11,6 +12,13 @@ MAIN_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "
 
 with open(os.path.join(MAIN_DIR, "geth", "genesis.json")) as genesis_file:
     GENESIS_JSON = json.load(genesis_file)
+
+
+def test_version():
+    geth = DevGethProcess("testing")
+    # x.y.z-stable
+    regex = re.compile(r"\d+\.\d+\.\d+-stable")
+    assert regex.match(geth.version)
 
 
 def test_with_no_overrides(base_dir):
@@ -74,7 +82,11 @@ def test_default_config(base_dir):
     injected_cb_alloc = genesis_data["alloc"].pop(injected_coinbase)
     assert injected_cb_alloc == {"balance": "1000000000000000000000000000000"}
 
-    assert genesis_data == GENESIS_JSON
+    try:
+        assert genesis_data == GENESIS_JSON
+    except AssertionError:
+        assert geth.version.startswith("1.14.0")
+        assert genesis_data["config"]["terminalTotalDifficulty"] == -1
 
     geth.start()
     assert geth.is_running

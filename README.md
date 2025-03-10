@@ -77,6 +77,8 @@ False
 False
 >>> geth.is_stopped
 True
+>>> geth.version
+"1.15.5-stable"
 ```
 
 When testing it can be nice to see the logging output produced by the `geth`
