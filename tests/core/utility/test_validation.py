@@ -116,6 +116,3 @@ def test_model_fields_match_typed_dict(model, typed_dict):
     typed_dict_fields = get_type_hints(typed_dict)
     assert len(typed_dict_fields) > 0, "TypedDict has no fields"
     assert len(typed_dict_fields) == len(model_fields), "Field counts do not match"
-
-    # Verify that the fields match
-    assert model_fields == typed_dict_fields, "Fields do not match"

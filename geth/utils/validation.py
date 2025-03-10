@@ -73,41 +73,44 @@ def validate_geth_kwargs(geth_kwargs: GethKwargsTypedDict) -> None:
 
 
 class GenesisDataConfig(BaseModel):
-    chainId: int = 0
-    ethash: dict[str, Any] = {}  # so that geth treats config as PoW -> PoS transition
-    homesteadBlock: int = 0
-    daoForkBlock: int = 0
-    daoForkSupport: bool = True
-    eip150Block: int = 0
-    eip155Block: int = 0
-    eip158Block: int = 0
-    byzantiumBlock: int = 0
-    constantinopleBlock: int = 0
-    petersburgBlock: int = 0
-    istanbulBlock: int = 0
-    berlinBlock: int = 0
-    londonBlock: int = 0
-    arrowGlacierBlock: int = 0
-    grayGlacierBlock: int = 0
+    """
+    Default values are pulled from the ``genesis.json`` file internal to the repository.
+    """
+    chainId: int | None = None
+    ethash: dict[str, Any] | None = None
+    homesteadBlock: int | None = None
+    daoForkBlock: int | None = None
+    daoForkSupport: bool | None = None
+    eip150Block: int | None = None
+    eip155Block: int | None = None
+    eip158Block: int | None = None
+    byzantiumBlock: int | None = None
+    constantinopleBlock: int | None = None
+    petersburgBlock: int | None = None
+    istanbulBlock: int | None = None
+    berlinBlock: int | None = None
+    londonBlock: int | None = None
+    arrowGlacierBlock: int | None = None
+    grayGlacierBlock: int | None = None
     # merge
-    terminalTotalDifficulty: int = 0
-    terminalTotalDifficultyPassed: bool = True
+    terminalTotalDifficulty: int | None = None
+    terminalTotalDifficultyPassed: bool | None = None
     # post-merge, timestamp is used for network transitions
-    shanghaiTime: int = 0
-    cancunTime: int = 0
-    pragueTime: int = 0
+    shanghaiTime: int | None = None
+    cancunTime: int | None = None
+    pragueTime: int | None = None
     # blobs
-    blobSchedule: dict[str, Any] = {}
+    blobSchedule: dict[str, Any] | None = None
 
     @model_validator(mode="after")
     def check_blob_schedule_required(
         self,
     ) -> GenesisDataConfig:
-        if self.cancunTime > 0 and self.blobSchedule.get("cancun") is None:
+        if self.cancunTime and not self.blobSchedule.get("cancun"):
             raise PyGethValueError(
                 "blobSchedule 'cancun' value is required when cancunTime is set"
             )
-        if self.pragueTime > 0 and self.blobSchedule.get("prague") is None:
+        if self.pragueTime and not self.blobSchedule.get("prague"):
             raise PyGethValueError(
                 "blobSchedule 'prague' value is required when pragueTime is set"
             )
@@ -116,24 +119,20 @@ class GenesisDataConfig(BaseModel):
 
 class GenesisData(BaseModel):
     alloc: dict[str, dict[str, Any]] = {}
-    baseFeePerGas: str = "0x0"
-    blobGasUsed: str = "0x0"
-    coinbase: str = "0x3333333333333333333333333333333333333333"
+    baseFeePerGas: str | None = None
+    blobGasUsed: str | None = None
+    coinbase: str | None = None
     config: dict[str, Any] = GenesisDataConfig().model_dump()
-    difficulty: str = "0x0"
-    excessBlobGas: str = "0x0"
-    extraData: str = (
-        "0x0000000000000000000000000000000000000000000000000000000000000000"
-    )
-    gasLimit: str = "0x47e7c4"
-    gasUsed: str = "0x0"
-    mixHash: str = "0x0000000000000000000000000000000000000000000000000000000000000000"
-    nonce: str = "0x0"
-    number: str = "0x0"
-    parentHash: str = (
-        "0x0000000000000000000000000000000000000000000000000000000000000000"
-    )
-    timestamp: str = "0x0"
+    difficulty: str | None = None
+    excessBlobGas: str | None = None
+    extraData: str | None = None
+    gasLimit: str | None = None
+    gasUsed: str | None = None
+    mixHash: str | None = None
+    nonce: str | None = None
+    number: str | None = None
+    parentHash: str | None = None
+    timestamp: str | None = None
 
     model_config = ConfigDict(extra="forbid")
 
