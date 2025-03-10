@@ -1,3 +1,4 @@
+import copy
 import json
 import os
 
@@ -28,7 +29,7 @@ def test_dev_geth_process_generates_accounts(base_dir):
 
 
 def test_dev_geth_process_generates_genesis_json_from_genesis_data(base_dir):
-    shanghai_genesis = GENESIS_JSON.copy()
+    shanghai_genesis = copy.deepcopy(GENESIS_JSON)
     config = shanghai_genesis.pop("config")
 
     # stop at Shanghai, drop any keys in config after `shanghaiTime`
@@ -49,6 +50,31 @@ def test_dev_geth_process_generates_genesis_json_from_genesis_data(base_dir):
         genesis_data = json.load(genesis_file)
 
     assert genesis_data == shanghai_genesis
+
+    geth.start()
+    assert geth.is_running
+    assert geth.is_alive
+    geth.stop()
+    assert geth.is_stopped
+
+
+def test_default_config(base_dir):
+    geth = DevGethProcess("testing", base_dir=base_dir)
+
+    assert os.path.exists(os.path.join(geth.data_dir, "genesis.json"))
+    with open(os.path.join(geth.data_dir, "genesis.json")) as genesis_file:
+        genesis_data = json.load(genesis_file)
+
+    # assert genesis_data == GENESIS_JSON with the exception of an added coinbase and
+    # alloc for that coinbase
+    injected_coinbase = genesis_data.pop("coinbase")
+    assert injected_coinbase in genesis_data["alloc"]
+    assert injected_coinbase in geth.accounts
+
+    injected_cb_alloc = genesis_data["alloc"].pop(injected_coinbase)
+    assert injected_cb_alloc == {"balance": "1000000000000000000000000000000"}
+
+    assert genesis_data == GENESIS_JSON
 
     geth.start()
     assert geth.is_running

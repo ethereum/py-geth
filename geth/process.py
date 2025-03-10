@@ -6,6 +6,7 @@ from abc import (
     ABC,
     abstractmethod,
 )
+import copy
 import json
 import logging
 import os
@@ -282,7 +283,8 @@ class DevGethProcess(BaseGethProcess):
             overrides = {}
 
         if genesis_data is None:
-            genesis_data = GenesisDataTypedDict(**GENESIS_JSON)
+            # deepcopy since we may modify the data on init below
+            genesis_data = GenesisDataTypedDict(**copy.deepcopy(GENESIS_JSON))
 
         validate_genesis_data(genesis_data)
 
