@@ -76,6 +76,7 @@ class GenesisDataConfig(BaseModel):
     """
     Default values are pulled from the ``genesis.json`` file internal to the repository.
     """
+
     chainId: int | None = None
     ethash: dict[str, Any] | None = None
     homesteadBlock: int | None = None
@@ -100,7 +101,7 @@ class GenesisDataConfig(BaseModel):
     cancunTime: int | None = None
     pragueTime: int | None = None
     # blobs
-    blobSchedule: dict[str, Any] | None = None
+    blobSchedule: dict[str, Any] = {}
 
     @model_validator(mode="after")
     def check_blob_schedule_required(
