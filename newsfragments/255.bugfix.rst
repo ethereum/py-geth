@@ -1,1 +1,0 @@
-Fix a bug where defaults were being filled for all config values if not provided in ``genesis.json``.

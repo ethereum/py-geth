@@ -1,3 +1,19 @@
+py-geth v5.3.0 (2025-03-11)
+---------------------------
+
+Bugfixes
+~~~~~~~~
+
+- Fix a bug where defaults were being filled for all config values if not provided in ``genesis.json``. (`#255 <https://github.com/ethereum/py-geth/issues/255>`__)
+
+
+Features
+~~~~~~~~
+
+- Adds support for geth ``v1.15.0`` through ``v1.15.5``,  add new fields ``blobSchedule`` and ``pragueTime`` to genesis data config. (`#251 <https://github.com/ethereum/py-geth/issues/251>`__)
+- Add ``version`` property to ``BaseGethProcess``, returning the version of the running geth process. (`#255 <https://github.com/ethereum/py-geth/issues/255>`__)
+
+
 py-geth v5.2.1 (2025-02-03)
 ---------------------------
 
