@@ -1,1 +1,1 @@
-Adds support for geth ``v1.16.6``.
+Support for geth ``v1.15.6``.
