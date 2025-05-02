@@ -1,1 +1,0 @@
-Adds support for geth ``v1.15.18`` and ``v1.15.19``.
