@@ -37,7 +37,7 @@ with open("./README.md") as readme:
 setup(
     name="py-geth",
     # *IMPORTANT*: Don't manually change the version here. Use the 'bump-my-version' utility.
-    version="5.4.0",
+    version="5.5.0",
     description="""py-geth: Run Go-Ethereum as a subprocess""",
     long_description_content_type="text/markdown",
     long_description=long_description,
