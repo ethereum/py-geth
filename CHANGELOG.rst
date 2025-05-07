@@ -4,7 +4,7 @@ py-geth v5.5.0 (2025-05-02)
 Features
 ~~~~~~~~
 
-- Adds support for geth ``v1.15.18`` and ``v1.15.19``. (`#268 <https://github.com/ethereum/py-geth/issues/268>`__)
+- Adds support for geth ``v1.15.8`` and ``v1.15.9``. (`#268 <https://github.com/ethereum/py-geth/issues/268>`__)
 - Adds support for geth ``v1.15.10``. (`#269 <https://github.com/ethereum/py-geth/issues/269>`__)
 
 
