@@ -300,6 +300,14 @@ class DevGethProcess(BaseGethProcess):
 
         self._data_dir = get_chain_data_dir(base_dir, chain_name)
         overrides["data_dir"] = self.data_dir
+
+        if overrides.get("network_id") is not None:
+            # as of ``v1.16.0``, ``network_id`` can no longer be used with ``--dev``
+            raise PyGethValueError(
+                "You cannot specify `network_id` for a DevGethProcess"
+            )
+        overrides["network_id"] = None
+
         geth_kwargs = construct_test_chain_kwargs(**overrides)
         validate_geth_kwargs(geth_kwargs)
 
