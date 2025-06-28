@@ -140,7 +140,7 @@ In that regard, it is preconfigured as follows.
 - A single account is created, allocated 1 billion ether, and assigned as the coinbase.
 - All APIs are enabled on both `rpc` and `ipc` interfaces.
 - Networking is configured to not look for or connect to any peers.
-- The `networkid` of `1234` is used.
+- A `networkid` is not set as one can no longer be set along with `--dev`.
 - Verbosity is set to `5` (DEBUG)
 - The RPC interface *tries* to bind to 8545 but will find an open port if this
   port is not available.
