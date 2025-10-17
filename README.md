@@ -78,7 +78,7 @@ False
 >>> geth.is_stopped
 True
 >>> geth.version
-"1.16.3-stable"
+"1.16.5-stable"
 ```
 
 When testing it can be nice to see the logging output produced by the `geth`
@@ -118,19 +118,19 @@ the current list of supported versions.
 Installation can be done via the command line:
 
 ```bash
-$ python -m geth.install v1.16.3
+$ python -m geth.install v1.16.5
 ```
 
 Or from python using the `install_geth` function.
 
 ```python
 >>> from geth import install_geth
->>> install_geth('v1.16.3')
+>>> install_geth('v1.16.5')
 ```
 
 The installed binary can be found in the `$HOME/.py-geth` directory, under your
-home directory.  The `v1.16.3` binary would be located at
-`$HOME/.py-geth/geth-v1.16.3/bin/geth`.
+home directory.  The `v1.16.5` binary would be located at
+`$HOME/.py-geth/geth-v1.16.5/bin/geth`.
 
 ## About `DevGethProcess`
 
