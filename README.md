@@ -229,14 +229,14 @@ the version for the one you wish to add support for. Note that the `v` in the ve
 optional.
 
 ```shell
-$ python update_geth.py v1_14_0
+$ python update_geth.py v1_16_0
 ```
 
 To introduce support for more than one version, pass in the versions in increasing order,
 ending with the latest version.
 
 ```shell
-$ python update_geth.py v1_14_0 v1_14_2 v1_14_3
+$ python update_geth.py v1_16_1 v1_16_2 v1_16_3
 ```
 
 Always review your changes before committing as something may cause this existing pattern to change at some point.
