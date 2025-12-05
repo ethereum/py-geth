@@ -6,12 +6,11 @@ parameters:
     type: string
 
 supported_python_minor_versions: &supported_python_minor_versions
-  - "8"
-  - "9"
   - "10"
   - "11"
   - "12"
   - "13"
+  - "14"
 
 common_go_steps: &common_go_steps
   working_directory: ~/repo
