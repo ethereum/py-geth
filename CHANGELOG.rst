@@ -1,3 +1,12 @@
+py-geth v6.4.0 (2025-12-05)
+---------------------------
+
+Features
+~~~~~~~~
+
+- Add support for geth versions ``v1.16.6`` and ``v1.16.7``. (`#288 <https://github.com/ethereum/py-geth/issues/288>`__)
+
+
 py-geth v6.3.0 (2025-10-31)
 ---------------------------
 
