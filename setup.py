@@ -13,6 +13,7 @@ extras_require = {
         "pre-commit>=3.4.0",
         "tox>=4.0.0",
         "twine",
+        "types-requests",
         "wheel>=0.38.1",
     ],
     "docs": [
@@ -58,9 +59,7 @@ setup(
     extras_require=extras_require,
     zip_safe=False,
     keywords="ethereum go-ethereum geth",
-    packages=find_packages(
-        exclude=["scripts", "scripts.*", "tests", "tests.*"]
-    ),
+    packages=find_packages(exclude=["scripts", "scripts.*", "tests", "tests.*"]),
     package_data={"geth": ["py.typed"]},
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
