@@ -2,6 +2,9 @@ from __future__ import (
     annotations,
 )
 
+from collections.abc import (
+    Callable,
+)
 import datetime
 import logging
 import os
@@ -10,7 +13,6 @@ import time
 from typing import (
     TYPE_CHECKING,
     Any,
-    Callable,
 )
 
 from geth.exceptions import (

@@ -1,9 +1,9 @@
+from collections.abc import (
+    Generator,
+)
 import contextlib
 import socket
 import time
-from typing import (
-    Generator,
-)
 
 from geth.exceptions import (
     PyGethValueError,
@@ -54,7 +54,7 @@ def wait_for_http_connection(port: int, timeout: int = 5) -> None:
             s.settimeout(1)
             try:
                 s.connect(("127.0.0.1", port))
-            except (socket.timeout, ConnectionRefusedError):
+            except (TimeoutError, ConnectionRefusedError):
                 time.sleep(0.1)
                 _timeout.check()
                 continue
