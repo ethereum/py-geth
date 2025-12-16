@@ -1,3 +1,18 @@
+py-geth v7.0.0-beta.1 (2025-12-15)
+----------------------------------
+
+Breaking Changes
+~~~~~~~~~~~~~~~~
+
+- Drop support for Python 3.8 and 3.9 (`#289 <https://github.com/ethereum/py-geth/issues/289>`__)
+
+
+Features
+~~~~~~~~
+
+- Add support for Python 3.14 (`#289 <https://github.com/ethereum/py-geth/issues/289>`__)
+
+
 py-geth v6.4.0 (2025-12-05)
 ---------------------------
 
