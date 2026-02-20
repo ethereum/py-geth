@@ -36,31 +36,6 @@ from geth.types import (
     IO_Any,
 )
 
-V1_14_0 = "v1.14.0"
-V1_14_2 = "v1.14.2"
-V1_14_3 = "v1.14.3"
-V1_14_4 = "v1.14.4"
-V1_14_5 = "v1.14.5"
-V1_14_6 = "v1.14.6"
-V1_14_7 = "v1.14.7"
-V1_14_8 = "v1.14.8"
-V1_14_9 = "v1.14.9"
-V1_14_10 = "v1.14.10"
-V1_14_11 = "v1.14.11"
-V1_14_12 = "v1.14.12"
-V1_14_13 = "v1.14.13"
-V1_15_0 = "v1.15.0"
-V1_15_1 = "v1.15.1"
-V1_15_2 = "v1.15.2"
-V1_15_3 = "v1.15.3"
-V1_15_4 = "v1.15.4"
-V1_15_5 = "v1.15.5"
-V1_15_6 = "v1.15.6"
-V1_15_7 = "v1.15.7"
-V1_15_8 = "v1.15.8"
-V1_15_9 = "v1.15.9"
-V1_15_10 = "v1.15.10"
-V1_15_11 = "v1.15.11"
 V1_16_0 = "v1.16.0"
 V1_16_1 = "v1.16.1"
 V1_16_2 = "v1.16.2"
@@ -69,6 +44,9 @@ V1_16_4 = "v1.16.4"
 V1_16_5 = "v1.16.5"
 V1_16_6 = "v1.16.6"
 V1_16_7 = "v1.16.7"
+V1_16_8 = "v1.16.8"
+V1_16_9 = "v1.16.9"
+V1_17_0 = "v1.17.0"
 
 
 LINUX = "linux"
@@ -352,31 +330,6 @@ def install_from_source_code_release(identifier: str) -> None:
     print(f"geth successfully installed at: {executable_path}\n\n{version_output}\n\n")
 
 
-install_v1_14_0 = functools.partial(install_from_source_code_release, V1_14_0)
-install_v1_14_2 = functools.partial(install_from_source_code_release, V1_14_2)
-install_v1_14_3 = functools.partial(install_from_source_code_release, V1_14_3)
-install_v1_14_4 = functools.partial(install_from_source_code_release, V1_14_4)
-install_v1_14_5 = functools.partial(install_from_source_code_release, V1_14_5)
-install_v1_14_6 = functools.partial(install_from_source_code_release, V1_14_6)
-install_v1_14_7 = functools.partial(install_from_source_code_release, V1_14_7)
-install_v1_14_8 = functools.partial(install_from_source_code_release, V1_14_8)
-install_v1_14_9 = functools.partial(install_from_source_code_release, V1_14_9)
-install_v1_14_10 = functools.partial(install_from_source_code_release, V1_14_10)
-install_v1_14_11 = functools.partial(install_from_source_code_release, V1_14_11)
-install_v1_14_12 = functools.partial(install_from_source_code_release, V1_14_12)
-install_v1_14_13 = functools.partial(install_from_source_code_release, V1_14_13)
-install_v1_15_0 = functools.partial(install_from_source_code_release, V1_15_0)
-install_v1_15_1 = functools.partial(install_from_source_code_release, V1_15_1)
-install_v1_15_2 = functools.partial(install_from_source_code_release, V1_15_2)
-install_v1_15_3 = functools.partial(install_from_source_code_release, V1_15_3)
-install_v1_15_4 = functools.partial(install_from_source_code_release, V1_15_4)
-install_v1_15_5 = functools.partial(install_from_source_code_release, V1_15_5)
-install_v1_15_6 = functools.partial(install_from_source_code_release, V1_15_6)
-install_v1_15_7 = functools.partial(install_from_source_code_release, V1_15_7)
-install_v1_15_8 = functools.partial(install_from_source_code_release, V1_15_8)
-install_v1_15_9 = functools.partial(install_from_source_code_release, V1_15_9)
-install_v1_15_10 = functools.partial(install_from_source_code_release, V1_15_10)
-install_v1_15_11 = functools.partial(install_from_source_code_release, V1_15_11)
 install_v1_16_0 = functools.partial(install_from_source_code_release, V1_16_0)
 install_v1_16_1 = functools.partial(install_from_source_code_release, V1_16_1)
 install_v1_16_2 = functools.partial(install_from_source_code_release, V1_16_2)
@@ -385,34 +338,12 @@ install_v1_16_4 = functools.partial(install_from_source_code_release, V1_16_4)
 install_v1_16_5 = functools.partial(install_from_source_code_release, V1_16_5)
 install_v1_16_6 = functools.partial(install_from_source_code_release, V1_16_6)
 install_v1_16_7 = functools.partial(install_from_source_code_release, V1_16_7)
+install_v1_16_8 = functools.partial(install_from_source_code_release, V1_16_8)
+install_v1_16_9 = functools.partial(install_from_source_code_release, V1_16_9)
+install_v1_17_0 = functools.partial(install_from_source_code_release, V1_17_0)
 
 INSTALL_FUNCTIONS = {
     LINUX: {
-        V1_14_0: install_v1_14_0,
-        V1_14_2: install_v1_14_2,
-        V1_14_3: install_v1_14_3,
-        V1_14_4: install_v1_14_4,
-        V1_14_5: install_v1_14_5,
-        V1_14_6: install_v1_14_6,
-        V1_14_7: install_v1_14_7,
-        V1_14_8: install_v1_14_8,
-        V1_14_9: install_v1_14_9,
-        V1_14_10: install_v1_14_10,
-        V1_14_11: install_v1_14_11,
-        V1_14_12: install_v1_14_12,
-        V1_14_13: install_v1_14_13,
-        V1_15_0: install_v1_15_0,
-        V1_15_1: install_v1_15_1,
-        V1_15_2: install_v1_15_2,
-        V1_15_3: install_v1_15_3,
-        V1_15_4: install_v1_15_4,
-        V1_15_5: install_v1_15_5,
-        V1_15_6: install_v1_15_6,
-        V1_15_7: install_v1_15_7,
-        V1_15_8: install_v1_15_8,
-        V1_15_9: install_v1_15_9,
-        V1_15_10: install_v1_15_10,
-        V1_15_11: install_v1_15_11,
         V1_16_0: install_v1_16_0,
         V1_16_1: install_v1_16_1,
         V1_16_2: install_v1_16_2,
@@ -421,33 +352,11 @@ INSTALL_FUNCTIONS = {
         V1_16_5: install_v1_16_5,
         V1_16_6: install_v1_16_6,
         V1_16_7: install_v1_16_7,
+        V1_16_8: install_v1_16_8,
+        V1_16_9: install_v1_16_9,
+        V1_17_0: install_v1_17_0,
     },
     OSX: {
-        V1_14_0: install_v1_14_0,
-        V1_14_2: install_v1_14_2,
-        V1_14_3: install_v1_14_3,
-        V1_14_4: install_v1_14_4,
-        V1_14_5: install_v1_14_5,
-        V1_14_6: install_v1_14_6,
-        V1_14_7: install_v1_14_7,
-        V1_14_8: install_v1_14_8,
-        V1_14_9: install_v1_14_9,
-        V1_14_10: install_v1_14_10,
-        V1_14_11: install_v1_14_11,
-        V1_14_12: install_v1_14_12,
-        V1_14_13: install_v1_14_13,
-        V1_15_0: install_v1_15_0,
-        V1_15_1: install_v1_15_1,
-        V1_15_2: install_v1_15_2,
-        V1_15_3: install_v1_15_3,
-        V1_15_4: install_v1_15_4,
-        V1_15_5: install_v1_15_5,
-        V1_15_6: install_v1_15_6,
-        V1_15_7: install_v1_15_7,
-        V1_15_8: install_v1_15_8,
-        V1_15_9: install_v1_15_9,
-        V1_15_10: install_v1_15_10,
-        V1_15_11: install_v1_15_11,
         V1_16_0: install_v1_16_0,
         V1_16_1: install_v1_16_1,
         V1_16_2: install_v1_16_2,
@@ -456,6 +365,9 @@ INSTALL_FUNCTIONS = {
         V1_16_5: install_v1_16_5,
         V1_16_6: install_v1_16_6,
         V1_16_7: install_v1_16_7,
+        V1_16_8: install_v1_16_8,
+        V1_16_9: install_v1_16_9,
+        V1_17_0: install_v1_17_0,
     },
 }
 
