@@ -142,7 +142,7 @@ workflows:
               python_minor_version: *supported_python_minor_versions
               geth_version: [
                 "1_16_0", "1_16_1", "1_16_2", "1_16_3", "1_16_4", "1_16_5",
-                "1_16_6", "1_16_7", "1_16_8", "1_16_9", "1_17_0"
+                "1_16_6", "1_16_7", "1_16_8", "1_16_9", "1_17_0", "1_17_1"
               ]
           name: "py3<< matrix.python_minor_version >>-install-geth-v<< matrix.geth_version >>"
       - windows-wheel:
