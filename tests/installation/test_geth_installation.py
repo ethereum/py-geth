@@ -268,4 +268,4 @@ def test_every_platform_supports_the_same_versions():
         )
     )
     assert linux.keys() == osx.keys() == windows.keys()
-    assert install_module.V1_17_7 in linux
+    assert install_module.V1_17_8 in linux
