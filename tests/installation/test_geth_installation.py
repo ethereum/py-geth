@@ -256,3 +256,16 @@ def test_install_rejects_unsupported_platform():
 def test_install_rejects_unsupported_version():
     with pytest.raises(PyGethValueError, match="not supported"):
         install_module.install_geth("v0.0.0", platform=install_module.LINUX)
+
+
+def test_every_platform_supports_the_same_versions():
+    linux, osx, windows = (
+        install_module.INSTALL_FUNCTIONS[platform]
+        for platform in (
+            install_module.LINUX,
+            install_module.OSX,
+            install_module.WINDOWS,
+        )
+    )
+    assert linux.keys() == osx.keys() == windows.keys()
+    assert install_module.V1_17_8 in linux

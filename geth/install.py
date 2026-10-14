@@ -52,6 +52,12 @@ V1_16_9 = "v1.16.9"
 V1_17_0 = "v1.17.0"
 V1_17_1 = "v1.17.1"
 V1_17_2 = "v1.17.2"
+V1_17_3 = "v1.17.3"
+V1_17_4 = "v1.17.4"
+V1_17_5 = "v1.17.5"
+V1_17_6 = "v1.17.6"
+V1_17_7 = "v1.17.7"
+V1_17_8 = "v1.17.8"
 
 
 LINUX = "linux"
@@ -455,6 +461,12 @@ install_v1_16_9 = functools.partial(install_from_source_code_release, V1_16_9)
 install_v1_17_0 = functools.partial(install_from_source_code_release, V1_17_0)
 install_v1_17_1 = functools.partial(install_from_source_code_release, V1_17_1)
 install_v1_17_2 = functools.partial(install_from_source_code_release, V1_17_2)
+install_v1_17_3 = functools.partial(install_from_source_code_release, V1_17_3)
+install_v1_17_4 = functools.partial(install_from_source_code_release, V1_17_4)
+install_v1_17_5 = functools.partial(install_from_source_code_release, V1_17_5)
+install_v1_17_6 = functools.partial(install_from_source_code_release, V1_17_6)
+install_v1_17_7 = functools.partial(install_from_source_code_release, V1_17_7)
+install_v1_17_8 = functools.partial(install_from_source_code_release, V1_17_8)
 
 INSTALL_FUNCTIONS = {
     LINUX: {
@@ -471,6 +483,12 @@ INSTALL_FUNCTIONS = {
         V1_17_0: install_v1_17_0,
         V1_17_1: install_v1_17_1,
         V1_17_2: install_v1_17_2,
+        V1_17_3: install_v1_17_3,
+        V1_17_4: install_v1_17_4,
+        V1_17_5: install_v1_17_5,
+        V1_17_6: install_v1_17_6,
+        V1_17_7: install_v1_17_7,
+        V1_17_8: install_v1_17_8,
     },
     OSX: {
         V1_16_0: install_v1_16_0,
@@ -486,6 +504,12 @@ INSTALL_FUNCTIONS = {
         V1_17_0: install_v1_17_0,
         V1_17_1: install_v1_17_1,
         V1_17_2: install_v1_17_2,
+        V1_17_3: install_v1_17_3,
+        V1_17_4: install_v1_17_4,
+        V1_17_5: install_v1_17_5,
+        V1_17_6: install_v1_17_6,
+        V1_17_7: install_v1_17_7,
+        V1_17_8: install_v1_17_8,
     },
     WINDOWS: {
         V1_16_0: install_v1_16_0,
@@ -501,6 +525,12 @@ INSTALL_FUNCTIONS = {
         V1_17_0: install_v1_17_0,
         V1_17_1: install_v1_17_1,
         V1_17_2: install_v1_17_2,
+        V1_17_3: install_v1_17_3,
+        V1_17_4: install_v1_17_4,
+        V1_17_5: install_v1_17_5,
+        V1_17_6: install_v1_17_6,
+        V1_17_7: install_v1_17_7,
+        V1_17_8: install_v1_17_8,
     },
 }
 
